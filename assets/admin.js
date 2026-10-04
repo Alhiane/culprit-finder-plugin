@@ -1,4 +1,3 @@
-/* Culprit Finder: Copy buttons. Without JS everything stays selectable. */
 ( function () {
 	document.querySelectorAll( '.culprit-finder-copy' ).forEach( function ( button ) {
 		var target = document.getElementById( button.getAttribute( 'data-target' ) );
@@ -24,7 +23,6 @@
 	} );
 } )();
 
-/* Start stays disabled until "I've saved both links" is ticked (the checkbox is also `required`). */
 ( function () {
 	document.querySelectorAll( '.cf-setup' ).forEach( function ( form ) {
 		var box = form.querySelector( 'input[name="culprit_finder_saved"]' );

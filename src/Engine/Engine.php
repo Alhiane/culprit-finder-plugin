@@ -208,6 +208,10 @@ final class Engine {
 	/**
 	 * The algorithm, top to bottom. ask() throws PendingQuestion when answers run out.
 	 *
+	 * Both binary searches look for the smallest prefix that reproduces the problem: prefix 0 is
+	 * known "no" (baseline) and the full prefix is assumed "yes" (the problem was seen with
+	 * everything on; for the partner search it equals the first search's reproducing prefix).
+	 *
 	 * @return Result
 	 */
 	private function run() {
@@ -223,7 +227,6 @@ final class Engine {
 			return new Result( Result::NOT_PLUGIN, array(), $kept_on );
 		}
 
-		// Smallest prefix that reproduces: prefix 0 is known NO, prefix n is assumed YES.
 		$lo = 0;
 		$hi = $n;
 		while ( $hi - $lo > 1 ) {
@@ -246,7 +249,6 @@ final class Engine {
 			return new Result( Result::INCONCLUSIVE, array( $first ), $kept_on );
 		}
 
-		// Prefix |rest| equals phase 1's prefix hi: known/assumed YES.
 		$this->rest_count = count( $rest );
 		$lo               = 0;
 		$hi2              = count( $rest );

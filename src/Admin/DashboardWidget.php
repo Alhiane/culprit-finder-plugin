@@ -57,13 +57,12 @@ final class DashboardWidget {
 	}
 
 	/**
-	 * Register the widget for users who can manage plugins.
+	 * Register the widget for users who can manage plugins, near the top until the user moves it.
 	 */
 	public function add() {
 		if ( ! current_user_can( 'activate_plugins' ) || is_multisite() ) {
 			return;
 		}
-		// High priority: near the top until the user moves it (their saved order wins).
 		wp_add_dashboard_widget( self::ID, esc_html__( 'Culprit Finder', 'culprit-finder' ), array( $this, 'render' ), null, null, 'normal', 'high' );
 	}
 

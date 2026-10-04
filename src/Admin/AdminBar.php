@@ -125,14 +125,14 @@ final class AdminBar {
 	}
 
 	/**
-	 * A few inline lines of CSS, only during a session.
+	 * A few inline lines of CSS, only during a session. Targets the node id because core's
+	 * top-level hover and focus rules outrank a class selector.
 	 */
 	public function styles() {
 		if ( null === $this->plugin->owned_session() || ! is_admin_bar_showing() ) {
 			return;
 		}
 		$glyph = esc_url_raw( plugins_url( 'assets/images/glyph-white.svg', CULPRIT_FINDER_FILE ) );
-		// IDs, not classes: core's top-level hover/focus rules would otherwise win on specificity.
 		wp_add_inline_style(
 			'admin-bar',
 			'#wpadminbar #wp-admin-bar-culprit-finder > .ab-item{background:#925FBB url("' . $glyph . '") no-repeat 8px center/16px 16px;padding-left:30px;color:#fff;font-weight:600}'

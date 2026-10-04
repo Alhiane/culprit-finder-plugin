@@ -104,7 +104,7 @@ final class Page {
 			return;
 		}
 		$manager = $this->plugin->manager();
-		$session = $manager->current(); // Deletes an expired session and remembers it.
+		$session = $manager->current();
 		$owned   = null !== $session && null !== $this->plugin->owned_session();
 
 		echo '<div class="wrap culprit-finder">';
@@ -142,7 +142,6 @@ final class Page {
 			echo '<span class="cf-pill"><span class="cf-pill__dot" aria-hidden="true"></span>' . esc_html__( 'Troubleshooting is on for you only', 'culprit-finder' ) . '</span>';
 		}
 		echo '</header>';
-		// WordPress moves admin notices after the first heading; keep them below our header.
 		echo '<hr class="wp-header-end">';
 	}
 
@@ -229,13 +228,11 @@ final class Page {
 		echo '<input type="hidden" name="action" value="culprit_finder_start">';
 		echo '<input type="hidden" name="culprit_finder_recovery" value="' . esc_attr( $key ) . '">';
 
-		// 1. Problem page.
 		echo '<fieldset class="cf-field"><legend>' . esc_html__( 'Where do you see the problem?', 'culprit-finder' ) . ' <span class="cf-optional">' . esc_html__( 'Optional', 'culprit-finder' ) . '</span></legend>';
 		echo '<label for="culprit-finder-problem-url">' . esc_html__( 'Paste the address of the broken page. Every step gets a one-click link to it.', 'culprit-finder' ) . '</label>';
 		echo '<input type="url" class="regular-text cf-input" id="culprit-finder-problem-url" name="culprit_finder_problem_url" placeholder="' . esc_attr( home_url( '/' ) ) . '">';
 		echo '</fieldset>';
 
-		// 2. Keep-on plugins.
 		echo '<fieldset class="cf-field"><legend>' . esc_html__( 'Keep any plugins on?', 'culprit-finder' ) . ' <span class="cf-optional">' . esc_html__( 'Optional', 'culprit-finder' ) . '</span></legend>';
 		echo '<p class="cf-help">' . esc_html__( 'Tick plugins the problem needs to show up, like your shop plugin for a checkout problem. They stay on in every step and are never blamed. Plugins they require stay on too.', 'culprit-finder' ) . '</p>';
 		if ( $active ) {
@@ -253,7 +250,6 @@ final class Page {
 		}
 		echo '</fieldset>';
 
-		// 3. Safety links.
 		echo '<fieldset class="cf-field"><legend>' . esc_html__( 'Save your two safety links', 'culprit-finder' ) . '</legend>';
 		echo '<p class="cf-help">' . esc_html__( 'If a step makes a page crash, these still work. Bookmark them now: the emergency exit is made for this session only, so press Start without reloading this page.', 'culprit-finder' ) . '</p>';
 		$this->safety_link( 'culprit-finder-panel-url', __( 'Control panel', 'culprit-finder' ), __( 'Answer questions even when pages are broken.', 'culprit-finder' ), Links::control_panel() );
@@ -435,7 +431,8 @@ final class Page {
 	}
 
 	/**
-	 * Result: verdict, culprit cards, next steps, report.
+	 * Result: verdict, culprit cards, next steps, report. Run again starts a new session, so it carries
+	 * its own emergency exit key and shows that link.
 	 *
 	 * @param array $session Session.
 	 * @param Step  $step    Done step.
@@ -468,7 +465,6 @@ final class Page {
 		echo '<a class="button" href="' . esc_url( Links::action( 'undo', array(), Links::control_panel() ) ) . '">' . esc_html__( 'Undo last answer', 'culprit-finder' ) . '</a>';
 		echo '</div>';
 
-		// Run again starts a new session, so it needs its own emergency exit link (invariant: every way in has a way out).
 		$key = Token::generate();
 		echo '<form class="cf-rerun" method="post" action="' . esc_url( Links::form_action() ) . '">';
 		wp_nonce_field( 'culprit_finder_start' );

@@ -188,14 +188,15 @@ final class Manager {
 		$engine = $this->engine( $session );
 		$step   = $engine->step( $session['answers'] );
 		if ( $step->is_done() ) {
-			return $step; // Nothing to answer; ignore.
+			return $step;
 		}
 		$session['answers'][] = (bool) $problem_present;
 		return $this->persist( $session, $engine );
 	}
 
 	/**
-	 * Drop the last answer (AC-10), including the one that produced the result.
+	 * Drop the last answer (AC-10), including the one that produced the result; that result no
+	 * longer stands, so the stored last result is deleted.
 	 *
 	 * @return Step|WP_Error
 	 */
@@ -207,7 +208,6 @@ final class Manager {
 		$engine = $this->engine( $session );
 		$was    = $engine->step( $session['answers'] );
 		if ( $was->is_done() ) {
-			// The result this session produced no longer stands.
 			$this->store->delete_last_result();
 		}
 		$session['answers'] = array_slice( $session['answers'], 0, -1 );

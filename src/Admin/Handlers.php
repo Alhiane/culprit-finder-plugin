@@ -44,14 +44,14 @@ final class Handlers {
 	}
 
 	/**
-	 * Start a session.
+	 * Start a session. Refused unless the user confirmed saving the safety links (ADR-0018);
+	 * pinned basenames are validated against the snapshot in Manager::start().
 	 */
 	public function handle_start() {
 		$this->guard( 'start' );
 		// phpcs:disable WordPress.Security.NonceVerification.Missing -- nonce checked in guard().
 		$pins = array();
 		if ( isset( $_POST['culprit_finder_pin'] ) && is_array( $_POST['culprit_finder_pin'] ) ) {
-			// Basenames are validated against the snapshot in Manager::start().
 			$pins = array_map( 'sanitize_text_field', wp_unslash( $_POST['culprit_finder_pin'] ) );
 		}
 		$key     = isset( $_POST['culprit_finder_recovery'] ) ? sanitize_text_field( wp_unslash( $_POST['culprit_finder_recovery'] ) ) : '';
@@ -59,7 +59,6 @@ final class Handlers {
 		$saved   = ! empty( $_POST['culprit_finder_saved'] );
 		// phpcs:enable
 
-		// The emergency exit only exists if the user kept the link (ADR-0018). The form requires the box too.
 		if ( ! $saved ) {
 			$this->redirect( Links::tools( array( 'culprit_notice' => 'unsaved' ) ) );
 		}

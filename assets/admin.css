@@ -1,4 +1,3 @@
-/* Culprit Finder admin page. Brand: #925FBB, hover #7C4DA6 (ADR-0016). WordPress admin type and greys. */
 .culprit-finder { --cf-brand: #925FBB; --cf-brand-dark: #7C4DA6; --cf-brand-ink: #5e3a80; --cf-brand-soft: #f3ecf8; --cf-brand-line: #d9c6e9; --cf-line: #dcdcde; --cf-muted: #50575e; --cf-ok: #00a32a; max-width: 1080px; }
 .culprit-finder .cf-muted { color: var(--cf-muted); }
 .culprit-finder .cf-help { color: var(--cf-muted); margin: 0; font-size: 13px; }
@@ -95,6 +94,5 @@
 
 @media (prefers-reduced-motion: no-preference) { .culprit-finder .cf-button { transition: background-color .12s, border-color .12s; } }
 
-/* Secondary buttons in brand ink instead of WordPress blue. */
 .culprit-finder .button:not(.cf-button--primary):not(.cf-button--outline):not(.cf-button--soft):not(.cf-button--danger) { color: var(--cf-brand-ink); border-color: var(--cf-brand); }
 .culprit-finder .button:not(.cf-button--primary):not(.cf-button--outline):not(.cf-button--soft):not(.cf-button--danger):hover { background: var(--cf-brand-soft); color: var(--cf-brand-ink); }

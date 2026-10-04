@@ -12,8 +12,6 @@
 
 defined( 'ABSPATH' ) || exit;
 
-// Guard with a constant, not class_exists(): PHP declares a top-level class before the file's
-// first statement runs, so a class_exists() guard here would always return early.
 if ( defined( 'CULPRIT_FINDER_LOADER_FILE' ) ) {
 	return;
 }
@@ -21,6 +19,10 @@ define( 'CULPRIT_FINDER_LOADER_FILE', __FILE__ );
 
 /**
  * Session-scoped active_plugins filter. Must stay dependency-free (skill culprit-loader, ADR-0001/2/3/7).
+ *
+ * Without our cookie or the recovery argument, boot() returns before any call (AC-14); any error
+ * fails open to the normal site. The re-include guard above uses a constant, not class_exists(),
+ * because PHP declares a top-level class before the file's first statement runs.
  */
 final class Culprit_Finder_Loader {
 
@@ -59,7 +61,7 @@ final class Culprit_Finder_Loader {
 		$has_cookie = isset( $_COOKIE[ self::COOKIE ] );
 		$has_exit   = isset( $_GET[ self::EXIT_ARG ] );
 		if ( ! $has_cookie && ! $has_exit ) {
-			return; // Normal traffic: nothing else runs (AC-14).
+			return;
 		}
 
 		try {
@@ -97,7 +99,7 @@ final class Culprit_Finder_Loader {
 			}
 			add_action( 'send_headers', 'nocache_headers' );
 		} catch ( \Throwable $e ) {
-			self::$session = null; // Fail open: the normal site loads.
+			self::$session = null;
 		}
 	}
 

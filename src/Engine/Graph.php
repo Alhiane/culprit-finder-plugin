@@ -98,7 +98,8 @@ final class Graph {
 	 * Topological order of a subset: dependencies first, ties by strcmp.
 	 *
 	 * Cycle members are kept adjacent in strcmp order (ADR-0005): strongly connected
-	 * components are ordered as single nodes keyed by their smallest member.
+	 * components are ordered as single nodes keyed by their smallest member, using Kahn's
+	 * algorithm that always takes the ready component with the smallest key.
 	 *
 	 * @param string[] $subset Basenames to order (edges to plugins outside the subset are ignored).
 	 * @return string[]
@@ -119,7 +120,6 @@ final class Graph {
 			}
 		}
 
-		// Component DAG: edge dep-component -> dependent-component.
 		$pending    = array_fill( 0, count( $components ), 0 );
 		$dependents = array_fill( 0, count( $components ), array() );
 		foreach ( $nodes as $plugin ) {
@@ -136,7 +136,6 @@ final class Graph {
 			}
 		}
 
-		// Kahn's algorithm, always taking the ready component with the smallest key.
 		$ready = array();
 		foreach ( $components as $index => $component ) {
 			if ( 0 === $pending[ $index ] ) {
