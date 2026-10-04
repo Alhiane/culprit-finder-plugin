@@ -129,3 +129,6 @@
 .culprit-finder .cf-help-page h2 { margin: 0; font-size: 18px; }
 .culprit-finder .cf-help-page p, .culprit-finder .cf-help-page ul { margin: 0; color: #3c434a; }
 .culprit-finder .cf-help-page ul { padding-left: 20px; list-style: disc; display: grid; gap: 6px; }
+.culprit-finder .cf-link code { display: block; font-size: 12px; line-height: 1.5; word-break: break-all; overflow-wrap: anywhere; user-select: all; background: transparent; padding: 0; margin: 2px 0; }
+.culprit-finder .cf-reassure a, .culprit-finder .cf-back, .culprit-finder .cf-results a:not(.cf-delete) { color: var(--cf-brand-ink); }
+.culprit-finder .cf-reassure a:hover, .culprit-finder .cf-back:hover, .culprit-finder .cf-results a:not(.cf-delete):hover { color: var(--cf-brand-dark); }
