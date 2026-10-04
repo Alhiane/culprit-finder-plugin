@@ -1,0 +1,32 @@
+{
+    "name": "alhiane/culprit-finder",
+    "description": "Find the plugin that broke your WordPress site, for your browser session only. Dev tooling only: the plugin has no runtime Composer dependencies.",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "require-dev": {
+        "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+        "phpcompatibility/phpcompatibility-wp": "^2.1",
+        "phpunit/phpunit": "^9.6",
+        "squizlabs/php_codesniffer": "^3.10",
+        "wp-coding-standards/wpcs": "^3.1"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "CulpritFinder\\": "src/",
+            "CulpritFinder\\Tests\\": "tests/unit/"
+        }
+    },
+    "config": {
+        "platform": {
+            "php": "7.4.33"
+        },
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        },
+        "sort-packages": true
+    },
+    "scripts": {
+        "lint": "phpcs",
+        "unit": "phpunit"
+    }
+}
