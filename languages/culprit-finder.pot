@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-04T16:08:29+00:00\n"
+"POT-Creation-Date: 2026-10-04T16:15:30+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: culprit-finder\n"
@@ -141,7 +141,7 @@ msgid "Emergency exit (ends troubleshooting, works even when logged out)"
 msgstr ""
 
 #: src/Admin/Page.php:189
-msgid "The emergency exit link becomes active when you press Start. Keep it private."
+msgid "The emergency exit link becomes active when you press Start on this page. Each page load creates a new link, so bookmark it and press Start without reloading. Keep it private."
 msgstr ""
 
 #: src/Admin/Page.php:192
@@ -225,85 +225,89 @@ msgstr ""
 msgid "Your site is back to normal for you while you read this."
 msgstr ""
 
-#: src/Admin/Page.php:320
+#: src/Admin/Page.php:323
+msgid "Running again starts a new session with a new emergency exit link. Bookmark it before you press Run again:"
+msgstr ""
+
+#: src/Admin/Page.php:324
 msgid "Run again"
 msgstr ""
 
-#: src/Admin/Page.php:337
+#: src/Admin/Page.php:341
 msgid "Last result"
 msgstr ""
 
-#: src/Admin/Page.php:348
+#: src/Admin/Page.php:352
 msgid "Support report"
 msgstr ""
 
-#: src/Admin/Page.php:349
+#: src/Admin/Page.php:353
 msgid "Safe to paste in a support forum: it contains no site address, user names, or emails."
 msgstr ""
 
-#: src/Admin/Page.php:351
+#: src/Admin/Page.php:355
 msgid "Copied!"
 msgstr ""
 
-#: src/Admin/Page.php:351
+#: src/Admin/Page.php:355
 msgid "Copy report"
 msgstr ""
 
 #. translators: %s: plugin author
-#: src/Admin/Page.php:372
+#: src/Admin/Page.php:376
 #, php-format
 msgid "By %s"
 msgstr ""
 
 #. translators: %s: list of plugin names
-#: src/Admin/Page.php:380
+#: src/Admin/Page.php:384
 #, php-format
 msgid "Tested together with its required plugins: %s"
 msgstr ""
 
-#: src/Admin/Page.php:383
+#: src/Admin/Page.php:387
 msgid "Plugin website"
 msgstr ""
 
-#: src/Admin/Page.php:398
+#: src/Admin/Page.php:402
 msgid "(none)"
 msgstr ""
 
-#: src/Admin/Page.php:413
+#: src/Admin/Page.php:417
 msgid "Culprit Finder does not support multisite networks yet, so troubleshooting cannot start here."
 msgstr ""
 
-#: src/Admin/Page.php:419
+#: src/Admin/Page.php:423
 msgid "The Culprit Finder loader is missing or out of date, so plugins cannot be switched off for your session yet."
 msgstr ""
 
 #. translators: 1: source file path, 2: target folder path
-#: src/Admin/Page.php:425
+#: src/Admin/Page.php:429
 #, php-format
 msgid "To fix it, copy %1$s into %2$s (create the folder if needed) with FTP or your host’s file manager, then reload this page."
 msgstr ""
 
-#: src/Admin/Page.php:441
+#: src/Admin/Page.php:445
 msgid "Found it: one plugin causes the problem."
 msgstr ""
 
-#: src/Admin/Page.php:443
+#: src/Admin/Page.php:447
 msgid "Found it: two plugins conflict with each other. The problem appears only when both are on."
 msgstr ""
 
-#: src/Admin/Page.php:445
+#: src/Admin/Page.php:449
 msgid "Three or more plugins are involved. These two are part of it; test further with both of them on."
 msgstr ""
 
-#: src/Admin/Page.php:447
+#: src/Admin/Page.php:451
 msgid "The problem is not caused by the plugins tested: it stayed with all of them off. Check the theme, must-use plugins, or server."
 msgstr ""
 
-#: src/Admin/Page.php:449
+#: src/Admin/Page.php:453
 msgid "There was nothing to test: every active plugin was kept on."
 msgstr ""
 
-#: src/Admin/Page.php:451
+#: src/Admin/Page.php:455
 msgid "The answers were inconsistent, so the problem may come and go. Try again, checking each step carefully."
 msgstr ""
 

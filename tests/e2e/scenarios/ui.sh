@@ -35,6 +35,8 @@ assert_contains "$RUNNING" "Step 1 of about" "running: step text"
 assert_contains "$RUNNING" "for you only" "running: for-you-only copy"
 SESSION=$(wpjson option get culprit_finder_session --format=json)
 assert_eq "$(jq -c .pinned <<<"$SESSION")" '["cff-fixtures/cff-noise-01.php"]' "pins validated against the snapshot"
+sha() { printf '%s' "$1" | shasum -a 256 | cut -d' ' -f1; }
+assert_eq "$(jq_r .recovery_hash "$SESSION")" "$(sha "$KEY")" "the exit URL shown before Start ends this session"
 
 # Front end: admin bar node, filtered page.
 FRONT=$(browse /)
@@ -78,6 +80,9 @@ assert_contains "$RESULT" "CFF Solo 1.0.0" "culprit card"
 assert_contains "$RESULT" 'id="culprit-finder-report"' "report textarea"
 assert_contains "$RESULT" "culprit-finder-copy" "copy button"
 assert_contains "$RESULT" "Run again" "run again"
+RERUN_KEY=$(grep -oE 'culprit-finder-exit=[0-9a-f]{64}' <<<"$RESULT" | head -1 | cut -d= -f2)
+[ -n "$RERUN_KEY" ] || fail "Run again shows no emergency exit link"
+assert_eq "$(attr 'name="culprit_finder_recovery" value="[^"]+"' "$RESULT")" "$RERUN_KEY" "Run again posts the key it shows"
 assert_contains "$(browse /)" "Culprit Finder: result ready" "admin bar shows result"
 assert_eq "$(noise_count "$(browse /)")" 8 "site back to normal for the admin on the result"
 

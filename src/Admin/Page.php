@@ -186,7 +186,7 @@ final class Page {
 		echo '<dt>' . esc_html__( 'Emergency exit (ends troubleshooting, works even when logged out)', 'culprit-finder' ) . '</dt>';
 		echo '<dd><code>' . esc_html( Links::recovery( $key ) ) . '</code></dd>';
 		echo '</dl>';
-		echo '<p class="description">' . esc_html__( 'The emergency exit link becomes active when you press Start. Keep it private.', 'culprit-finder' ) . '</p>';
+		echo '<p class="description">' . esc_html__( 'The emergency exit link becomes active when you press Start on this page. Each page load creates a new link, so bookmark it and press Start without reloading. Keep it private.', 'culprit-finder' ) . '</p>';
 
 		$disabled = $problems ? ' disabled' : '';
 		echo '<p><button type="submit" class="button button-primary button-hero"' . esc_attr( $disabled ) . '>' . esc_html__( 'Start troubleshooting', 'culprit-finder' ) . '</button></p>';
@@ -311,12 +311,16 @@ final class Page {
 		echo '<a class="button button-primary" href="' . esc_url( Links::action( 'exit' ) ) . '">' . esc_html__( 'Exit', 'culprit-finder' ) . '</a>';
 		echo '</p>';
 
+		// Run again starts a new session, so it needs its own emergency exit link (invariant: every way in has a way out).
+		$key = Token::generate();
 		echo '<form method="post" action="' . esc_url( Links::form_action() ) . '">';
 		wp_nonce_field( 'culprit_finder_start' );
 		echo '<input type="hidden" name="action" value="culprit_finder_start">';
+		echo '<input type="hidden" name="culprit_finder_recovery" value="' . esc_attr( $key ) . '">';
 		foreach ( $session['pinned'] as $basename ) {
 			echo '<input type="hidden" name="culprit_finder_pin[]" value="' . esc_attr( $basename ) . '">';
 		}
+		echo '<p class="description">' . esc_html__( 'Running again starts a new session with a new emergency exit link. Bookmark it before you press Run again:', 'culprit-finder' ) . '<br><code class="culprit-finder-exit-url">' . esc_html( Links::recovery( $key ) ) . '</code></p>';
 		echo '<p><button type="submit" class="button">' . esc_html__( 'Run again', 'culprit-finder' ) . '</button></p>';
 		echo '</form>';
 		echo '</div>';
