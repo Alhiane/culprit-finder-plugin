@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://getculpritfinder.com/docs
+    about: How to use Culprit Finder, limits, and troubleshooting.
+  - name: Security issue
+    url: mailto:security@getculpritfinder.com
+    about: Please report security issues privately by email.

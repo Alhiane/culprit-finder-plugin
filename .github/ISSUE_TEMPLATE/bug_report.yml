@@ -1,0 +1,44 @@
+name: Bug report
+description: Something in Culprit Finder doesn't work as expected.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! Security issues: please email security@getculpritfinder.com instead of opening an issue.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What you did, what you expected, and what happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: report
+    attributes:
+      label: Support report
+      description: |
+        In WordPress, open Culprit Finder → Results, open the result, and press "Copy for forum". Paste it here.
+        It contains no site address, user names or emails. If the search didn't finish, write "no result".
+      render: markdown
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Go to …
+        2. Click …
+  - type: input
+    id: version
+    attributes:
+      label: Culprit Finder version
+      placeholder: "0.1.0"
+    validations:
+      required: true
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else?
+      description: Error messages from wp-content/debug.log, hosting details, screenshots.

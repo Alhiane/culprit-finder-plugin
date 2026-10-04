@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          tools: composer
+          coverage: none
+      - run: make install
+      - run: make lint
+      - run: make unit
+      - name: Unit tests on PHP 7.4
+        run: make unit PHP_IMAGE=php:7.4-cli PHP="docker run --rm -v $PWD:/app -w /app php:7.4-cli php"
+      - run: make zip
+      - run: make release-check
+      - run: bash tests/release/distignore-match.sh
+
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+      - run: sudo apt-get update && sudo apt-get install -y jq
+      - run: make up
+      - run: make e2e
+
+  website:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: website
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm test

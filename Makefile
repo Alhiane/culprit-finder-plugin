@@ -62,6 +62,7 @@ zip:
 release-check:
 	bash tests/release/readme-lint.sh
 	bash tests/release/forbidden-terms.sh
+	bash tests/release/distignore-match.sh
 
 # Translation template (runs WP-CLI in the wp-env cli container).
 pot:
