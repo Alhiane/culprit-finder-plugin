@@ -1,0 +1,12 @@
+.culprit-finder .culprit-finder-lead { font-size: 14px; max-width: 760px; }
+.culprit-finder .culprit-finder-card { background: #fff; border: 1px solid #c3c4c7; border-left: 4px solid #b32d2e; padding: 8px 20px 12px; max-width: 760px; margin: 16px 0; }
+.culprit-finder .culprit-finder-result { border-left-color: #00a32a; }
+.culprit-finder .culprit-finder-step { text-transform: uppercase; color: #646970; font-weight: 600; margin-bottom: 0; }
+.culprit-finder .culprit-finder-answers .button-hero { margin: 0 8px 8px 0; }
+.culprit-finder .culprit-finder-lists { display: flex; flex-wrap: wrap; gap: 32px; }
+.culprit-finder .culprit-finder-lists ul { margin-top: 0; }
+.culprit-finder .culprit-finder-links dd { margin: 4px 0 12px; }
+.culprit-finder .culprit-finder-links code { word-break: break-all; user-select: all; }
+.culprit-finder .culprit-finder-pins { margin-bottom: 8px; }
+.culprit-finder .culprit-finder-culprit { background: #f6f7f7; padding: 4px 16px; margin: 12px 0; }
+.culprit-finder #culprit-finder-report { max-width: 760px; }

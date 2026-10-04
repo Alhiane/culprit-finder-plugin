@@ -80,11 +80,12 @@ final class Manager {
 	/**
 	 * Start a new session, replacing any existing one (ADR-0002).
 	 *
-	 * @param int      $user_id Session owner.
-	 * @param string[] $pinned  Requested keep-on basenames (validated against the snapshot).
+	 * @param int         $user_id      Session owner.
+	 * @param string[]    $pinned       Requested keep-on basenames (validated against the snapshot).
+	 * @param string|null $recovery_key Pre-generated recovery key shown on the idle screen (64 hex), or null.
 	 * @return array{token: string, recovery_key: string, session: array, step: Step}|WP_Error
 	 */
-	public function start( $user_id, array $pinned = array() ) {
+	public function start( $user_id, array $pinned = array(), $recovery_key = null ) {
 		$snapshot = array_values( array_unique( array_filter( $this->real_active_plugins(), 'is_string' ) ) );
 		$errors   = StartGuard::errors( is_multisite(), $this->loader_ready(), in_array( $this->self, $snapshot, true ) );
 		if ( $errors ) {
@@ -97,7 +98,7 @@ final class Manager {
 		$step   = $engine->step( array() );
 
 		$token    = Token::generate();
-		$recovery = Token::generate();
+		$recovery = Token::is_valid_format( $recovery_key ) ? strtolower( $recovery_key ) : Token::generate();
 		$now      = time();
 		$session  = array(
 			'v'             => 1,

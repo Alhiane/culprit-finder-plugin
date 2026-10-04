@@ -73,6 +73,14 @@ final class Plugin {
 	public function register() {
 		add_action( 'init', array( $this, 'bind_session' ), 1 );
 		add_action( 'admin_init', array( $this, 'ensure_loader' ) );
+		( new Admin\Page( $this ) )->register();
+		( new Admin\Handlers( $this ) )->register();
+		( new Admin\AdminBar( $this ) )->register();
+		( new Admin\PluginsLock( $this ) )->register();
+
+		if ( defined( 'WP_CLI' ) && WP_CLI ) {
+			\WP_CLI::add_command( 'culprit-finder', new CLI\Command( $this->manager, $this->store ) );
+		}
 	}
 
 	/**

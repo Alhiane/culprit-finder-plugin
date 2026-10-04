@@ -10,8 +10,12 @@
 
 defined( 'ABSPATH' ) || exit;
 
-function cff_shared_helper() {
-	return 'b';
+// Declared at runtime (inside a block) so WP-CLI, which loads every active plugin, can still run
+// with both pair plugins active. Web requests with both active fatal with "Cannot redeclare".
+if ( ! ( defined( 'WP_CLI' ) && WP_CLI ) ) {
+	function cff_shared_helper() {
+		return 'b';
+	}
 }
 
 add_action( 'wp_head', function () { echo "<!-- CFF-PAIR-B -->\n"; } );

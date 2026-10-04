@@ -49,4 +49,8 @@
 		<!-- The loader's file name is fixed by ADR-0001 (it is what users delete via FTP). -->
 		<exclude-pattern>/mu-loader/*</exclude-pattern>
 	</rule>
+	<!-- WP-CLI passes ($args, $assoc_args) to every subcommand; not all of them use both. -->
+	<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter">
+		<exclude-pattern>/src/CLI/*</exclude-pattern>
+	</rule>
 </ruleset>

@@ -12,9 +12,12 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( class_exists( 'Culprit_Finder_Loader', false ) ) {
+// Guard with a constant, not class_exists(): PHP declares a top-level class before the file's
+// first statement runs, so a class_exists() guard here would always return early.
+if ( defined( 'CULPRIT_FINDER_LOADER_FILE' ) ) {
 	return;
 }
+define( 'CULPRIT_FINDER_LOADER_FILE', __FILE__ );
 
 /**
  * Session-scoped active_plugins filter. Must stay dependency-free (skill culprit-loader, ADR-0001/2/3/7).
