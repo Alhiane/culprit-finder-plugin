@@ -2,6 +2,7 @@
 # Wrong first answer produces a result; Undo reverts it and the search continues (AC-10).
 source "$(dirname "$0")/../lib.sh"
 BEFORE=$(reset_site $(noise 1 24) cff-fixtures/cff-solo)
+wpcli option delete culprit_finder_results >/dev/null 2>&1 || true
 JAR=$TMP/admin.jar; login "$JAR"
 start_session
 add_token "$JAR" "$TOKEN"
@@ -12,6 +13,7 @@ UNDONE=$(admin_cli undo)
 assert_eq "$(jq_r .status "$UNDONE")" asking "undo reopens the question"
 assert_eq "$(jq_r .question "$UNDONE")" 1 "back to question 1"
 wpcli culprit-finder result >/dev/null 2>&1 && fail "undone result must not remain as last result"
+assert_eq "$(wpjson option get culprit_finder_results --format=json 2>/dev/null | jq 'map(select(.result.type == "NOT_PLUGIN")) | length' 2>/dev/null || echo 0)" 0 "undone result removed from the history"
 answer_loop "$JAR" symptom_marker
 assert_result SINGLE cff-fixtures/cff-solo.php
 assert_eq "$(wpcli option get active_plugins --format=json)" "$BEFORE" "AC-2 active_plugins unchanged"

@@ -10,6 +10,7 @@ defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
 delete_option( 'culprit_finder_session' );
 delete_option( 'culprit_finder_last_result' );
 delete_option( 'culprit_finder_loader_error' );
+delete_option( 'culprit_finder_results' );
 
 $culprit_finder_loader = WPMU_PLUGIN_DIR . '/culprit-finder-loader.php';
 if ( is_file( $culprit_finder_loader ) ) {

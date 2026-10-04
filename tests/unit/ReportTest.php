@@ -87,4 +87,10 @@ final class ReportTest extends TestCase {
 		$record['answers'] = 1;
 		$this->assertStringContainsString( 'Found in 1 answer on', Builder::build( $record ) );
 	}
+
+	public function test_plain_text_drops_heading_markers(): void {
+		$text = Builder::to_plain( Builder::build( $this->record( array( 'type' => Result::NOT_PLUGIN, 'culprits' => array(), 'kept_on' => array() ) ) ) );
+		$this->assertStringStartsWith( "Plugin conflict report (Culprit Finder 0.1.0)\n", $text );
+		$this->assertStringContainsString( "- Multisite: no\n", $text );
+	}
 }

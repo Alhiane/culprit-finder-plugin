@@ -102,7 +102,8 @@ final class DashboardWidget {
 					wp_date( get_option( 'date_format' ), (int) $record['finished_at'] )
 				)
 			) . '</strong><br>' . esc_html( Page::verdict_heading( $record['result']['type'] ) ) . ( $labels ? ': ' . esc_html( implode( ', ', $labels ) ) : '' ) . '</p>';
-			echo '<div class="cf-w-actions"><a class="button" href="' . esc_url( Links::tools() ) . '">' . esc_html( $owned ? __( 'View result', 'culprit-finder' ) : __( 'View report', 'culprit-finder' ) ) . '</a>';
+			$view = isset( $record['id'] ) ? Links::result( $record['id'] ) : Links::tools( array( 'tab' => Page::TAB_RESULTS ) );
+			echo '<div class="cf-w-actions"><a class="button" href="' . esc_url( $view ) . '">' . esc_html( $owned ? __( 'View result', 'culprit-finder' ) : __( 'View report', 'culprit-finder' ) ) . '</a>';
 			if ( ! $owned ) {
 				echo '<a href="' . esc_url( Links::tools() ) . '">' . esc_html__( 'Run a new search', 'culprit-finder' ) . '</a>';
 			}

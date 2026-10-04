@@ -196,7 +196,7 @@ final class Manager {
 
 	/**
 	 * Drop the last answer (AC-10), including the one that produced the result; that result no
-	 * longer stands, so the stored last result is deleted.
+	 * longer stands, so it is removed from the last result and the history.
 	 *
 	 * @return Step|WP_Error
 	 */
@@ -208,6 +208,10 @@ final class Manager {
 		$engine = $this->engine( $session );
 		$was    = $engine->step( $session['answers'] );
 		if ( $was->is_done() ) {
+			$last = $this->store->last_result();
+			if ( is_array( $last ) && isset( $last['id'] ) ) {
+				$this->store->delete_result( $last['id'] );
+			}
 			$this->store->delete_last_result();
 		}
 		$session['answers'] = array_slice( $session['answers'], 0, -1 );
@@ -241,14 +245,17 @@ final class Manager {
 	}
 
 	/**
-	 * Store the result and report data so it survives Exit.
+	 * Store the result as the last result and at the front of the history (ADR-0019).
 	 *
 	 * @param array  $session Session.
 	 * @param Engine $engine  Engine.
 	 * @param Step   $step    Done step.
 	 */
 	private function record_result( array $session, Engine $engine, Step $step ) {
-		$this->store->save_last_result( Collector::collect( $session, $engine, $step ) );
+		$record       = Collector::collect( $session, $engine, $step );
+		$record['id'] = bin2hex( random_bytes( 6 ) );
+		$this->store->save_last_result( $record );
+		$this->store->add_result( $record );
 	}
 
 	/**

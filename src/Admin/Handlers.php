@@ -8,6 +8,7 @@
 namespace CulpritFinder\Admin;
 
 use CulpritFinder\Plugin;
+use CulpritFinder\Report\Builder;
 use CulpritFinder\Session\Token;
 use WP_Error;
 
@@ -38,7 +39,7 @@ final class Handlers {
 	 * Hook the admin-post actions.
 	 */
 	public function register() {
-		foreach ( array( 'start', 'answer', 'undo', 'exit' ) as $action ) {
+		foreach ( array( 'start', 'answer', 'undo', 'exit', 'download', 'delete_result', 'clear_results' ) as $action ) {
 			add_action( 'admin_post_culprit_finder_' . $action, array( $this, 'handle_' . $action ) );
 		}
 	}
@@ -105,7 +106,64 @@ final class Handlers {
 	}
 
 	/**
-	 * Refresh the cookie and redirect: to the result when done, else back where the user was.
+	 * Send a saved report as a .md or .txt file.
+	 */
+	public function handle_download() {
+		$this->guard( 'download' );
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- nonce checked in guard().
+		$id     = isset( $_GET['result'] ) ? sanitize_key( wp_unslash( $_GET['result'] ) ) : '';
+		$format = isset( $_GET['format'] ) ? sanitize_key( wp_unslash( $_GET['format'] ) ) : 'md';
+		// phpcs:enable
+		$record = $this->plugin->store()->result( $id );
+		if ( null === $record || ! in_array( $format, array( 'md', 'txt' ), true ) ) {
+			wp_die( esc_html__( 'That result no longer exists.', 'culprit-finder' ), '', array( 'response' => 404 ) );
+		}
+		$report   = Builder::build( $record );
+		$body     = 'txt' === $format ? Builder::to_plain( $report ) : $report;
+		$filename = 'culprit-finder-report-' . gmdate( 'Y-m-d-His', (int) $record['finished_at'] ) . '.' . $format;
+		nocache_headers();
+		header( 'Content-Type: ' . ( 'txt' === $format ? 'text/plain' : 'text/markdown' ) . '; charset=utf-8' );
+		header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
+		header( 'X-Content-Type-Options: nosniff' );
+		echo $body; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- plain-text file download, not HTML.
+		exit;
+	}
+
+	/**
+	 * Delete one saved result.
+	 */
+	public function handle_delete_result() {
+		$this->guard( 'delete_result' );
+		$id = isset( $_GET['result'] ) ? sanitize_key( wp_unslash( $_GET['result'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- nonce checked in guard().
+		$this->plugin->store()->delete_result( $id );
+		$this->redirect(
+			Links::tools(
+				array(
+					'tab'            => Page::TAB_RESULTS,
+					'culprit_notice' => 'deleted',
+				)
+			)
+		);
+	}
+
+	/**
+	 * Delete all saved results.
+	 */
+	public function handle_clear_results() {
+		$this->guard( 'clear_results' );
+		$this->plugin->store()->clear_results();
+		$this->redirect(
+			Links::tools(
+				array(
+					'tab'            => Page::TAB_RESULTS,
+					'culprit_notice' => 'cleared',
+				)
+			)
+		);
+	}
+
+	/**
+	 * Refresh the cookie and redirect: to the saved result when done, else back where the user was.
 	 *
 	 * @param mixed $step Step or WP_Error.
 	 */
@@ -119,7 +177,8 @@ final class Handlers {
 			$this->plugin->cookie()->set( $token, $session['expires_at'] );
 		}
 		if ( $step->is_done() ) {
-			$this->redirect( Links::tools() );
+			$last = $this->plugin->store()->last_result();
+			$this->redirect( is_array( $last ) && isset( $last['id'] ) ? Links::result( $last['id'] ) : Links::tools() );
 		}
 		$this->redirect( $this->redirect_target() );
 	}

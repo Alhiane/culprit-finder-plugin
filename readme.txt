@@ -22,7 +22,8 @@ Culprit Finder switches plugins off **for your browser only**. It asks one quest
 * Respects plugin dependencies ("Requires Plugins").
 * Answer from the admin bar on any page, or from a control panel that keeps working even when a step breaks your pages.
 * Ends by itself after an hour without answers, and has a logged-out emergency exit link.
-* A copyable support report for forums, with no site address, user names or emails.
+* A support report for forums, with no site address, user names or emails: copy it, or download it as .md or .txt.
+* Your last 10 results are kept on the Results tab, on your own site only.
 * Never changes your real plugin settings. No external requests, no tracking.
 
 Open **Culprit Finder** in the admin menu to start. A small dashboard widget shows the current step while you troubleshoot.

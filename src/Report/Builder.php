@@ -58,6 +58,16 @@ final class Builder {
 	}
 
 	/**
+	 * Plain-text version of the report (Markdown heading markers removed).
+	 *
+	 * @param string $markdown Report from build().
+	 * @return string
+	 */
+	public static function to_plain( $markdown ) {
+		return (string) preg_replace( '/^#{1,6}\s+/m', '', $markdown );
+	}
+
+	/**
 	 * Verdict line per result type.
 	 *
 	 * @param array $result  Result.

@@ -25,6 +25,21 @@ final class Links {
 	}
 
 	/**
+	 * One saved result on the Results tab.
+	 *
+	 * @param string $id Result id.
+	 * @return string
+	 */
+	public static function result( $id ) {
+		return self::tools(
+			array(
+				'tab'    => Page::TAB_RESULTS,
+				'result' => $id,
+			)
+		);
+	}
+
+	/**
 	 * Validated address of the broken page: same site only, else ''.
 	 *
 	 * @param string $url Raw URL.

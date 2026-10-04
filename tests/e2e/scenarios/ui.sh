@@ -87,17 +87,25 @@ assert_eq "$(code "$JAR" '/wp-admin/plugins.php?action=-1&action2=activate-selec
 # Finish via the Tools page links (control panel in safe mode).
 for i in $(seq 1 12); do
   PANEL=$(browse "$TOOLS&culprit_safe=1")
-  grep -q 'culprit-finder-result' <<<"$PANEL" && break
+  grep -q 'Result ready' <<<"$PANEL" && break
   WHICH=no; symptom_marker "$JAR" && WHICH=yes
   LINK=$(grep -oE "href=\"[^\"]*answer=$WHICH[^\"]*\"" <<<"$PANEL" | head -1 | sed -E 's/href="([^"]+)"/\1/; s/&amp;/\&/g; s/&#038;/\&/g')
   [ -n "$LINK" ] || fail "no answer link on the control panel"
   curl -s -L -o /dev/null -b "$JAR" -c "$JAR" "$LINK"
 done
-RESULT=$(browse "$TOOLS")
+DONE=$(browse "$TOOLS")
+assert_contains "$DONE" "Result ready" "troubleshoot tab points to the result"
+RID=$(wpjson option get culprit_finder_last_result --format=json | jq -r .id)
+[ -n "$RID" ] && [ "$RID" != null ] || fail "result has no id"
+assert_contains "$DONE" "result=$RID" "View result links to the saved result"
+RESULT=$(browse "$TOOLS&tab=results&result=$RID")
+assert_contains "$RESULT" "This is the result of your current session." "session bar on the current result"
+assert_contains "$RESULT" "Environment" "environment table"
+assert_contains "$RESULT" "Download .md" "download buttons"
 assert_contains "$RESULT" "One plugin causes the problem" "result verdict"
 assert_contains "$RESULT" "What you can do next" "result next steps"
 assert_contains "$RESULT" "CFF Solo 1.0.0" "culprit card"
-assert_contains "$RESULT" 'id="culprit-finder-report"' "report textarea"
+assert_contains "$RESULT" 'id="culprit-finder-report"' "plain-text report"
 assert_contains "$RESULT" "culprit-finder-copy" "copy button"
 assert_contains "$RESULT" "Run again" "run again"
 RERUN_KEY=$(grep -oE 'culprit-finder-exit=[0-9a-f]{64}' <<<"$RESULT" | head -1 | cut -d= -f2)
@@ -110,7 +118,7 @@ assert_eq "$(noise_count "$(browse /)")" 8 "site back to normal for the admin on
 EXIT=$(grep -oE 'href="[^"]*action=culprit_finder_exit[^"]*"' <<<"$RESULT" | head -1 | sed -E 's/href="([^"]+)"/\1/; s/&amp;/\&/g; s/&#038;/\&/g')
 AFTER=$(curl -s -L -b "$JAR" -c "$JAR" "$EXIT")
 assert_contains "$AFTER" "Troubleshooting ended" "exit notice"
-assert_contains "$AFTER" "Last result" "last result survives exit"
+assert_contains "$(browse "$TOOLS&tab=results")" "CFF Solo 1.0.0" "result survives exit on the Results tab"
 assert_contains "$(browse /wp-admin/)" "Run a new search" "dashboard widget (after)"
 wpcli option get culprit_finder_session >/dev/null 2>&1 && fail "session still exists after exit"
 assert_not_contains "$(browse /)" "wp-admin-bar-culprit-finder" "admin bar node gone after exit"
