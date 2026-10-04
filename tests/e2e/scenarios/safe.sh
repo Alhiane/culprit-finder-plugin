@@ -15,6 +15,6 @@ for i in $(seq 1 20); do
 done
 assert_eq "$FATAL" 1 "reached a step that fatals"
 assert_eq "$(code "$JAR" /wp-admin/)" 500 "normal admin request fatals in this step"
-assert_eq "$(code "$JAR" '/wp-admin/tools.php?page=culprit-finder&culprit_safe=1')" 200 "AC-8 control panel loads in safe mode"
+assert_eq "$(code "$JAR" '/wp-admin/admin.php?page=culprit-finder&culprit_safe=1')" 200 "AC-8 control panel loads in safe mode"
 assert_eq "$(wpcli option get active_plugins --format=json)" "$BEFORE" "AC-2 active_plugins unchanged"
 wpcli culprit-finder exit >/dev/null

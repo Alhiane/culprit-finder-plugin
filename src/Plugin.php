@@ -77,6 +77,7 @@ final class Plugin {
 		( new Admin\Handlers( $this ) )->register();
 		( new Admin\AdminBar( $this ) )->register();
 		( new Admin\PluginsLock( $this ) )->register();
+		( new Admin\DashboardWidget( $this ) )->register();
 
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
 			\WP_CLI::add_command( 'culprit-finder', new CLI\Command( $this->manager, $this->store ) );

@@ -66,11 +66,11 @@ final class AdminBar {
 		$here = Links::current_url();
 
 		if ( $step->is_done() ) {
-			$title = __( 'Culprit Finder: result ready', 'culprit-finder' );
+			$title = __( 'Culprit Finder · result ready', 'culprit-finder' );
 		} else {
 			$title = sprintf(
 				/* translators: 1: current step number, 2: estimated number of steps */
-				__( 'Culprit Finder: step %1$d of ~%2$d', 'culprit-finder' ),
+				__( 'Culprit Finder · Step %1$d of ~%2$d · still broken?', 'culprit-finder' ),
 				$step->question(),
 				$step->estimated_total()
 			);
@@ -86,14 +86,14 @@ final class AdminBar {
 
 		$children = array();
 		if ( ! $step->is_done() ) {
-			$children['yes'] = array( __( 'Yes, problem is still here', 'culprit-finder' ), Links::action( 'answer', array( 'answer' => 'yes' ), $here ) );
+			$children['yes'] = array( __( 'Yes, the problem is still here', 'culprit-finder' ), Links::action( 'answer', array( 'answer' => 'yes' ), $here ) );
 			$children['no']  = array( __( 'No, it’s gone', 'culprit-finder' ), Links::action( 'answer', array( 'answer' => 'no' ), $here ) );
 		}
 		if ( $step->answers_used() > 0 ) {
-			$children['undo'] = array( __( 'Undo', 'culprit-finder' ), Links::action( 'undo', array(), $here ) );
+			$children['undo'] = array( __( 'Undo last answer', 'culprit-finder' ), Links::action( 'undo', array(), $here ) );
 		}
 		$children['panel'] = array( $step->is_done() ? __( 'View result', 'culprit-finder' ) : __( 'Control panel', 'culprit-finder' ), Links::control_panel() );
-		$children['exit']  = array( __( 'Exit', 'culprit-finder' ), Links::action( 'exit' ) );
+		$children['exit']  = array( __( 'Exit troubleshooting', 'culprit-finder' ), Links::action( 'exit' ) );
 
 		foreach ( $children as $id => $child ) {
 			$bar->add_node(
@@ -102,6 +102,23 @@ final class AdminBar {
 					'id'     => 'culprit-finder-' . $id,
 					'title'  => esc_html( $child[0] ),
 					'href'   => $child[1],
+				)
+			);
+		}
+		if ( ! $step->is_done() ) {
+			$bar->add_node(
+				array(
+					'parent' => 'culprit-finder',
+					'id'     => 'culprit-finder-info',
+					'title'  => esc_html(
+						sprintf(
+							/* translators: 1: plugins switched off, 2: plugins in total */
+							__( '%1$d of %2$d plugins off, for you only', 'culprit-finder' ),
+							count( $step->disabled() ),
+							count( $session['snapshot'] ) - 1
+						)
+					),
+					'meta'   => array( 'class' => 'culprit-finder-info' ),
 				)
 			);
 		}

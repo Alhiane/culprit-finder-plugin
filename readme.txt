@@ -25,13 +25,13 @@ Culprit Finder switches plugins off **for your browser only**. It asks one quest
 * A copyable support report for forums, with no site address, user names or emails.
 * Never changes your real plugin settings. No external requests, no tracking.
 
-Go to Tools → Culprit Finder to start.
+Open **Culprit Finder** in the admin menu to start. A small dashboard widget shows the current step while you troubleshoot.
 
 == Installation ==
 
 1. Upload the plugin and activate it.
-2. Culprit Finder copies a small helper file to `wp-content/mu-plugins/culprit-finder-loader.php`. If your host doesn't allow that, Tools → Culprit Finder shows how to copy it by hand.
-3. Go to Tools → Culprit Finder, bookmark the two links it shows, and press Start.
+2. Culprit Finder copies a small helper file to `wp-content/mu-plugins/culprit-finder-loader.php`. If your host doesn't allow that, the Culprit Finder page shows how to copy it by hand.
+3. Open Culprit Finder in the admin menu, bookmark the two links it shows, tick "I've saved both links", and press Start.
 
 == Frequently Asked Questions ==
 
@@ -41,7 +41,7 @@ No. Plugins are only switched off for requests from your own browser while you a
 
 = A step shows "There has been a critical error on this website". What now? =
 
-That's normal: it often means the plugins switched on in that step are the problem. Open the **control panel** link you bookmarked (Tools → Culprit Finder with `culprit_safe=1`), which always loads safely, and answer there. WordPress may also email you about the error; you can ignore it during troubleshooting.
+That's normal: it often means the plugins switched on in that step are the problem. Open the **control panel** link you bookmarked (the Culprit Finder page with `culprit_safe=1`), which always loads safely, and answer there. WordPress may also email you about the error; you can ignore it during troubleshooting.
 
 = My whole site is down, including wp-admin. Can I still use it? =
 
@@ -58,7 +58,7 @@ If the recovery email never arrives (some hosts can't send email), ask another a
 
 Any of these ends troubleshooting:
 
-* Press **Exit** on the Tools page or in the admin bar.
+* Press **Exit** on the Culprit Finder page, in the dashboard widget, or in the admin bar.
 * Open the **emergency exit** link you bookmarked. It works even when you're logged out.
 * Wait an hour without answering; the session expires by itself.
 * Deactivate Culprit Finder.

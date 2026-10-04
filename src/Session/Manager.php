@@ -83,9 +83,10 @@ final class Manager {
 	 * @param int         $user_id      Session owner.
 	 * @param string[]    $pinned       Requested keep-on basenames (validated against the snapshot).
 	 * @param string|null $recovery_key Pre-generated recovery key shown on the idle screen (64 hex), or null.
+	 * @param string      $problem_url  Address of the broken page (already validated as same-site), or ''.
 	 * @return array{token: string, recovery_key: string, session: array, step: Step}|WP_Error
 	 */
-	public function start( $user_id, array $pinned = array(), $recovery_key = null ) {
+	public function start( $user_id, array $pinned = array(), $recovery_key = null, $problem_url = '' ) {
 		$snapshot = array_values( array_unique( array_filter( $this->real_active_plugins(), 'is_string' ) ) );
 		$errors   = StartGuard::errors( is_multisite(), $this->loader_ready(), in_array( $this->self, $snapshot, true ) );
 		if ( $errors ) {
@@ -114,6 +115,7 @@ final class Manager {
 			'answers'       => array(),
 			'fixed'         => $engine->fixed(),
 			'enabled_now'   => $step->enabled(),
+			'problem_url'   => (string) $problem_url,
 		);
 		$this->store->save_session( $session );
 		if ( $step->is_done() ) {

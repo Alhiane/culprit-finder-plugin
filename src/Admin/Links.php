@@ -15,17 +15,31 @@ defined( 'ABSPATH' ) || exit;
 final class Links {
 
 	/**
-	 * Tools page.
+	 * The Culprit Finder page (top-level menu, ADR-0018).
 	 *
 	 * @param array $args Extra query args.
 	 * @return string
 	 */
 	public static function tools( array $args = array() ) {
-		return add_query_arg( array_merge( array( 'page' => Page::SLUG ), $args ), admin_url( 'tools.php' ) );
+		return add_query_arg( array_merge( array( 'page' => Page::SLUG ), $args ), admin_url( 'admin.php' ) );
 	}
 
 	/**
-	 * Control panel: the Tools page in safe mode (loads with only the fixed set).
+	 * Validated address of the broken page: same site only, else ''.
+	 *
+	 * @param string $url Raw URL.
+	 * @return string
+	 */
+	public static function problem_url( $url ) {
+		$url = esc_url_raw( trim( (string) $url ), array( 'http', 'https' ) );
+		if ( '' === $url ) {
+			return '';
+		}
+		return (string) wp_validate_redirect( $url, '' );
+	}
+
+	/**
+	 * Control panel: our page in safe mode (loads with only the fixed set).
 	 *
 	 * @return string
 	 */

@@ -54,10 +54,17 @@ final class Handlers {
 			// Basenames are validated against the snapshot in Manager::start().
 			$pins = array_map( 'sanitize_text_field', wp_unslash( $_POST['culprit_finder_pin'] ) );
 		}
-		$key = isset( $_POST['culprit_finder_recovery'] ) ? sanitize_text_field( wp_unslash( $_POST['culprit_finder_recovery'] ) ) : '';
+		$key     = isset( $_POST['culprit_finder_recovery'] ) ? sanitize_text_field( wp_unslash( $_POST['culprit_finder_recovery'] ) ) : '';
+		$problem = isset( $_POST['culprit_finder_problem_url'] ) ? Links::problem_url( sanitize_text_field( wp_unslash( $_POST['culprit_finder_problem_url'] ) ) ) : '';
+		$saved   = ! empty( $_POST['culprit_finder_saved'] );
 		// phpcs:enable
 
-		$start = $this->plugin->manager()->start( get_current_user_id(), $pins, Token::is_valid_format( $key ) ? $key : null );
+		// The emergency exit only exists if the user kept the link (ADR-0018). The form requires the box too.
+		if ( ! $saved ) {
+			$this->redirect( Links::tools( array( 'culprit_notice' => 'unsaved' ) ) );
+		}
+
+		$start = $this->plugin->manager()->start( get_current_user_id(), $pins, Token::is_valid_format( $key ) ? $key : null, $problem );
 		if ( $start instanceof WP_Error ) {
 			$this->die_with( $start );
 		}
