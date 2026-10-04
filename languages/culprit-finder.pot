@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-04T21:06:52+00:00\n"
+"POT-Creation-Date: 2026-10-04T22:24:13+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: culprit-finder\n"
@@ -17,12 +17,18 @@ msgstr ""
 #. Plugin Name of the plugin
 #: culprit-finder.php
 #: src/Admin/DashboardWidget.php:66
-#: src/Admin/Handlers.php:239
-#: src/Admin/Page.php:63
-#: src/Admin/Page.php:64
-#: src/Admin/Page.php:143
-#: src/Plugin.php:132
+#: src/Admin/Handlers.php:240
+#: src/Admin/Page.php:65
+#: src/Admin/Page.php:66
+#: src/Admin/Page.php:202
+#: src/Plugin.php:134
 msgid "Culprit Finder"
+msgstr ""
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: culprit-finder.php
+msgid "https://getculpritfinder.com"
 msgstr ""
 
 #. Description of the plugin
@@ -56,7 +62,7 @@ msgid "No, it’s gone"
 msgstr ""
 
 #: src/Admin/AdminBar.php:93
-#: src/Admin/ResultsView.php:202
+#: src/Admin/ResultsView.php:203
 #: src/Admin/TroubleshootView.php:231
 #: src/Admin/TroubleshootView.php:274
 msgid "Undo last answer"
@@ -163,26 +169,26 @@ msgstr ""
 msgid "Exit"
 msgstr ""
 
-#: src/Admin/Handlers.php:83
+#: src/Admin/Handlers.php:84
 msgid "Invalid answer."
 msgstr ""
 
-#: src/Admin/Handlers.php:119
-#: src/Admin/ResultsView.php:52
+#: src/Admin/Handlers.php:120
+#: src/Admin/ResultsView.php:53
 msgid "That result no longer exists."
 msgstr ""
 
-#: src/Admin/Handlers.php:193
+#: src/Admin/Handlers.php:194
 msgid "Sorry, you are not allowed to do that."
 msgstr ""
 
 #. translators: %s: Tools page URL
-#: src/Admin/Handlers.php:207
+#: src/Admin/Handlers.php:208
 #, php-format
 msgid "There is no troubleshooting session for you in this browser. <a href=\"%s\">Go to Culprit Finder</a>."
 msgstr ""
 
-#: src/Admin/Handlers.php:243
+#: src/Admin/Handlers.php:244
 msgid "Back to Culprit Finder"
 msgstr ""
 
@@ -263,135 +269,135 @@ msgstr ""
 msgid "Your theme, must-use plugins, drop-ins such as object-cache.php, and server settings. If the problem stays with every plugin off, the result says so."
 msgstr ""
 
-#: src/Admin/Page.php:144
-msgid "Find the plugin that broke your site. Visitors never notice."
-msgstr ""
-
-#: src/Admin/Page.php:157
+#: src/Admin/Page.php:138
 msgid "Troubleshoot"
 msgstr ""
 
-#: src/Admin/Page.php:158
+#: src/Admin/Page.php:139
 msgid "Results"
 msgstr ""
 
-#: src/Admin/Page.php:159
+#: src/Admin/Page.php:140
 msgid "Help"
 msgstr ""
 
-#: src/Admin/Page.php:161
+#: src/Admin/Page.php:203
+msgid "Find the plugin that broke your site. Visitors never notice."
+msgstr ""
+
+#: src/Admin/Page.php:216
 msgid "Culprit Finder sections"
 msgstr ""
 
-#: src/Admin/Page.php:170
+#: src/Admin/Page.php:225
 msgid "Troubleshooting is running"
 msgstr ""
 
 #. translators: %s: URL that exits WordPress recovery mode
-#: src/Admin/Page.php:193
+#: src/Admin/Page.php:248
 #, php-format
 msgid "<strong>You are still in WordPress recovery mode.</strong> WordPress keeps the plugin that crashed paused for you, so your answers would be wrong. <a href=\"%s\">Exit recovery mode</a> before you answer; Culprit Finder keeps your site usable, and your bookmarked control panel always works."
 msgstr ""
 
 #. translators: %s: URL that exits WordPress recovery mode
-#: src/Admin/Page.php:196
+#: src/Admin/Page.php:251
 #, php-format
 msgid "<strong>You are in WordPress recovery mode.</strong> Bookmark the two links below and press Start, then <a href=\"%s\">exit recovery mode</a> before you answer any question."
 msgstr ""
 
-#: src/Admin/Page.php:207
+#: src/Admin/Page.php:262
 msgid "Troubleshooting started. Plugins are switched off for you only; visitors see the normal site."
 msgstr ""
 
-#: src/Admin/Page.php:208
+#: src/Admin/Page.php:263
 msgid "Troubleshooting ended. The site is back to normal for you."
 msgstr ""
 
-#: src/Admin/Page.php:209
+#: src/Admin/Page.php:264
 msgid "Please save both safety links and tick “I’ve saved both links” before you start."
 msgstr ""
 
-#: src/Admin/Page.php:210
+#: src/Admin/Page.php:265
 msgid "Result deleted."
 msgstr ""
 
-#: src/Admin/Page.php:211
+#: src/Admin/Page.php:266
 msgid "All results deleted."
 msgstr ""
 
-#: src/Admin/Page.php:220
+#: src/Admin/Page.php:275
 msgid "Your troubleshooting session expired after an hour without answers and was ended. The site is back to normal for you."
 msgstr ""
 
-#: src/Admin/Page.php:254
+#: src/Admin/Page.php:309
 msgid "One plugin causes the problem"
 msgstr ""
 
-#: src/Admin/Page.php:256
+#: src/Admin/Page.php:311
 msgid "Two plugins conflict with each other"
 msgstr ""
 
-#: src/Admin/Page.php:258
+#: src/Admin/Page.php:313
 msgid "Three or more plugins are involved"
 msgstr ""
 
-#: src/Admin/Page.php:260
+#: src/Admin/Page.php:315
 msgid "It’s not one of the plugins tested"
 msgstr ""
 
-#: src/Admin/Page.php:262
+#: src/Admin/Page.php:317
 msgid "There was nothing to test"
 msgstr ""
 
-#: src/Admin/Page.php:264
+#: src/Admin/Page.php:319
 msgid "The answers didn’t add up"
 msgstr ""
 
-#: src/Admin/Page.php:277
+#: src/Admin/Page.php:332
 msgid "One plugin"
 msgstr ""
 
-#: src/Admin/Page.php:279
+#: src/Admin/Page.php:334
 msgid "Two plugins conflict"
 msgstr ""
 
-#: src/Admin/Page.php:281
+#: src/Admin/Page.php:336
 msgid "Three or more plugins"
 msgstr ""
 
-#: src/Admin/Page.php:283
+#: src/Admin/Page.php:338
 msgid "Not a plugin"
 msgstr ""
 
-#: src/Admin/Page.php:285
+#: src/Admin/Page.php:340
 msgid "Nothing to test"
 msgstr ""
 
-#: src/Admin/Page.php:287
+#: src/Admin/Page.php:342
 msgid "Inconsistent answers"
 msgstr ""
 
-#: src/Admin/Page.php:300
+#: src/Admin/Page.php:355
 msgid "The problem appears whenever this plugin is on."
 msgstr ""
 
-#: src/Admin/Page.php:302
+#: src/Admin/Page.php:357
 msgid "The problem appears only when both of these are on."
 msgstr ""
 
-#: src/Admin/Page.php:304
+#: src/Admin/Page.php:359
 msgid "These two are part of it; test further with both of them on."
 msgstr ""
 
-#: src/Admin/Page.php:306
+#: src/Admin/Page.php:361
 msgid "The problem stayed with all of them off. Check the theme, must-use plugins, or the server."
 msgstr ""
 
-#: src/Admin/Page.php:308
+#: src/Admin/Page.php:363
 msgid "Every active plugin was kept on."
 msgstr ""
 
-#: src/Admin/Page.php:310
+#: src/Admin/Page.php:365
 msgid "The problem may come and go. Try again and check each step carefully."
 msgstr ""
 
@@ -405,203 +411,203 @@ msgstr ""
 msgid "<strong>Plugin management is paused while Culprit Finder is running.</strong> The list below shows only the plugins switched on for you in this step; nothing has changed for visitors. <a href=\"%1$s\">Exit troubleshooting</a> or go to the <a href=\"%2$s\">control panel</a>."
 msgstr ""
 
-#: src/Admin/ResultsView.php:63
+#: src/Admin/ResultsView.php:64
 msgid "No results yet"
 msgstr ""
 
-#: src/Admin/ResultsView.php:64
+#: src/Admin/ResultsView.php:65
 msgid "When a search finishes, its result and report appear here."
 msgstr ""
 
-#: src/Admin/ResultsView.php:65
+#: src/Admin/ResultsView.php:66
 #: src/Admin/TroubleshootView.php:122
 msgid "Start troubleshooting"
 msgstr ""
 
 #. translators: %d: maximum number of results kept
-#: src/Admin/ResultsView.php:72
+#: src/Admin/ResultsView.php:73
 #, php-format
 msgid "Your last %d results are kept on this site only. Nothing is sent anywhere."
 msgstr ""
 
-#: src/Admin/ResultsView.php:76
+#: src/Admin/ResultsView.php:77
 msgid "Clear all"
 msgstr ""
 
-#: src/Admin/ResultsView.php:79
+#: src/Admin/ResultsView.php:80
 msgid "Date"
 msgstr ""
 
-#: src/Admin/ResultsView.php:80
-#: src/Admin/ResultsView.php:132
+#: src/Admin/ResultsView.php:81
+#: src/Admin/ResultsView.php:133
 msgid "Result"
 msgstr ""
 
-#: src/Admin/ResultsView.php:81
+#: src/Admin/ResultsView.php:82
 msgid "Plugins"
 msgstr ""
 
-#: src/Admin/ResultsView.php:82
+#: src/Admin/ResultsView.php:83
 msgid "Answers"
 msgstr ""
 
-#: src/Admin/ResultsView.php:83
+#: src/Admin/ResultsView.php:84
 msgid "Actions"
 msgstr ""
 
-#: src/Admin/ResultsView.php:100
+#: src/Admin/ResultsView.php:101
 msgid "Download"
 msgstr ""
 
-#: src/Admin/ResultsView.php:101
-#: src/Admin/ResultsView.php:183
+#: src/Admin/ResultsView.php:102
+#: src/Admin/ResultsView.php:184
 msgid "Delete"
 msgstr ""
 
-#: src/Admin/ResultsView.php:121
+#: src/Admin/ResultsView.php:122
 msgid "← All results"
 msgstr ""
 
 #. translators: 1: "Found it" or "Result", 2: number of answers, 3: date
-#: src/Admin/ResultsView.php:131
+#: src/Admin/ResultsView.php:132
 #, php-format
 msgid "%1$s · %2$d answer · %3$s"
 msgid_plural "%1$s · %2$d answers · %3$s"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Admin/ResultsView.php:132
+#: src/Admin/ResultsView.php:133
 msgid "Found it"
 msgstr ""
 
-#: src/Admin/ResultsView.php:144
+#: src/Admin/ResultsView.php:145
 msgid "Environment"
 msgstr ""
 
-#: src/Admin/ResultsView.php:150
+#: src/Admin/ResultsView.php:151
 msgid "WordPress"
 msgstr ""
 
-#: src/Admin/ResultsView.php:151
+#: src/Admin/ResultsView.php:152
 msgid "PHP"
 msgstr ""
 
-#: src/Admin/ResultsView.php:152
+#: src/Admin/ResultsView.php:153
 msgid "Theme"
 msgstr ""
 
-#: src/Admin/ResultsView.php:153
+#: src/Admin/ResultsView.php:154
 msgid "Plugins tested"
 msgstr ""
 
-#: src/Admin/ResultsView.php:154
+#: src/Admin/ResultsView.php:155
 msgid "Kept on"
 msgstr ""
 
-#: src/Admin/ResultsView.php:154
+#: src/Admin/ResultsView.php:155
 msgid "None"
 msgstr ""
 
-#: src/Admin/ResultsView.php:155
+#: src/Admin/ResultsView.php:156
 msgid "Not tested"
 msgstr ""
 
-#: src/Admin/ResultsView.php:155
+#: src/Admin/ResultsView.php:156
 msgid "Must-use plugins, drop-ins, theme"
 msgstr ""
 
-#: src/Admin/ResultsView.php:156
+#: src/Admin/ResultsView.php:157
 msgid "Multisite"
 msgstr ""
 
-#: src/Admin/ResultsView.php:156
+#: src/Admin/ResultsView.php:157
 msgid "Yes"
 msgstr ""
 
-#: src/Admin/ResultsView.php:156
+#: src/Admin/ResultsView.php:157
 msgid "No"
 msgstr ""
 
-#: src/Admin/ResultsView.php:164
+#: src/Admin/ResultsView.php:165
 msgid "Copied!"
 msgstr ""
 
-#: src/Admin/ResultsView.php:164
+#: src/Admin/ResultsView.php:165
 msgid "Copy for forum"
 msgstr ""
 
-#: src/Admin/ResultsView.php:173
+#: src/Admin/ResultsView.php:174
 msgid "Download .md"
 msgstr ""
 
-#: src/Admin/ResultsView.php:182
+#: src/Admin/ResultsView.php:183
 msgid "Download .txt"
 msgstr ""
 
-#: src/Admin/ResultsView.php:185
+#: src/Admin/ResultsView.php:186
 msgid "Safe to share publicly: no site address, user names or emails."
 msgstr ""
 
-#: src/Admin/ResultsView.php:186
+#: src/Admin/ResultsView.php:187
 msgid "Show plain text"
 msgstr ""
 
-#: src/Admin/ResultsView.php:199
+#: src/Admin/ResultsView.php:200
 msgid "This is the result of your current session."
 msgstr ""
 
-#: src/Admin/ResultsView.php:199
+#: src/Admin/ResultsView.php:200
 msgid "Your site is back to normal for you while you read it."
 msgstr ""
 
-#: src/Admin/ResultsView.php:201
+#: src/Admin/ResultsView.php:202
 #: src/Admin/TroubleshootView.php:275
 msgid "Done, exit"
 msgstr ""
 
-#: src/Admin/ResultsView.php:214
+#: src/Admin/ResultsView.php:215
 msgid "Run again"
 msgstr ""
 
-#: src/Admin/ResultsView.php:216
+#: src/Admin/ResultsView.php:217
 msgid "Run again starts a new session with a new emergency exit link. Bookmark it first:"
 msgstr ""
 
 #. translators: %s: plugin author
-#: src/Admin/ResultsView.php:255
+#: src/Admin/ResultsView.php:256
 #, php-format
 msgid "By %s"
 msgstr ""
 
-#: src/Admin/ResultsView.php:258
+#: src/Admin/ResultsView.php:259
 msgid "Plugin website"
 msgstr ""
 
 #. translators: %s: list of plugin names
-#: src/Admin/ResultsView.php:269
+#: src/Admin/ResultsView.php:270
 #, php-format
 msgid "Tested together with its required plugins: %s"
 msgstr ""
 
-#: src/Admin/ResultsView.php:273
+#: src/Admin/ResultsView.php:274
 msgid "What you can do next"
 msgstr ""
 
 #. translators: %s: Plugins screen URL
-#: src/Admin/ResultsView.php:275
+#: src/Admin/ResultsView.php:276
 #, php-format
 msgid "Check for an update on the <a href=\"%s\">Plugins screen</a> (after you exit)."
 msgstr ""
 
-#: src/Admin/ResultsView.php:276
+#: src/Admin/ResultsView.php:277
 msgid "Send this report to the plugin’s support forum."
 msgstr ""
 
-#: src/Admin/ResultsView.php:277
+#: src/Admin/ResultsView.php:278
 msgid "If you can live without it, deactivate it for everyone from the Plugins screen."
 msgstr ""
 
-#: src/Admin/ResultsView.php:304
+#: src/Admin/ResultsView.php:305
 msgid "None of the plugins tested"
 msgstr ""
 
@@ -798,7 +804,7 @@ msgstr ""
 msgid "To fix it, copy %1$s into %2$s (create the folder if needed) with FTP or your host’s file manager, then reload this page."
 msgstr ""
 
-#: src/Plugin.php:131
+#: src/Plugin.php:133
 msgid "Culprit Finder does not support multisite networks yet. Please do not network-activate it."
 msgstr ""
 
@@ -808,18 +814,18 @@ msgstr ""
 msgid "Could not copy the loader into %s (the folder may not be writable)."
 msgstr ""
 
-#: src/Session/Manager.php:282
+#: src/Session/Manager.php:301
 msgid "No troubleshooting session is running."
 msgstr ""
 
-#: src/Session/Manager.php:294
+#: src/Session/Manager.php:313
 msgid "Culprit Finder does not support multisite networks yet. No session was started."
 msgstr ""
 
-#: src/Session/Manager.php:296
+#: src/Session/Manager.php:315
 msgid "The Culprit Finder loader is not installed in wp-content/mu-plugins, so plugins cannot be switched off for your session. See the manual install steps on the Tools page."
 msgstr ""
 
-#: src/Session/Manager.php:298
+#: src/Session/Manager.php:317
 msgid "Culprit Finder must be active to start a session."
 msgstr ""

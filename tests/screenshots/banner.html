@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Culprit Finder banner</title>
+<style>
+  html, body { margin: 0; }
+  body {
+    --w: 1544px; --h: 500px; --pad: 40px;
+    width: var(--w); height: var(--h); overflow: hidden;
+    background: #1F1A24;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    color: #fff;
+  }
+  .banner {
+    position: relative; box-sizing: border-box; width: 100%; height: 100%;
+    padding: var(--pad); display: flex; align-items: center; gap: calc(var(--w) * 0.05);
+  }
+  .glow {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 55% 85% at 88% 50%, rgba(146, 95, 187, 0.55), rgba(146, 95, 187, 0.18) 45%, rgba(31, 26, 36, 0) 75%);
+  }
+  .logo { position: relative; width: calc(var(--w) * 0.38); flex: 0 0 auto; display: block; }
+  .copy { position: relative; display: grid; gap: calc(var(--h) * 0.04); }
+  h1 { margin: 0; font-weight: 700; line-height: 1.12; letter-spacing: -0.01em; font-size: calc(var(--h) * 0.105); text-wrap: balance; }
+  p { margin: 0; color: #E6D9F2; font-size: calc(var(--h) * 0.062); }
+</style>
+</head>
+<body>
+<div class="banner">
+  <div class="glow"></div>
+  <img class="logo" src="../../.github/brand/culprit-finder-logo-white.svg" alt="Culprit Finder">
+  <div class="copy">
+    <h1>Find the plugin that broke your site.</h1>
+    <p>Visitors never notice.</p>
+  </div>
+</div>
+<script>
+  const q = new URLSearchParams(location.search);
+  const s = document.body.style;
+  if (q.get('w')) s.setProperty('--w', q.get('w') + 'px');
+  if (q.get('h')) s.setProperty('--h', q.get('h') + 'px');
+  if (q.get('pad')) s.setProperty('--pad', q.get('pad') + 'px');
+</script>
+</body>
+</html>

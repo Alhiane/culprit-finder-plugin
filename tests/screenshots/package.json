@@ -1,0 +1,9 @@
+{
+  "name": "culprit-finder-screenshots",
+  "private": true,
+  "description": "Renders the WordPress.org screenshots and banners (make screenshots, make banners).",
+  "type": "module",
+  "devDependencies": {
+    "playwright-core": "1.48.2"
+  }
+}

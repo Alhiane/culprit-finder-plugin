@@ -1,6 +1,6 @@
 === Culprit Finder ===
-Contributors: alhiane
-Tags: troubleshooting, plugin conflict, debug, health check, white screen
+Contributors: WPORG_USERNAME
+Tags: troubleshooting, plugin conflict, debug, critical error, white screen
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
@@ -8,7 +8,7 @@ Stable tag: 0.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Find the plugin that broke your site in a few clicks, without breaking it for your visitors.
+Find the plugin that broke your site. Plugins are switched off for your browser only, so visitors never notice.
 
 == Description ==
 
@@ -16,23 +16,32 @@ When something on your site breaks, the usual advice is "deactivate all plugins,
 
 Culprit Finder switches plugins off **for your browser only**. It asks one question per step: "Is the problem still there?" Answer Yes or No, and it narrows things down until it names the plugin that causes the problem, or the two plugins that conflict with each other. Visitors and other admins see the normal site the whole time.
 
-* About 7 questions for one culprit among 30 plugins.
-* Detects conflicts between two plugins (for example "Cannot redeclare" fatal errors).
-* Keep plugins on that the problem needs (for example WooCommerce for a checkout bug).
-* Respects plugin dependencies ("Requires Plugins").
-* Answer from the admin bar on any page, or from a control panel that keeps working even when a step breaks your pages.
-* Ends by itself after an hour without answers, and has a logged-out emergency exit link.
-* A support report for forums, with no site address, user names or emails: copy it, or download it as .md or .txt.
-* Your last 10 results are kept on the Results tab, on your own site only.
-* Never changes your real plugin settings. No external requests, no tracking.
+* **Visitors never notice.** Only your browser sees plugins switched off. Nothing is deactivated, and your real plugin settings never change.
+* **Fast.** About 7 answers for 30 plugins, because each answer halves the list.
+* **Catches two-plugin conflicts**, such as two plugins that only crash together ("Cannot redeclare" fatal errors).
+* **Keep plugins on** that the problem needs, for example your shop plugin for a checkout problem. Plugin dependencies ("Requires Plugins") are respected.
+* **Answer from anywhere:** the Culprit Finder page, the toolbar on any page, the dashboard widget, or a control panel that keeps working even when a step breaks your pages.
+* **Always a way out:** an Exit button, a logged-out emergency exit link, and an automatic end after an hour without answers.
+* **A support report** for forums and plugin authors, with no site address, user names or emails. Copy it, or download it as .md or .txt.
+* **Results history:** your last 10 results stay on the Results tab, on your own site.
 
-Open **Culprit Finder** in the admin menu to start. A small dashboard widget shows the current step while you troubleshoot.
+= What it can't test =
+
+Your theme, must-use plugins, drop-ins (such as `object-cache.php`) and server settings. If the problem stays with every plugin off, the result says so. Multisite networks aren't supported yet.
+
+= Privacy =
+
+Culprit Finder makes no external requests and has no tracking. It stores its results only on your site, and uninstalling removes them.
+
+= Source code and support =
+
+Culprit Finder is free software (GPLv2 or later). The source code is on GitHub: GITHUB_REPO_URL. Documentation lives at https://getculpritfinder.com/docs.
 
 == Installation ==
 
-1. Upload the plugin and activate it.
+1. Install Culprit Finder from Plugins → Add New, or upload the zip, then activate it.
 2. Culprit Finder copies a small helper file to `wp-content/mu-plugins/culprit-finder-loader.php`. If your host doesn't allow that, the Culprit Finder page shows how to copy it by hand.
-3. Open Culprit Finder in the admin menu, bookmark the two links it shows, tick "I've saved both links", and press Start.
+3. Open **Culprit Finder** in the admin menu, bookmark the two safety links, tick "I've saved both links", and press **Start troubleshooting**.
 
 == Frequently Asked Questions ==
 
@@ -68,7 +77,11 @@ Any of these ends troubleshooting:
 
 = Does any data leave my site? =
 
-No. Culprit Finder makes no external requests and has no tracking. The support report is only shown to you, and it contains no site address, user names or emails.
+No. Culprit Finder makes no external requests and has no tracking. Results are stored only on your site (your last 10), and the support report contains no site address, user names or emails. Uninstalling removes everything.
+
+= How many questions will it ask? =
+
+About 7 for 30 plugins, because each answer halves the list. Finding two plugins that only fail together takes a few more.
 
 = What can't it test? =
 
@@ -82,7 +95,21 @@ Not yet. It refuses to start on multisite networks.
 
 No. The Plugins screen is paused for you while a session runs, so the shortened list you see can never be saved by accident. Exit first.
 
+== Screenshots ==
+
+1. Pick plugins to keep on and save your two safety links.
+2. One question per step: is the problem still there?
+3. Answer from the toolbar on any page.
+4. The culprit, what to do next, and a report ready for any support forum.
+5. Your last 10 results stay on this site.
+6. How it works and every way out.
+
 == Changelog ==
 
 = 0.1.0 =
-* First release: session-only plugin isolation, conflict search with pair detection, pinned plugins, dependencies, admin bar controls, support report, WP-CLI command.
+* First release: switch plugins off for your browser only, find the plugin (or the two plugins) behind a problem, keep plugins on, respect plugin dependencies, answer from the page, the toolbar or the dashboard widget, results history with .md and .txt downloads, and a WP-CLI command.
+
+== Upgrade Notice ==
+
+= 0.1.0 =
+First release.

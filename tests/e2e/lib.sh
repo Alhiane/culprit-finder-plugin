@@ -30,7 +30,7 @@ CLI_CONTAINER=${CLI_CONTAINER:-$(find_cli_container || true)}
 
 wpcli() {
   if [ -n "$CLI_CONTAINER" ]; then
-    docker exec -i -w /var/www/html "$CLI_CONTAINER" wp "$@"
+    docker exec -i -w /var/www/html "$CLI_CONTAINER" "${CF_WP_BIN:-wp}" "$@"
   else
     (cd "$ROOT" && ${WPENV:-npx --yes @wordpress/env} run cli wp "$@" 2>/dev/null)
   fi

@@ -1,11 +1,13 @@
 <?php
 /**
  * Plugin Name:       Culprit Finder
+ * Plugin URI:        https://getculpritfinder.com
  * Description:       Find the plugin that broke your site. Plugins are switched off for your browser session only, so visitors never notice.
  * Version:           0.1.0
  * Requires at least: 6.5
  * Requires PHP:      7.4
  * Author:            Alhiane Lahcen
+ * Author URI:        https://getculpritfinder.com
  * License:           GPLv2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       culprit-finder

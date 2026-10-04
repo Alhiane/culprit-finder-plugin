@@ -19,10 +19,10 @@ endif
 
 export BASE WPENV
 
-.PHONY: help install up down destroy lint fix unit e2e test zip zip-test clean
+.PHONY: help install up down destroy lint fix unit e2e test zip zip-test release-check pot screenshots banners compat clean
 
 help:
-	@echo "make up | down | destroy | lint | fix | unit | e2e | test | zip | zip-test"
+	@echo "make up | down | destroy | lint | fix | unit | e2e | test | zip | zip-test | release-check | pot | screenshots | banners"
 	@echo "Site: $(BASE)  (admin / password)"
 
 vendor/autoload.php: composer.json
@@ -53,10 +53,31 @@ unit: vendor/autoload.php
 e2e:
 	bash tests/e2e/run.sh $(SCENARIO)
 
-test: lint unit e2e
+test: lint unit release-check e2e
 
 zip:
 	bash bin/build-zip.sh
+
+# readme.txt rules and no paid-plan wording in anything published (run after make zip for the zip check).
+release-check:
+	bash tests/release/readme-lint.sh
+	bash tests/release/forbidden-terms.sh
+
+# Translation template (runs WP-CLI in the wp-env cli container).
+pot:
+	bash -c 'source tests/e2e/lib.sh; docker exec -w /var/www/html/wp-content/plugins/culprit-finder "$$CLI_CONTAINER" wp i18n make-pot . languages/culprit-finder.pot --slug=culprit-finder --domain=culprit-finder --exclude=tests,vendor,build,docs,.claude,node_modules,.wordpress-org,.github,website'
+
+# WordPress.org screenshots from the cff-showcase fixtures (needs make up; resets the wp-env site).
+screenshots:
+	bash tests/screenshots/run.sh
+
+# solo + pair on WordPress 6.5/latest x PHP 7.4/8.5 (PHP CLI images + SQLite, port 8892).
+compat:
+	bash tests/compat/run.sh
+
+# WordPress.org banners + website og-image from tests/screenshots/banner.html.
+banners:
+	cd tests/screenshots && ( [ -d node_modules ] || npm install --silent --no-audit --no-fund ) && node banners.mjs
 
 # Install the zip on a fresh, separate wp-env (ports 8890/8891) and run the solo scenario.
 zip-test: zip

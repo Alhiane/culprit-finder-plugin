@@ -7,7 +7,8 @@
     "wp-content/plugins/culprit-finder": ".",
     "wp-content/plugins/cff-fixtures": "./tests/fixtures/plugins/cff-fixtures",
     "wp-content/plugins/cff-dep-parent": "./tests/fixtures/plugins/cff-dep-parent",
-    "wp-content/plugins/cff-dep-child": "./tests/fixtures/plugins/cff-dep-child"
+    "wp-content/plugins/cff-dep-child": "./tests/fixtures/plugins/cff-dep-child",
+    "wp-content/plugins/cff-showcase": "./tests/fixtures/plugins/cff-showcase"
   },
   "config": {
     "WP_DEBUG": true,
