@@ -43,6 +43,17 @@ No. Plugins are only switched off for requests from your own browser while you a
 
 That's normal: it often means the plugins switched on in that step are the problem. Open the **control panel** link you bookmarked (Tools → Culprit Finder with `culprit_safe=1`), which always loads safely, and answer there. WordPress may also email you about the error; you can ignore it during troubleshooting.
 
+= My whole site is down, including wp-admin. Can I still use it? =
+
+Yes, through WordPress's own recovery mode:
+
+1. When a plugin crashes the whole site, WordPress emails the site admin a "recovery mode" link. Open it and log in. WordPress pauses the plugin that crashed, for you only, so wp-admin loads again.
+2. Go to Culprit Finder, bookmark the two links, and press Start.
+3. Click **Exit Recovery Mode** in the admin bar straight away. This matters: while recovery mode is on, WordPress keeps that plugin paused and your answers would be wrong. Culprit Finder now keeps your site usable instead, and the control panel link always works.
+4. Answer the questions as usual.
+
+If the recovery email never arrives (some hosts can't send email), ask another administrator, use WP-CLI (`wp plugin deactivate`), or rename the plugin's folder via FTP to get back in. WordPress's recovery email usually names the plugin that crashed; Culprit Finder is most useful when the cause isn't obvious, such as two plugins that only fail together.
+
 = How do I get out if everything is broken? =
 
 Any of these ends troubleshooting:

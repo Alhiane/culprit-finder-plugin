@@ -91,6 +91,7 @@ final class Page {
 		echo '<div class="wrap culprit-finder">';
 		echo '<h1><img class="culprit-finder-symbol" src="' . esc_url( plugins_url( 'assets/images/symbol.svg', CULPRIT_FINDER_FILE ) ) . '" alt="" height="32"> ' . esc_html__( 'Culprit Finder', 'culprit-finder' ) . '</h1>';
 		$this->render_notices();
+		$this->render_recovery_mode_notice( null !== $session && null !== $owned );
 
 		if ( null !== $session && null !== $owned ) {
 			$step = $manager->step( $session );
@@ -106,6 +107,27 @@ final class Page {
 			$this->render_idle();
 		}
 		echo '</div>';
+	}
+
+	/**
+	 * WordPress recovery mode keeps the crashed plugin paused for this browser, which would skew
+	 * every answer. Tell the user to start here, then exit recovery mode (readme FAQ, ADR-0017).
+	 *
+	 * @param bool $running Whether this browser has a running session.
+	 */
+	private function render_recovery_mode_notice( $running ) {
+		if ( ! function_exists( 'wp_is_recovery_mode' ) || ! wp_is_recovery_mode() ) {
+			return;
+		}
+		$exit_url = wp_nonce_url( add_query_arg( 'action', 'exit_recovery_mode', wp_login_url() ), 'exit_recovery_mode' );
+		if ( $running ) {
+			/* translators: %s: URL that exits WordPress recovery mode */
+			$message = __( '<strong>You are still in WordPress recovery mode.</strong> WordPress keeps the plugin that crashed paused for you, so your answers would be wrong. <a href="%s">Exit recovery mode</a> before you answer; Culprit Finder keeps your site usable, and your bookmarked control panel always works.', 'culprit-finder' );
+		} else {
+			/* translators: %s: URL that exits WordPress recovery mode */
+			$message = __( '<strong>You are in WordPress recovery mode.</strong> Bookmark the two links below and press Start, then <a href="%s">exit recovery mode</a> before you answer any question.', 'culprit-finder' );
+		}
+		printf( '<div class="notice notice-warning culprit-finder-recovery-mode"><p>%s</p></div>', wp_kses_post( sprintf( $message, esc_url( $exit_url ) ) ) );
 	}
 
 	/**
