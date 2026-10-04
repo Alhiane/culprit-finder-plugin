@@ -114,6 +114,12 @@ final class AdminBar {
 		if ( null === $this->plugin->owned_session() || ! is_admin_bar_showing() ) {
 			return;
 		}
-		wp_add_inline_style( 'admin-bar', '#wpadminbar .culprit-finder-bar > .ab-item{background:#b32d2e;color:#fff;font-weight:600}#wpadminbar .culprit-finder-bar:hover > .ab-item,#wpadminbar .culprit-finder-bar > .ab-item:focus{background:#8a2424;color:#fff}' );
+		$glyph = esc_url_raw( plugins_url( 'assets/images/glyph-white.svg', CULPRIT_FINDER_FILE ) );
+		// IDs, not classes: core's top-level hover/focus rules would otherwise win on specificity.
+		wp_add_inline_style(
+			'admin-bar',
+			'#wpadminbar #wp-admin-bar-culprit-finder > .ab-item{background:#925FBB url("' . $glyph . '") no-repeat 8px center/16px 16px;padding-left:30px;color:#fff;font-weight:600}'
+			. '#wpadminbar #wp-admin-bar-culprit-finder:hover > .ab-item,#wpadminbar #wp-admin-bar-culprit-finder.hover > .ab-item,#wpadminbar #wp-admin-bar-culprit-finder > .ab-item:focus{background-color:#7C4DA6;color:#fff}'
+		);
 	}
 }

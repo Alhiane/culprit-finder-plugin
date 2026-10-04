@@ -89,7 +89,7 @@ final class Page {
 		$owned   = $this->plugin->owned_session();
 
 		echo '<div class="wrap culprit-finder">';
-		echo '<h1>' . esc_html__( 'Culprit Finder', 'culprit-finder' ) . '</h1>';
+		echo '<h1><img class="culprit-finder-symbol" src="' . esc_url( plugins_url( 'assets/images/symbol.svg', CULPRIT_FINDER_FILE ) ) . '" alt="" height="32"> ' . esc_html__( 'Culprit Finder', 'culprit-finder' ) . '</h1>';
 		$this->render_notices();
 
 		if ( null !== $session && null !== $owned ) {
