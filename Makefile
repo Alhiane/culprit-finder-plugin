@@ -19,7 +19,7 @@ endif
 
 export BASE WPENV
 
-.PHONY: help install up down destroy lint unit e2e test zip clean
+.PHONY: help install up down destroy lint fix unit e2e test zip clean
 
 help:
 	@echo "make up | down | destroy | lint | unit | e2e | test | zip"
@@ -43,6 +43,9 @@ destroy:
 
 lint: vendor/autoload.php
 	$(PHP) vendor/bin/phpcs
+
+fix: vendor/autoload.php
+	-$(PHP) vendor/bin/phpcbf
 
 unit: vendor/autoload.php
 	$(PHP) vendor/bin/phpunit
