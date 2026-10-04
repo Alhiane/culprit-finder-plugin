@@ -46,5 +46,7 @@
 	<!-- src/ uses PSR-4 file names (ClassName.php) for the tiny autoloader (ADR-0008, CLAUDE.md). -->
 	<rule ref="WordPress.Files.FileName">
 		<exclude-pattern>/src/*</exclude-pattern>
+		<!-- The loader's file name is fixed by ADR-0001 (it is what users delete via FTP). -->
+		<exclude-pattern>/mu-loader/*</exclude-pattern>
 	</rule>
 </ruleset>
