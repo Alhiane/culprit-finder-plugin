@@ -9,6 +9,7 @@ namespace CulpritFinder\Admin;
 
 use CulpritFinder\Plugin;
 use CulpritFinder\Report\Builder;
+use CulpritFinder\Report\Report;
 use CulpritFinder\Session\Store;
 use CulpritFinder\Session\Token;
 
@@ -116,7 +117,7 @@ final class ResultsView {
 		$plugins = isset( $record['plugins'] ) ? $record['plugins'] : array();
 		$env     = $record['env'];
 		$current = $owned && $this->is_current_session_result( $record, $session );
-		$report  = Builder::build( $record );
+		$report  = Report::text( $record );
 
 		echo '<p><a class="cf-back" href="' . esc_url( Links::tools( array( 'tab' => Page::TAB_RESULTS ) ) ) . '">' . esc_html__( '← All results', 'culprit-finder' ) . '</a></p>';
 

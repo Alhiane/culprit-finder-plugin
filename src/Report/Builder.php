@@ -24,11 +24,22 @@ final class Builder {
 	 * @return string
 	 */
 	public static function build( array $record ) {
+		return self::join( self::sections( $record ) );
+	}
+
+	/**
+	 * The report as ordered sections (`result`, `environment`, `footer`), each a block of lines.
+	 * Add-ons change them through the `culprit_finder_report_sections` filter (ADR-0021).
+	 *
+	 * @param array $record Result record.
+	 * @return array<string, string>
+	 */
+	public static function sections( array $record ) {
 		$result  = $record['result'];
 		$plugins = isset( $record['plugins'] ) ? $record['plugins'] : array();
 		$env     = $record['env'];
-		$lines   = array();
 
+		$lines   = array();
 		$lines[] = '### Plugin conflict report (Culprit Finder ' . $record['version'] . ')';
 		$lines[] = 'Result: ' . self::verdict( $result, $plugins );
 		foreach ( $result['culprits'] as $culprit ) {
@@ -39,22 +50,41 @@ final class Builder {
 			$lines[] = $after;
 		}
 
-		$lines[] = '';
-		$lines[] = 'Environment';
-		$lines[] = '- WordPress ' . $env['wp'] . ', PHP ' . $env['php'];
-		$lines[] = '- Theme: ' . trim( $env['theme'] . ' ' . $env['theme_version'] );
-		$kept    = array();
+		$kept = array();
 		foreach ( $result['kept_on'] as $basename ) {
 			$kept[] = self::label( $basename, $plugins );
 		}
-		$lines[] = '- Plugins tested: ' . (int) $record['tested'] . ( $kept ? ' (kept on: ' . implode( ', ', $kept ) . ')' : '' );
-		$lines[] = '- Not tested: must-use plugins, drop-ins, theme';
-		$lines[] = '- Multisite: ' . ( ! empty( $env['multisite'] ) ? 'yes' : 'no' );
-		$lines[] = '';
-		$answers = (int) $record['answers'];
-		$lines[] = 'Found in ' . $answers . ' ' . ( 1 === $answers ? 'answer' : 'answers' ) . ' on ' . gmdate( 'Y-m-d', (int) $record['finished_at'] ) . ' (UTC).';
+		$environment = array(
+			'Environment',
+			'- WordPress ' . $env['wp'] . ', PHP ' . $env['php'],
+			'- Theme: ' . trim( $env['theme'] . ' ' . $env['theme_version'] ),
+			'- Plugins tested: ' . (int) $record['tested'] . ( $kept ? ' (kept on: ' . implode( ', ', $kept ) . ')' : '' ),
+			'- Not tested: must-use plugins, drop-ins, theme',
+			'- Multisite: ' . ( ! empty( $env['multisite'] ) ? 'yes' : 'no' ),
+		);
 
-		return implode( "\n", $lines ) . "\n";
+		$answers = (int) $record['answers'];
+		return array(
+			'result'      => implode( "\n", $lines ),
+			'environment' => implode( "\n", $environment ),
+			'footer'      => 'Found in ' . $answers . ' ' . ( 1 === $answers ? 'answer' : 'answers' ) . ' on ' . gmdate( 'Y-m-d', (int) $record['finished_at'] ) . ' (UTC).',
+		);
+	}
+
+	/**
+	 * Join sections into the report text, separated by a blank line.
+	 *
+	 * @param array<string, string> $sections Sections in order.
+	 * @return string
+	 */
+	public static function join( array $sections ) {
+		$blocks = array();
+		foreach ( $sections as $block ) {
+			if ( is_string( $block ) && '' !== trim( $block ) ) {
+				$blocks[] = rtrim( $block, "\n" );
+			}
+		}
+		return implode( "\n\n", $blocks ) . "\n";
 	}
 
 	/**

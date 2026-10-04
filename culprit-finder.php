@@ -16,7 +16,7 @@
 defined( 'ABSPATH' ) || exit;
 
 define( 'CULPRIT_FINDER_VERSION', '0.1.0' );
-define( 'CULPRIT_FINDER_LOADER_VERSION', '0.1.0' );
+define( 'CULPRIT_FINDER_LOADER_VERSION', '0.1.1' );
 define( 'CULPRIT_FINDER_FILE', __FILE__ );
 
 spl_autoload_register(

@@ -7,7 +7,7 @@
 
 namespace CulpritFinder\CLI;
 
-use CulpritFinder\Report\Builder;
+use CulpritFinder\Report\Report;
 use CulpritFinder\Session\Manager;
 use CulpritFinder\Session\Store;
 use WP_CLI;
@@ -161,7 +161,7 @@ final class Command {
 		if ( null === $record || ! isset( $record['result'] ) ) {
 			WP_CLI::error( 'No result yet.' );
 		}
-		$report = Builder::build( $record );
+		$report = Report::text( $record );
 		if ( isset( $assoc_args['format'] ) && 'report' === $assoc_args['format'] ) {
 			WP_CLI::line( $report );
 			return;
@@ -180,7 +180,7 @@ final class Command {
 	 * @subcommand exit
 	 */
 	public function end( $args, $assoc_args ) {
-		$this->manager->end();
+		$this->manager->end( 'exit' );
 		WP_CLI::success( 'Session ended.' );
 	}
 

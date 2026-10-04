@@ -9,6 +9,7 @@ namespace CulpritFinder\Admin;
 
 use CulpritFinder\Plugin;
 use CulpritFinder\Report\Builder;
+use CulpritFinder\Report\Report;
 use CulpritFinder\Session\Token;
 use WP_Error;
 
@@ -118,7 +119,7 @@ final class Handlers {
 		if ( null === $record || ! in_array( $format, array( 'md', 'txt' ), true ) ) {
 			wp_die( esc_html__( 'That result no longer exists.', 'culprit-finder' ), '', array( 'response' => 404 ) );
 		}
-		$report   = Builder::build( $record );
+		$report   = Report::text( $record );
 		$body     = 'txt' === $format ? Builder::to_plain( $report ) : $report;
 		$filename = 'culprit-finder-report-' . gmdate( 'Y-m-d-His', (int) $record['finished_at'] ) . '.' . $format;
 		nocache_headers();

@@ -8,8 +8,10 @@
 namespace CulpritFinder\Session;
 
 use CulpritFinder\Engine\Engine;
+use CulpritFinder\Hooks;
 use CulpritFinder\Engine\Step;
 use CulpritFinder\Report\Collector;
+use CulpritFinder\Report\Report;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -93,6 +95,11 @@ final class Manager {
 			return new WP_Error( 'culprit_finder_' . $errors[0], self::error_message( $errors[0] ) );
 		}
 
+		$previous = $this->store->session();
+		if ( null !== $previous && self::is_valid( $previous ) ) {
+			Hooks::action( 'culprit_finder_session_ended', 'replaced', View::of( $previous ) );
+		}
+
 		$pinned = array_values( array_diff( array_intersect( $snapshot, $pinned ), array( $this->self ) ) );
 		$deps   = Dependencies::map( $snapshot );
 		$engine = new Engine( $snapshot, $this->self, $pinned, $deps );
@@ -118,6 +125,7 @@ final class Manager {
 			'problem_url'   => (string) $problem_url,
 		);
 		$this->store->save_session( $session );
+		Hooks::action( 'culprit_finder_session_started', View::of( $session ), $step->to_array() );
 		if ( $step->is_done() ) {
 			$this->record_result( $session, $engine, $step );
 		}
@@ -146,6 +154,7 @@ final class Manager {
 		}
 		if ( (int) $session['expires_at'] <= time() ) {
 			$this->store->delete_session();
+			Hooks::action( 'culprit_finder_session_ended', 'expired', View::of( $session ) );
 			$last                       = (array) $this->store->last_result();
 			$last['session_expired_at'] = time();
 			$this->store->save_last_result( $last );
@@ -191,7 +200,7 @@ final class Manager {
 			return $step;
 		}
 		$session['answers'][] = (bool) $problem_present;
-		return $this->persist( $session, $engine );
+		return $this->persist( $session, $engine, 'answer' );
 	}
 
 	/**
@@ -215,24 +224,32 @@ final class Manager {
 			$this->store->delete_last_result();
 		}
 		$session['answers'] = array_slice( $session['answers'], 0, -1 );
-		return $this->persist( $session, $engine );
+		return $this->persist( $session, $engine, 'undo' );
 	}
 
 	/**
-	 * End the session (Exit, deactivation).
+	 * End the session.
+	 *
+	 * @param string $reason exit|deactivated (fired with `culprit_finder_session_ended`).
 	 */
-	public function end() {
+	public function end( $reason = 'exit' ) {
+		$session = $this->store->session();
 		$this->store->delete_session();
+		if ( null !== $session && self::is_valid( $session ) ) {
+			Hooks::action( 'culprit_finder_session_ended', $reason, View::of( $session ) );
+		}
 	}
 
 	/**
-	 * Save answers, the new enabled set, and the refreshed expiry; record the result when done.
+	 * Save answers, the new enabled set, and the refreshed expiry; record the result when done,
+	 * then fire `culprit_finder_step_changed`.
 	 *
 	 * @param array  $session Session with updated answers.
 	 * @param Engine $engine  Engine.
+	 * @param string $cause   answer|undo.
 	 * @return Step
 	 */
-	private function persist( array $session, Engine $engine ) {
+	private function persist( array $session, Engine $engine, $cause ) {
 		$step                   = $engine->step( $session['answers'] );
 		$session['answers']     = array_slice( $session['answers'], 0, $step->is_done() ? $step->answers_used() : count( $session['answers'] ) );
 		$session['enabled_now'] = $step->enabled();
@@ -241,6 +258,7 @@ final class Manager {
 		if ( $step->is_done() ) {
 			$this->record_result( $session, $engine, $step );
 		}
+		Hooks::action( 'culprit_finder_step_changed', $step->to_array(), View::of( $session ), $cause );
 		return $step;
 	}
 
@@ -256,6 +274,7 @@ final class Manager {
 		$record['id'] = bin2hex( random_bytes( 6 ) );
 		$this->store->save_last_result( $record );
 		$this->store->add_result( $record );
+		Hooks::action( 'culprit_finder_result_found', Report::public_record( $record ), View::of( $session ) );
 	}
 
 	/**

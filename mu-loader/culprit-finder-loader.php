@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Culprit Finder Loader
  * Description: Lets Culprit Finder switch plugins off for one admin's browser session only. Deleting this file ends any troubleshooting session.
- * Version: 0.1.0
+ * Version: 0.1.1
  * License: GPLv2 or later
  *
  * Marker: culprit-finder-loader-marker (deactivating Culprit Finder deletes this file only when this line is present).
@@ -26,7 +26,7 @@ define( 'CULPRIT_FINDER_LOADER_FILE', __FILE__ );
  */
 final class Culprit_Finder_Loader {
 
-	const VERSION  = '0.1.0';
+	const VERSION  = '0.1.1';
 	const COOKIE   = 'wp-culprit-finder';
 	const OPTION   = 'culprit_finder_session';
 	const SAFE_ARG = 'culprit_safe';
@@ -45,6 +45,13 @@ final class Culprit_Finder_Loader {
 	 * @var bool
 	 */
 	private static $safe = false;
+
+	/**
+	 * Session ended by the recovery URL in this request, for the main plugin to report.
+	 *
+	 * @var array|null
+	 */
+	private static $recovered = null;
 
 	/**
 	 * True while real_active_plugins() reads the unfiltered option.
@@ -142,6 +149,15 @@ final class Culprit_Finder_Loader {
 	}
 
 	/**
+	 * The session the recovery URL ended in this request, or null.
+	 *
+	 * @return array|null
+	 */
+	public static function recovered_session() {
+		return self::$recovered;
+	}
+
+	/**
 	 * Whether this request is filtered by a verified session.
 	 *
 	 * @return bool
@@ -173,6 +189,7 @@ final class Culprit_Finder_Loader {
 		if ( ! is_array( $session ) || empty( $session['recovery_hash'] ) || ! is_string( $session['recovery_hash'] ) || ! hash_equals( $session['recovery_hash'], hash( 'sha256', $key ) ) ) {
 			return false;
 		}
+		self::$recovered = $session;
 		delete_option( self::OPTION );
 		self::expire_cookie();
 		return true;

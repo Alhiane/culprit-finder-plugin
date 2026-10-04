@@ -9,7 +9,9 @@ namespace CulpritFinder\Admin;
 
 use CulpritFinder\Engine\Result;
 use CulpritFinder\Engine\Step;
+use CulpritFinder\Hooks;
 use CulpritFinder\Plugin;
+use CulpritFinder\Session\View;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -69,6 +71,37 @@ final class Page {
 			66
 		);
 		$this->hook = is_string( $hook ) ? $hook : '';
+		if ( '' !== $this->hook ) {
+			add_action( 'load-' . $this->hook, array( $this, 'auto_answer' ) );
+		}
+	}
+
+	/**
+	 * Let an auto-answer provider answer steps (`culprit_finder_auto_answer`, ADR-0021).
+	 * Honored only on the Troubleshoot tab of the browser that owns the session, and only for
+	 * exactly 'yes' or 'no'; anything else leaves the question to the user.
+	 */
+	public function auto_answer() {
+		$owned = $this->plugin->owned_session();
+		if ( null === $owned || ! current_user_can( 'activate_plugins' ) || self::TAB_TROUBLESHOOT !== $this->current_tab() ) {
+			return;
+		}
+		$manager = $this->plugin->manager();
+		for ( $i = 0; $i < 64; $i++ ) {
+			$session = $manager->current();
+			if ( null === $session ) {
+				return;
+			}
+			$step = $manager->step( $session );
+			if ( $step->is_done() ) {
+				return;
+			}
+			$answer = Hooks::filter( 'culprit_finder_auto_answer', null, $step->to_array(), View::of( $session ) );
+			if ( 'yes' !== $answer && 'no' !== $answer ) {
+				return;
+			}
+			$manager->answer( 'yes' === $answer );
+		}
 	}
 
 	/**
@@ -96,13 +129,37 @@ final class Page {
 	}
 
 	/**
-	 * Current tab from the request.
+	 * Tabs: the three core tabs first, then add-on tabs from `culprit_finder_admin_tabs` (ADR-0021).
+	 *
+	 * @return array<string, string> Tab id => label.
+	 */
+	public function tabs() {
+		$core  = array(
+			self::TAB_TROUBLESHOOT => __( 'Troubleshoot', 'culprit-finder' ),
+			self::TAB_RESULTS      => __( 'Results', 'culprit-finder' ),
+			self::TAB_HELP         => __( 'Help', 'culprit-finder' ),
+		);
+		$extra = Hooks::filter( 'culprit_finder_admin_tabs', $core );
+		$tabs  = $core;
+		if ( is_array( $extra ) ) {
+			foreach ( $extra as $id => $label ) {
+				$id = sanitize_key( (string) $id );
+				if ( '' !== $id && ! isset( $core[ $id ] ) && is_string( $label ) && '' !== $label ) {
+					$tabs[ $id ] = $label;
+				}
+			}
+		}
+		return $tabs;
+	}
+
+	/**
+	 * Current tab from the request (core or add-on), defaulting to Troubleshoot.
 	 *
 	 * @return string
 	 */
-	public static function current_tab() {
+	public function current_tab() {
 		$tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- navigation only.
-		return in_array( $tab, array( self::TAB_RESULTS, self::TAB_HELP ), true ) ? $tab : self::TAB_TROUBLESHOOT;
+		return isset( $this->tabs()[ $tab ] ) ? $tab : self::TAB_TROUBLESHOOT;
 	}
 
 	/**
@@ -114,7 +171,7 @@ final class Page {
 		}
 		$session = $this->plugin->manager()->current();
 		$owned   = null !== $session && null !== $this->plugin->owned_session();
-		$tab     = self::current_tab();
+		$tab     = $this->current_tab();
 
 		echo '<div class="wrap culprit-finder">';
 		$this->render_header();
@@ -128,6 +185,8 @@ final class Page {
 			( new ResultsView( $this->plugin ) )->render( $session, $owned );
 		} elseif ( self::TAB_HELP === $tab ) {
 			( new HelpView() )->render();
+		} elseif ( self::TAB_TROUBLESHOOT !== $tab ) {
+			Hooks::action( 'culprit_finder_render_tab_' . $tab, null !== $session && $owned ? View::of( $session ) : null );
 		} else {
 			( new TroubleshootView( $this->plugin ) )->render( $session, $owned );
 		}
@@ -153,11 +212,7 @@ final class Page {
 	 */
 	private function render_tabs( $current, $running ) {
 		$count = count( $this->plugin->store()->results() );
-		$tabs  = array(
-			self::TAB_TROUBLESHOOT => __( 'Troubleshoot', 'culprit-finder' ),
-			self::TAB_RESULTS      => __( 'Results', 'culprit-finder' ),
-			self::TAB_HELP         => __( 'Help', 'culprit-finder' ),
-		);
+		$tabs  = $this->tabs();
 		echo '<nav class="cf-tabs" aria-label="' . esc_attr__( 'Culprit Finder sections', 'culprit-finder' ) . '">';
 		foreach ( $tabs as $id => $label ) {
 			$args = self::TAB_TROUBLESHOOT === $id ? array() : array( 'tab' => $id );

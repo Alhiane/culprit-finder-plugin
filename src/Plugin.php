@@ -12,6 +12,7 @@ use CulpritFinder\Session\LoaderInstaller;
 use CulpritFinder\Session\Manager;
 use CulpritFinder\Session\Store;
 use CulpritFinder\Session\Token;
+use CulpritFinder\Session\View;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -72,6 +73,7 @@ final class Plugin {
 	 */
 	public function register() {
 		add_action( 'init', array( $this, 'bind_session' ), 1 );
+		add_action( 'init', array( $this, 'report_recovery' ), 1 );
 		add_action( 'admin_init', array( $this, 'ensure_loader' ) );
 		( new Admin\Page( $this ) )->register();
 		( new Admin\Handlers( $this ) )->register();
@@ -140,7 +142,7 @@ final class Plugin {
 	 * Deactivation: end the session, expire the cookie, remove the loader (ADR-0007).
 	 */
 	public function deactivate() {
-		$this->manager->end();
+		$this->manager->end( 'deactivated' );
 		$this->cookie->expire();
 		LoaderInstaller::remove();
 	}
@@ -151,6 +153,19 @@ final class Plugin {
 	public function ensure_loader() {
 		if ( current_user_can( 'activate_plugins' ) ) {
 			LoaderInstaller::maybe_install();
+		}
+	}
+
+	/**
+	 * Report a session the recovery URL ended in this request (the loader ran before us).
+	 */
+	public function report_recovery() {
+		if ( ! class_exists( 'Culprit_Finder_Loader', false ) || ! method_exists( 'Culprit_Finder_Loader', 'recovered_session' ) ) {
+			return;
+		}
+		$session = \Culprit_Finder_Loader::recovered_session();
+		if ( is_array( $session ) ) {
+			Hooks::action( 'culprit_finder_session_ended', 'recovery', View::of( $session ) );
 		}
 	}
 
