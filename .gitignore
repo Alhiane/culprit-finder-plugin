@@ -6,3 +6,9 @@
 .phpunit.result.cache
 .DS_Store
 .wp-env-mu/
+
+# Planning docs and agent instructions stay local (not pushed).
+/docs/
+/CLAUDE.md
+/KICKOFF.md
+/.claude/
