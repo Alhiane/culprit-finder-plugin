@@ -19,10 +19,10 @@ endif
 
 export BASE WPENV
 
-.PHONY: help install up down destroy lint fix unit e2e test zip clean
+.PHONY: help install up down destroy lint fix unit e2e test zip zip-test clean
 
 help:
-	@echo "make up | down | destroy | lint | unit | e2e | test | zip"
+	@echo "make up | down | destroy | lint | fix | unit | e2e | test | zip | zip-test"
 	@echo "Site: $(BASE)  (admin / password)"
 
 vendor/autoload.php: composer.json
@@ -57,6 +57,10 @@ test: lint unit e2e
 
 zip:
 	bash bin/build-zip.sh
+
+# Install the zip on a fresh, separate wp-env (ports 8890/8891) and run the solo scenario.
+zip-test: zip
+	bash bin/zip-test.sh
 
 clean:
 	rm -rf build vendor .phpunit.result.cache

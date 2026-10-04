@@ -1,0 +1,344 @@
+# Copyright (C) 2026 Alhiane Lahcen
+# This file is distributed under the GPLv2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Culprit Finder 0.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/culprit-finder\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-10-04T16:08:29+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: culprit-finder\n"
+
+#. Plugin Name of the plugin
+#: culprit-finder.php
+#: src/Admin/Handlers.php:174
+#: src/Admin/Page.php:62
+#: src/Admin/Page.php:92
+#: src/Plugin.php:131
+msgid "Culprit Finder"
+msgstr ""
+
+#. Description of the plugin
+#: culprit-finder.php
+msgid "Find the plugin that broke your site. Plugins are switched off for your browser session only, so visitors never notice."
+msgstr ""
+
+#. Author of the plugin
+#: culprit-finder.php
+msgid "Alhiane Lahcen"
+msgstr ""
+
+#: src/Admin/AdminBar.php:69
+msgid "Culprit Finder: result ready"
+msgstr ""
+
+#. translators: 1: current step number, 2: estimated number of steps
+#: src/Admin/AdminBar.php:73
+#, php-format
+msgid "Culprit Finder: step %1$d of ~%2$d"
+msgstr ""
+
+#: src/Admin/AdminBar.php:89
+msgid "Yes, problem is still here"
+msgstr ""
+
+#: src/Admin/AdminBar.php:90
+#: src/Admin/Page.php:258
+msgid "No, it’s gone"
+msgstr ""
+
+#: src/Admin/AdminBar.php:93
+msgid "Undo"
+msgstr ""
+
+#: src/Admin/AdminBar.php:95
+msgid "View result"
+msgstr ""
+
+#: src/Admin/AdminBar.php:95
+msgid "Control panel"
+msgstr ""
+
+#: src/Admin/AdminBar.php:96
+#: src/Admin/Page.php:263
+#: src/Admin/Page.php:311
+msgid "Exit"
+msgstr ""
+
+#: src/Admin/Handlers.php:76
+msgid "Invalid answer."
+msgstr ""
+
+#: src/Admin/Handlers.php:128
+msgid "Sorry, you are not allowed to do that."
+msgstr ""
+
+#. translators: %s: Tools page URL
+#: src/Admin/Handlers.php:142
+#, php-format
+msgid "There is no troubleshooting session for you in this browser. <a href=\"%s\">Go to Culprit Finder</a>."
+msgstr ""
+
+#: src/Admin/Handlers.php:178
+msgid "Back to Culprit Finder"
+msgstr ""
+
+#: src/Admin/Page.php:117
+msgid "Troubleshooting started. Plugins are switched off for you only; visitors see the normal site."
+msgstr ""
+
+#: src/Admin/Page.php:118
+msgid "Troubleshooting ended. The site is back to normal for you."
+msgstr ""
+
+#: src/Admin/Page.php:127
+msgid "Your troubleshooting session expired after an hour without answers and was ended. The site is back to normal for you."
+msgstr ""
+
+#: src/Admin/Page.php:148
+msgid "Find the plugin that causes a problem on your site. Culprit Finder switches plugins off for your browser only, asks whether the problem is still there, and narrows it down in a few steps. Visitors always see the normal site."
+msgstr ""
+
+#. translators: %d: number of active plugins
+#: src/Admin/Page.php:162
+#, php-format
+msgid "%d active plugin will be tested"
+msgid_plural "%d active plugins will be tested"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Admin/Page.php:168
+msgid "Keep some plugins on (optional)"
+msgstr ""
+
+#: src/Admin/Page.php:169
+msgid "Tick plugins the problem needs, for example WooCommerce for a checkout problem. They stay on in every step and are not suspected."
+msgstr ""
+
+#: src/Admin/Page.php:170
+msgid "Plugins to keep on"
+msgstr ""
+
+#: src/Admin/Page.php:181
+msgid "Bookmark these two links first"
+msgstr ""
+
+#: src/Admin/Page.php:182
+msgid "If a step makes your site show an error, these still work:"
+msgstr ""
+
+#: src/Admin/Page.php:184
+msgid "Control panel (answer questions even when pages are broken)"
+msgstr ""
+
+#: src/Admin/Page.php:186
+msgid "Emergency exit (ends troubleshooting, works even when logged out)"
+msgstr ""
+
+#: src/Admin/Page.php:189
+msgid "The emergency exit link becomes active when you press Start. Keep it private."
+msgstr ""
+
+#: src/Admin/Page.php:192
+msgid "Start troubleshooting"
+msgstr ""
+
+#: src/Admin/Page.php:205
+msgid "another administrator"
+msgstr ""
+
+#. translators: %s: user display name
+#: src/Admin/Page.php:210
+#, php-format
+msgid "A troubleshooting session started by %s is running in another browser. It only affects that browser. Starting a new session here ends it."
+msgstr ""
+
+#: src/Admin/Page.php:214
+msgid "End that session"
+msgstr ""
+
+#. translators: 1: current step number, 2: estimated number of steps
+#: src/Admin/Page.php:235
+#, php-format
+msgid "Step %1$d of about %2$d"
+msgstr ""
+
+#. translators: %d: number of plugins switched off
+#: src/Admin/Page.php:243
+#, php-format
+msgid "We switched off %d plugin for you only."
+msgid_plural "We switched off %d plugins for you only."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %s: site home URL
+#: src/Admin/Page.php:250
+#, php-format
+msgid "Open the page where you saw the problem (for example <a href=\"%s\" target=\"_blank\">your home page</a>) and check it. <strong>Is the problem still there?</strong>"
+msgstr ""
+
+#: src/Admin/Page.php:257
+msgid "Yes, the problem is still here"
+msgstr ""
+
+#: src/Admin/Page.php:261
+#: src/Admin/Page.php:310
+msgid "Undo last answer"
+msgstr ""
+
+#. translators: 1: plugins on, 2: plugins off
+#: src/Admin/Page.php:269
+#, php-format
+msgid "Plugins in this step: %1$d on, %2$d off"
+msgstr ""
+
+#: src/Admin/Page.php:274
+msgid "On"
+msgstr ""
+
+#: src/Admin/Page.php:275
+msgid "Off (for you only)"
+msgstr ""
+
+#. translators: %d: minutes
+#: src/Admin/Page.php:281
+#, php-format
+msgid "Troubleshooting ends automatically after %d minute without an answer."
+msgid_plural "Troubleshooting ends automatically after %d minutes without an answer."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Admin/Page.php:284
+msgid "If a page shows a critical error, open your bookmarked control panel to answer. WordPress may email you about the error; that is expected during troubleshooting."
+msgstr ""
+
+#: src/Admin/Page.php:299
+msgid "Result"
+msgstr ""
+
+#: src/Admin/Page.php:301
+msgid "Your site is back to normal for you while you read this."
+msgstr ""
+
+#: src/Admin/Page.php:320
+msgid "Run again"
+msgstr ""
+
+#: src/Admin/Page.php:337
+msgid "Last result"
+msgstr ""
+
+#: src/Admin/Page.php:348
+msgid "Support report"
+msgstr ""
+
+#: src/Admin/Page.php:349
+msgid "Safe to paste in a support forum: it contains no site address, user names, or emails."
+msgstr ""
+
+#: src/Admin/Page.php:351
+msgid "Copied!"
+msgstr ""
+
+#: src/Admin/Page.php:351
+msgid "Copy report"
+msgstr ""
+
+#. translators: %s: plugin author
+#: src/Admin/Page.php:372
+#, php-format
+msgid "By %s"
+msgstr ""
+
+#. translators: %s: list of plugin names
+#: src/Admin/Page.php:380
+#, php-format
+msgid "Tested together with its required plugins: %s"
+msgstr ""
+
+#: src/Admin/Page.php:383
+msgid "Plugin website"
+msgstr ""
+
+#: src/Admin/Page.php:398
+msgid "(none)"
+msgstr ""
+
+#: src/Admin/Page.php:413
+msgid "Culprit Finder does not support multisite networks yet, so troubleshooting cannot start here."
+msgstr ""
+
+#: src/Admin/Page.php:419
+msgid "The Culprit Finder loader is missing or out of date, so plugins cannot be switched off for your session yet."
+msgstr ""
+
+#. translators: 1: source file path, 2: target folder path
+#: src/Admin/Page.php:425
+#, php-format
+msgid "To fix it, copy %1$s into %2$s (create the folder if needed) with FTP or your host’s file manager, then reload this page."
+msgstr ""
+
+#: src/Admin/Page.php:441
+msgid "Found it: one plugin causes the problem."
+msgstr ""
+
+#: src/Admin/Page.php:443
+msgid "Found it: two plugins conflict with each other. The problem appears only when both are on."
+msgstr ""
+
+#: src/Admin/Page.php:445
+msgid "Three or more plugins are involved. These two are part of it; test further with both of them on."
+msgstr ""
+
+#: src/Admin/Page.php:447
+msgid "The problem is not caused by the plugins tested: it stayed with all of them off. Check the theme, must-use plugins, or server."
+msgstr ""
+
+#: src/Admin/Page.php:449
+msgid "There was nothing to test: every active plugin was kept on."
+msgstr ""
+
+#: src/Admin/Page.php:451
+msgid "The answers were inconsistent, so the problem may come and go. Try again, checking each step carefully."
+msgstr ""
+
+#: src/Admin/PluginsLock.php:56
+msgid "Plugin management is paused"
+msgstr ""
+
+#. translators: 1: Exit URL, 2: control panel URL
+#: src/Admin/PluginsLock.php:78
+#, php-format
+msgid "<strong>Plugin management is paused while Culprit Finder is running.</strong> The list below shows only the plugins switched on for you in this step; nothing has changed for visitors. <a href=\"%1$s\">Exit troubleshooting</a> or go to the <a href=\"%2$s\">control panel</a>."
+msgstr ""
+
+#: src/Plugin.php:130
+msgid "Culprit Finder does not support multisite networks yet. Please do not network-activate it."
+msgstr ""
+
+#. translators: %s: directory path
+#: src/Session/LoaderInstaller.php:89
+#, php-format
+msgid "Could not copy the loader into %s (the folder may not be writable)."
+msgstr ""
+
+#: src/Session/Manager.php:273
+msgid "No troubleshooting session is running."
+msgstr ""
+
+#: src/Session/Manager.php:285
+msgid "Culprit Finder does not support multisite networks yet. No session was started."
+msgstr ""
+
+#: src/Session/Manager.php:287
+msgid "The Culprit Finder loader is not installed in wp-content/mu-plugins, so plugins cannot be switched off for your session. See the manual install steps on the Tools page."
+msgstr ""
+
+#: src/Session/Manager.php:289
+msgid "Culprit Finder must be active to start a session."
+msgstr ""
