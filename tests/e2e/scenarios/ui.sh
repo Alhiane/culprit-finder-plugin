@@ -15,7 +15,8 @@ assert_contains "$IDLE" "9 plugins to test" "idle: plugin count"
 assert_contains "$IDLE" "toplevel_page_culprit-finder" "top-level menu item"
 assert_contains "$IDLE" "culprit_finder_saved" "idle: saved-links checkbox"
 assert_contains "$IDLE" "culprit_finder_pin[]" "idle: pin checkboxes"
-assert_contains "$IDLE" "culprit_safe=1" "idle: control panel URL"
+assert_contains "$IDLE" "$BASE/wp-admin/admin.php?page=culprit-finder&amp;culprit_safe=1" "idle: control panel URL is the top-level page in safe mode"
+assert_not_contains "$IDLE" "tools.php?page=culprit-finder" "no Tools-page URL anywhere"
 assert_contains "$IDLE" "culprit-finder-exit=" "idle: emergency exit URL"
 NONCE=$(attr 'name="_wpnonce" value="[^"]+"' "$IDLE")
 KEY=$(attr 'name="culprit_finder_recovery" value="[^"]+"' "$IDLE")
@@ -24,7 +25,10 @@ assert_contains "$IDLE" "culprit-finder-exit=$KEY" "idle: exit URL uses the post
 # Editors can't see it.
 wpcli user get cfeditor >/dev/null 2>&1 || wpcli user create cfeditor cfeditor@example.test --role=editor --user_pass=password >/dev/null
 EJAR=$TMP/editor.jar; login "$EJAR" cfeditor password
-assert_eq "$(code "$EJAR" "$TOOLS")" 403 "editor cannot open the Tools page"
+assert_eq "$(code "$EJAR" "$TOOLS")" 403 "editor cannot open the Culprit Finder page"
+EDASH=$(fetch "$EJAR" /wp-admin/index.php)
+assert_not_contains "$EDASH" "culprit_finder_widget" "editor sees no dashboard widget"
+assert_not_contains "$EDASH" "toplevel_page_culprit-finder" "editor sees no menu item"
 
 # Start without a nonce is refused.
 assert_eq "$(curl -s -o /dev/null -w '%{http_code}' -b "$JAR" --data 'action=culprit_finder_start' "$BASE/wp-admin/admin-post.php?culprit_safe=1")" 403 "start without nonce refused"
