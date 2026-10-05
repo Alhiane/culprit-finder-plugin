@@ -52,7 +52,7 @@ make banners     # WordPress.org banners and the website's social image
 - `mu-loader/`: the tiny must-use loader that switches plugins off for one browser.
 - `src/`: sessions, admin screens, report, WP-CLI command (`wp culprit-finder`), and [extension hooks](https://getculpritfinder.com/docs/developers/hooks/).
 - `tests/e2e/`: end-to-end scenarios against wp-env with fixture plugins.
-- `website/`: the website (Astro + Starlight).
+- The website (getculpritfinder.com) lives in its own repository, `culprit-finder-website`, next to this one.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) to contribute and [SECURITY.md](SECURITY.md) to report a security issue privately.
 

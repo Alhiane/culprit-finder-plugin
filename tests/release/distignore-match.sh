@@ -19,7 +19,7 @@ if ! diff -u "$TMP/zip.txt" "$TMP/deploy.txt"; then
   echo "distignore-match: make zip (-) and .distignore deploy (+) ship different files" >&2
   exit 1
 fi
-for forbidden in website/ docs/ tests/ .github/ .wordpress-org/ .claude/; do
+for forbidden in docs/ tests/ .github/ .wordpress-org/ .claude/; do
   ! grep -q "^$forbidden" "$TMP/zip.txt" || { echo "distignore-match: $forbidden must not ship" >&2; exit 1; }
 done
 echo "distignore-match: OK ($(wc -l < "$TMP/zip.txt" | tr -d ' ') files, identical)"

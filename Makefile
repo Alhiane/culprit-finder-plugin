@@ -19,10 +19,10 @@ endif
 
 export BASE WPENV
 
-.PHONY: help install up down destroy lint fix unit e2e test zip zip-test release-check pot screenshots banners compat website website-dev website-test clean
+.PHONY: help install up down destroy lint fix unit e2e test zip zip-test release-check pot screenshots banners compat clean
 
 help:
-	@echo "make up | down | destroy | lint | fix | unit | e2e | test | zip | zip-test | release-check | pot | screenshots | banners | compat | website | website-dev | website-test"
+	@echo "make up | down | destroy | lint | fix | unit | e2e | test | zip | zip-test | release-check | pot | screenshots | banners | compat"
 	@echo "Site: $(BASE)  (admin / password)"
 
 vendor/autoload.php: composer.json
@@ -76,21 +76,7 @@ screenshots:
 compat:
 	bash tests/compat/run.sh
 
-# Website (website/, Astro + Starlight).
-website: website/node_modules
-	cd website && npm run build
-
-website-dev: website/node_modules
-	cd website && npm run dev
-
-website-test: website/node_modules
-	cd website && npm test
-
-website/node_modules: website/package.json
-	cd website && npm ci --no-audit --no-fund
-	@touch $@
-
-# WordPress.org banners + website og-image from tests/screenshots/banner.html.
+# WordPress.org banners + the website's og-image (into ../culprit-finder-website when checked out) from tests/screenshots/banner.html.
 banners:
 	cd tests/screenshots && ( [ -d node_modules ] || npm install --silent --no-audit --no-fund ) && node banners.mjs
 
