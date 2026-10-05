@@ -1,5 +1,5 @@
 === Culprit Finder ===
-Contributors: WPORG_USERNAME
+Contributors: alhiane
 Tags: troubleshooting, plugin conflict, debug, critical error, white screen
 Requires at least: 6.5
 Tested up to: 7.1
@@ -35,7 +35,7 @@ Culprit Finder makes no external requests and has no tracking. It stores its res
 
 = Source code and support =
 
-Culprit Finder is free software (GPLv2 or later). The source code is on GitHub: GITHUB_REPO_URL. Documentation lives at https://getculpritfinder.com/docs.
+Culprit Finder is free software (GPLv2 or later). The source code is on GitHub: https://github.com/Alhiane/culprit-finder-plugin. Documentation lives at https://getculpritfinder.com/docs.
 
 == Installation ==
 

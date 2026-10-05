@@ -60,4 +60,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) to contribute and [SECURITY.md](SECURITY.
 
 GPL-2.0-or-later. See [LICENSE](LICENSE).
 
-Source code: GITHUB_REPO_URL
+Source code: https://github.com/Alhiane/culprit-finder-plugin
