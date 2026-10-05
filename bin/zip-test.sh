@@ -23,7 +23,7 @@ cat > "$ENV_DIR/.wp-env.json" <<JSON
     "wp-content/plugins/cff-dep-child": "../../tests/fixtures/plugins/cff-dep-child",
     "wp-content/cf-zip": "./zip"
   },
-  "config": { "WP_DEBUG": true, "WP_DEBUG_LOG": true, "WP_DEBUG_DISPLAY": false }
+  "config": { "WP_DEBUG": true, "WP_DEBUG_LOG": true, "WP_DEBUG_DISPLAY": false, "WP_HTTP_BLOCK_EXTERNAL": true, "DISABLE_WP_CRON": true }
 }
 JSON
 
