@@ -10,6 +10,8 @@ permissions:
 
 jobs:
   deploy:
+    # Skipped until WordPress.org approves the plugin: then set the repository variable WPORG_APPROVED=true.
+    if: vars.WPORG_APPROVED == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
