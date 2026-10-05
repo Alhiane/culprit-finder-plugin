@@ -47,10 +47,26 @@ const pages = htmlFiles
 	.map((f) => f.slice(dist.length).replace(/index\.html$/, ''))
 	.sort();
 
-// Internal links and external assets, from the HTML.
+// Internal links and external assets, from the HTML; a download link and a unique title/description per page.
+const configSrc = readFileSync(join(site, 'src/config.ts'), 'utf8');
+const githubUrl = (configSrc.match(/GITHUB_URL = '([^']+)'/) || [])[1];
+const downloadUrl = `${githubUrl}/releases/latest`;
+const titles = new Map();
+const descriptions = new Map();
 for (const file of htmlFiles) {
 	const html = readFileSync(file, 'utf8');
 	const page = file.slice(dist.length);
+	if (!page.endsWith('/404.html')) {
+		if (!html.includes(`href="${downloadUrl}"`)) fail(`${page}: no link to the download (${downloadUrl})`);
+		const title = (html.match(/<title>([^<]*)<\/title>/) || [])[1];
+		const desc = (html.match(/<meta name="description" content="([^"]*)"/) || [])[1];
+		if (!title) fail(`${page}: missing <title>`);
+		if (!desc) fail(`${page}: missing meta description`);
+		if (titles.has(title)) fail(`${page}: same <title> as ${titles.get(title)}`);
+		if (descriptions.has(desc)) fail(`${page}: same meta description as ${descriptions.get(desc)}`);
+		titles.set(title, page);
+		descriptions.set(desc, page);
+	}
 	for (const [, attr, url] of html.matchAll(/\s(href|src|srcset)="([^"]+)"/g)) {
 		for (const u of attr === 'srcset' ? url.split(',').map((s) => s.trim().split(/\s+/)[0]) : [url]) {
 			if (/^(mailto:|tel:|#|data:|javascript:)/.test(u)) continue;
