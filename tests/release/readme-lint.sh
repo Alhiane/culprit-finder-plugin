@@ -22,6 +22,10 @@ CONST=$(grep -m1 "CULPRIT_FINDER_VERSION'" "$ROOT/culprit-finder.php" | sed -E "
 [ "$STABLE" = "$HEADER" ] && [ "$STABLE" = "$CONST" ] || fail "Stable tag ($STABLE), header Version ($HEADER) and CULPRIT_FINDER_VERSION ($CONST) differ"
 grep -q "^= $STABLE =" "$R" || fail "no changelog entry for $STABLE"
 
+PURI=$(grep -m1 -E '^ \* Plugin URI:' "$ROOT/culprit-finder.php" | sed -E 's/.*Plugin URI:[[:space:]]*//')
+AURI=$(grep -m1 -E '^ \* Author URI:' "$ROOT/culprit-finder.php" | sed -E 's/.*Author URI:[[:space:]]*//')
+[ -z "$PURI" ] || [ -z "$AURI" ] || [ "${PURI%/}" != "${AURI%/}" ] || fail "Plugin URI and Author URI must differ (WordPress.org rejects identical ones)"
+
 SHORT=$(awk 'NR>1 && /^$/ {getline; print; exit}' "$R")
 [ -n "$SHORT" ] || fail "missing short description"
 [ ${#SHORT} -le 150 ] || fail "short description is ${#SHORT} characters (max 150)"
