@@ -24,6 +24,7 @@ for id in "${SCENARIOS[@]}"; do
   file="$DIR/scenarios/$id.sh"
   [ -f "$file" ] || { RESULTS+=("FAIL  $id (no such scenario)"); failed=1; continue; }
   start=$(date +%s)
+  echo "... $id" >&2
   log=$(mktemp)
   if TMP_E2E=$(mktemp -d) bash "$file" >"$log" 2>&1; then
     RESULTS+=("PASS  $id ($(( $(date +%s) - start ))s)")

@@ -13,6 +13,8 @@
   "config": {
     "WP_DEBUG": true,
     "WP_DEBUG_LOG": true,
-    "WP_DEBUG_DISPLAY": false
+    "WP_DEBUG_DISPLAY": false,
+    "WP_HTTP_BLOCK_EXTERNAL": true,
+    "DISABLE_WP_CRON": true
   }
 }
