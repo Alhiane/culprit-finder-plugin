@@ -1,0 +1,30 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { DOWNLOAD_URL } from '../../config';
+
+export async function getStaticPaths() {
+	const guides = await getCollection('guides');
+	return guides.map((guide) => ({ params: { slug: guide.id }, props: { guide } }));
+}
+const { guide } = Astro.props;
+const { Content } = await render(guide);
+---
+<Base title={guide.data.title} description={guide.data.description}>
+	<article class="section">
+		<div class="wrap prose">
+			<p class="eyebrow"><a href="/guides/">Guides</a></p>
+			<h1>{guide.data.title}</h1>
+			<Content />
+			<aside class="card guide-cta">
+				<h2>Find the plugin behind it in a few minutes</h2>
+				<p>Culprit Finder switches plugins off for your browser only, so your visitors keep the working site while you test.</p>
+				<a class="btn" href={DOWNLOAD_URL}>Download free</a>
+			</aside>
+		</div>
+	</article>
+</Base>
+<style>
+	.guide-cta { margin-top: 3rem; }
+	.guide-cta h2 { margin-top: 0; font-size: 1.35rem; }
+</style>

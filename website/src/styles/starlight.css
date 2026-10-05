@@ -1,0 +1,16 @@
+@import './tokens.css';
+
+:root {
+	--sl-font: var(--cf-font);
+	--sl-font-mono: var(--cf-mono);
+	--sl-color-accent-low: #2e2238;
+	--sl-color-accent: #b48ad6;
+	--sl-color-accent-high: #e6d9f2;
+}
+:root[data-theme='light'] {
+	--sl-color-accent-low: #f3ecf8;
+	--sl-color-accent: #7c4da6;
+	--sl-color-accent-high: #4a2c66;
+}
+:focus-visible { outline: 2px solid var(--cf-purple); outline-offset: 2px; }
+.cf-docs-trademark { margin-top: 2rem; font-size: var(--sl-text-xs); color: var(--sl-color-gray-3); }

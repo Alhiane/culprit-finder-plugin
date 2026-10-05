@@ -1,0 +1,16 @@
+:root {
+	--cf-purple: #925fbb;
+	--cf-purple-hover: #7c4da6;
+	--cf-purple-tint: #f3ecf8;
+	--cf-dark: #1f1a24;
+	--cf-text: #1d2327;
+	--cf-muted: #50575e;
+	--cf-border: #dcdcde;
+	--cf-surface: #f6f7f7;
+	--cf-success: #008a20;
+	--cf-danger: #b32d2e;
+	--cf-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+	--cf-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+	--cf-radius: 8px;
+	--cf-max: 72rem;
+}

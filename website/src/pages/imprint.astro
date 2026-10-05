@@ -1,0 +1,14 @@
+---
+import Base from '../layouts/Base.astro';
+import { CONTACT_EMAIL } from '../config';
+---
+<Base title="Imprint" description="Legal information about the operator of this website." noindex>
+	<section class="section">
+		<div class="wrap prose">
+			<h1>Imprint</h1>
+			<p>Operator of this website:</p>
+			<p>IMPRINT_NAME<br />IMPRINT_ADDRESS</p>
+			<p>Email: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></p>
+		</div>
+	</section>
+</Base>

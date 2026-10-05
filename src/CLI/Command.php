@@ -60,7 +60,7 @@ final class Command {
 	 *
 	 * ## EXAMPLES
 	 *
-	 *     wp --user=admin culprit-finder start --pin=woocommerce/woocommerce.php
+	 *     wp --user=admin culprit-finder start --pin=acme-shop/acme-shop.php
 	 *
 	 * @param array $args       Positional args.
 	 * @param array $assoc_args Options.

@@ -19,10 +19,10 @@ endif
 
 export BASE WPENV
 
-.PHONY: help install up down destroy lint fix unit e2e test zip zip-test release-check pot screenshots banners compat clean
+.PHONY: help install up down destroy lint fix unit e2e test zip zip-test release-check pot screenshots banners compat website website-dev website-test clean
 
 help:
-	@echo "make up | down | destroy | lint | fix | unit | e2e | test | zip | zip-test | release-check | pot | screenshots | banners"
+	@echo "make up | down | destroy | lint | fix | unit | e2e | test | zip | zip-test | release-check | pot | screenshots | banners | compat | website | website-dev | website-test"
 	@echo "Site: $(BASE)  (admin / password)"
 
 vendor/autoload.php: composer.json
@@ -75,6 +75,20 @@ screenshots:
 # solo + pair on WordPress 6.5/latest x PHP 7.4/8.5 (PHP CLI images + SQLite, port 8892).
 compat:
 	bash tests/compat/run.sh
+
+# Website (website/, Astro + Starlight).
+website: website/node_modules
+	cd website && npm run build
+
+website-dev: website/node_modules
+	cd website && npm run dev
+
+website-test: website/node_modules
+	cd website && npm test
+
+website/node_modules: website/package.json
+	cd website && npm ci --no-audit --no-fund
+	@touch $@
 
 # WordPress.org banners + website og-image from tests/screenshots/banner.html.
 banners:

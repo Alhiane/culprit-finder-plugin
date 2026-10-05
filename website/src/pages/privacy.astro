@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+import { CONTACT_EMAIL } from '../config';
+---
+<Base title="Privacy" description="Privacy policy for the Culprit Finder website and plugin: no cookies, no analytics, no external requests.">
+	<section class="section">
+		<div class="wrap prose">
+			<h1>Privacy</h1>
+			<p class="lead">Short version: this website doesn't track you, and the plugin doesn't send anything anywhere.</p>
+			<h2>This website</h2>
+			<ul>
+				<li>No cookies. That's why there's no cookie banner.</li>
+				<li>No analytics, no tracking pixels, no advertising.</li>
+				<li>No external requests: fonts, images and scripts are all served from this site. No embedded videos or social media widgets.</li>
+				<li>Our hosting provider may keep standard server logs (such as IP address, time and page requested) for security and to keep the site running. We don't use them to identify or profile visitors.</li>
+			</ul>
+			<h2>The Culprit Finder plugin</h2>
+			<ul>
+				<li>The plugin makes no external requests and has no tracking or telemetry.</li>
+				<li>It stores its data only in your own WordPress database: the running troubleshooting session and your last 10 results.</li>
+				<li>The support report is shown only to you. It contains no site address, user names or email addresses, so you can decide where to share it.</li>
+				<li>Uninstalling the plugin deletes all of its data.</li>
+			</ul>
+			<h2>Email</h2>
+			<p>If you email us, we use your message and address only to reply, and we don't share them.</p>
+			<h2>Contact</h2>
+			<p>Questions about privacy: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</p>
+			<p><small>Last updated: 5 October 2026.</small></p>
+		</div>
+	</section>
+</Base>

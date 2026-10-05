@@ -1,0 +1,32 @@
+{
+  "name": "culprit-finder-website",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "sync": "node scripts/sync.mjs",
+    "predev": "node scripts/sync.mjs",
+    "dev": "astro dev",
+    "prebuild": "node scripts/sync.mjs",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "node scripts/sync.mjs && astro check",
+    "test": "npm run check && npm run build && node tests/check.mjs",
+    "lighthouse": "node tests/lighthouse.mjs",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/starlight": "^0.42.5",
+    "astro": "^7.2.10",
+    "sharp": "^0.35.3"
+  },
+  "allowScripts": {
+    "esbuild": true
+  },
+  "private": true,
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@axe-core/playwright": "^4.13.0",
+    "playwright-core": "^1.63.0",
+    "typescript": "^5.9.3"
+  }
+}

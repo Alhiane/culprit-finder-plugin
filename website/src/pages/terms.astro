@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import { CONTACT_EMAIL } from '../config';
+---
+<Base title="Terms of use" description="Terms of use for the Culprit Finder website.">
+	<section class="section">
+		<div class="wrap prose">
+			<h1>Terms of use</h1>
+			<p class="lead">These terms cover this website. The plugin itself is free software under its own license.</p>
+			<h2>The website</h2>
+			<p>You may read, link to and share the content of this website. The guides and documentation are provided for general information. Always keep a backup of your site and test changes on a staging copy when you can.</p>
+			<h2>The plugin</h2>
+			<p>Culprit Finder is free software, licensed under the GNU General Public License, version 2 or later. You may use, study, change and share it under that license. As the license says, it comes without any warranty.</p>
+			<h2>No guarantees</h2>
+			<p>We work hard to make Culprit Finder safe and accurate, but we can't guarantee that it finds every problem or that every site behaves the same way. You use the website's content and the plugin at your own risk, to the extent the law allows.</p>
+			<h2>Trademarks</h2>
+			<p>WordPress is a trademark of the WordPress Foundation. Culprit Finder is not affiliated with or endorsed by the WordPress Foundation. Other names mentioned belong to their owners.</p>
+			<h2>Changes</h2>
+			<p>We may update these terms. The date below shows the latest version.</p>
+			<h2>Contact</h2>
+			<p><a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></p>
+			<p><small>Last updated: 5 October 2026.</small></p>
+		</div>
+	</section>
+</Base>

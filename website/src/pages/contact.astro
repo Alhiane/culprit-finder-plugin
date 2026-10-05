@@ -1,0 +1,19 @@
+---
+import Base from '../layouts/Base.astro';
+import { CONTACT_EMAIL, GITHUB_URL, SECURITY_EMAIL } from '../config';
+---
+<Base title="Contact" description="How to reach the Culprit Finder team: email, bug reports and security reports.">
+	<section class="section">
+		<div class="wrap prose">
+			<h1>Contact</h1>
+			<p class="lead">We read every message.</p>
+			<h2>General questions</h2>
+			<p>Email <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. If you're asking about a problem on your site, please include the support report from Culprit Finder → Results (Copy for forum). It contains no private data.</p>
+			<h2>Bug reports and ideas</h2>
+			<p>Open an issue on <a href={GITHUB_URL}>GitHub</a>. The bug report form asks for the support report, which answers most of our questions up front.</p>
+			<h2>Security issues</h2>
+			<p>Please report security issues privately to <a href={`mailto:${SECURITY_EMAIL}`}>{SECURITY_EMAIL}</a>, not in a public issue.</p>
+			<p>Before writing, the <a href="/docs/help/faq/">FAQ</a> and <a href="/docs/help/troubleshooting/">troubleshooting page</a> may already have your answer.</p>
+		</div>
+	</section>
+</Base>

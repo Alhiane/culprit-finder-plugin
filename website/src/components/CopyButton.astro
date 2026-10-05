@@ -1,0 +1,19 @@
+---
+interface Props { target: string; label?: string }
+const { target, label = 'Copy' } = Astro.props;
+---
+<button type="button" class="btn btn-ghost btn-sm cf-copy" data-target={target} hidden>{label}</button>
+<script>
+	document.querySelectorAll<HTMLButtonElement>('.cf-copy').forEach((button) => {
+		const target = document.getElementById(button.dataset.target || '');
+		if (!target || !navigator.clipboard) return;
+		button.hidden = false;
+		const label = button.textContent;
+		button.addEventListener('click', () => {
+			navigator.clipboard.writeText(target.textContent || '').then(() => {
+				button.textContent = 'Copied';
+				setTimeout(() => (button.textContent = label), 2000);
+			});
+		});
+	});
+</script>
