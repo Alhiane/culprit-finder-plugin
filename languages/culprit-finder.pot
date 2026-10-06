@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-04T22:24:13+00:00\n"
+"POT-Creation-Date: 2026-10-06T10:39:12+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: culprit-finder\n"
@@ -26,7 +26,6 @@ msgid "Culprit Finder"
 msgstr ""
 
 #. Plugin URI of the plugin
-#. Author URI of the plugin
 #: culprit-finder.php
 msgid "https://getculpritfinder.com"
 msgstr ""
@@ -39,6 +38,11 @@ msgstr ""
 #. Author of the plugin
 #: culprit-finder.php
 msgid "Alhiane Lahcen"
+msgstr ""
+
+#. Author URI of the plugin
+#: culprit-finder.php
+msgid "https://profiles.wordpress.org/alhiane/"
 msgstr ""
 
 #: src/Admin/AdminBar.php:69
@@ -790,16 +794,22 @@ msgstr ""
 msgid "(none)"
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:303
+#: src/Admin/TroubleshootView.php:304
 msgid "Culprit Finder does not support multisite networks yet, so troubleshooting cannot start here."
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:309
-msgid "The Culprit Finder loader is missing or out of date, so plugins cannot be switched off for your session yet."
+#. translators: %s: file path
+#: src/Admin/TroubleshootView.php:310
+#, php-format
+msgid "A different file already exists at %s. Culprit Finder never overwrites files it didn’t create. If that file isn’t needed, rename or remove it with FTP or your host’s file manager, then reload this page."
+msgstr ""
+
+#: src/Admin/TroubleshootView.php:319
+msgid "When you press Start, Culprit Finder adds a small helper file to wp-content/mu-plugins and removes it when you’re done. That folder isn’t writable on this site."
 msgstr ""
 
 #. translators: 1: source file path, 2: target folder path
-#: src/Admin/TroubleshootView.php:315
+#: src/Admin/TroubleshootView.php:325
 #, php-format
 msgid "To fix it, copy %1$s into %2$s (create the folder if needed) with FTP or your host’s file manager, then reload this page."
 msgstr ""
@@ -809,21 +819,25 @@ msgid "Culprit Finder does not support multisite networks yet. Please do not net
 msgstr ""
 
 #. translators: %s: directory path
-#: src/Session/LoaderInstaller.php:89
+#: src/Session/LoaderInstaller.php:128
 #, php-format
-msgid "Could not copy the loader into %s (the folder may not be writable)."
+msgid "Could not copy the helper file into %s (the folder may not be writable)."
 msgstr ""
 
-#: src/Session/Manager.php:301
+#: src/Session/Manager.php:298
 msgid "No troubleshooting session is running."
 msgstr ""
 
-#: src/Session/Manager.php:313
+#: src/Session/Manager.php:310
 msgid "Culprit Finder does not support multisite networks yet. No session was started."
 msgstr ""
 
+#: src/Session/Manager.php:313
+msgid "A different file named culprit-finder-loader.php is already in wp-content/mu-plugins. Culprit Finder never overwrites files it didn’t create, so no session was started. See the Culprit Finder page."
+msgstr ""
+
 #: src/Session/Manager.php:315
-msgid "The Culprit Finder loader is not installed in wp-content/mu-plugins, so plugins cannot be switched off for your session. See the manual install steps on the Tools page."
+msgid "Culprit Finder couldn’t add its small helper file to wp-content/mu-plugins, so plugins can’t be switched off for your session. See the Culprit Finder page for how to fix it."
 msgstr ""
 
 #: src/Session/Manager.php:317

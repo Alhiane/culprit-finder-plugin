@@ -71,16 +71,8 @@ final class Manager {
 	}
 
 	/**
-	 * Whether the loader is installed and matches the bundled version.
-	 *
-	 * @return bool
-	 */
-	public function loader_ready() {
-		return LoaderInstaller::is_current();
-	}
-
-	/**
-	 * Start a new session, replacing any existing one (ADR-0002).
+	 * Start a new session, replacing any existing one (ADR-0002). This user action is the only time the
+	 * loader is written into mu-plugins (ADR-0023).
 	 *
 	 * @param int         $user_id      Session owner.
 	 * @param string[]    $pinned       Requested keep-on basenames (validated against the snapshot).
@@ -89,8 +81,11 @@ final class Manager {
 	 * @return array{token: string, recovery_key: string, session: array, step: Step}|WP_Error
 	 */
 	public function start( $user_id, array $pinned = array(), $recovery_key = null, $problem_url = '' ) {
-		$snapshot = array_values( array_unique( array_filter( $this->real_active_plugins(), 'is_string' ) ) );
-		$errors   = StartGuard::errors( is_multisite(), $this->loader_ready(), in_array( $this->self, $snapshot, true ) );
+		$snapshot  = array_values( array_unique( array_filter( $this->real_active_plugins(), 'is_string' ) ) );
+		$multisite = is_multisite();
+		$self_on   = in_array( $this->self, $snapshot, true );
+		$ready     = ! $multisite && $self_on && LoaderInstaller::prepare();
+		$errors    = StartGuard::errors( $multisite, $ready, $self_on );
 		if ( $errors ) {
 			return new WP_Error( 'culprit_finder_' . $errors[0], self::error_message( $errors[0] ) );
 		}
@@ -139,7 +134,7 @@ final class Manager {
 	}
 
 	/**
-	 * The current, unexpired session. An expired one is deleted and remembered for a notice.
+	 * The current, unexpired session. An expired one is deleted (with the loader) and remembered for a notice.
 	 *
 	 * @return array|null
 	 */
@@ -154,6 +149,7 @@ final class Manager {
 		}
 		if ( (int) $session['expires_at'] <= time() ) {
 			$this->store->delete_session();
+			LoaderInstaller::remove();
 			Hooks::action( 'culprit_finder_session_ended', 'expired', View::of( $session ) );
 			$last                       = (array) $this->store->last_result();
 			$last['session_expired_at'] = time();
@@ -228,13 +224,14 @@ final class Manager {
 	}
 
 	/**
-	 * End the session.
+	 * End the session and remove the loader (it is only installed while troubleshooting, ADR-0023).
 	 *
 	 * @param string $reason exit|deactivated (fired with `culprit_finder_session_ended`).
 	 */
 	public function end( $reason = 'exit' ) {
 		$session = $this->store->session();
 		$this->store->delete_session();
+		LoaderInstaller::remove();
 		if ( null !== $session && self::is_valid( $session ) ) {
 			Hooks::action( 'culprit_finder_session_ended', $reason, View::of( $session ) );
 		}
@@ -312,7 +309,10 @@ final class Manager {
 			case StartGuard::MULTISITE:
 				return __( 'Culprit Finder does not support multisite networks yet. No session was started.', 'culprit-finder' );
 			case StartGuard::LOADER_MISSING:
-				return __( 'The Culprit Finder loader is not installed in wp-content/mu-plugins, so plugins cannot be switched off for your session. See the manual install steps on the Tools page.', 'culprit-finder' );
+				if ( LoaderInstaller::PROBLEM_FOREIGN === LoaderInstaller::problem() ) {
+					return __( 'A different file named culprit-finder-loader.php is already in wp-content/mu-plugins. Culprit Finder never overwrites files it didn’t create, so no session was started. See the Culprit Finder page.', 'culprit-finder' );
+				}
+				return __( 'Culprit Finder couldn’t add its small helper file to wp-content/mu-plugins, so plugins can’t be switched off for your session. See the Culprit Finder page for how to fix it.', 'culprit-finder' );
 			default:
 				return __( 'Culprit Finder must be active to start a session.', 'culprit-finder' );
 		}

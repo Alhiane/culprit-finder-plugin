@@ -299,14 +299,24 @@ final class TroubleshootView {
 	 * @return string[]
 	 */
 	private function environment_problems() {
-		if ( is_multisite() ) {
+		$problem = LoaderInstaller::problem();
+		if ( LoaderInstaller::PROBLEM_MULTISITE === $problem ) {
 			return array( esc_html__( 'Culprit Finder does not support multisite networks yet, so troubleshooting cannot start here.', 'culprit-finder' ) );
 		}
-		if ( LoaderInstaller::is_current() ) {
+		if ( LoaderInstaller::PROBLEM_FOREIGN === $problem ) {
+			return array(
+				sprintf(
+					/* translators: %s: file path */
+					esc_html__( 'A different file already exists at %s. Culprit Finder never overwrites files it didn’t create. If that file isn’t needed, rename or remove it with FTP or your host’s file manager, then reload this page.', 'culprit-finder' ),
+					'<code>' . esc_html( LoaderInstaller::target() ) . '</code>'
+				),
+			);
+		}
+		if ( '' === $problem ) {
 			return array();
 		}
 		$error   = get_option( Store::LOADER_ERROR );
-		$message = esc_html__( 'The Culprit Finder loader is missing or out of date, so plugins cannot be switched off for your session yet.', 'culprit-finder' );
+		$message = esc_html__( 'When you press Start, Culprit Finder adds a small helper file to wp-content/mu-plugins and removes it when you’re done. That folder isn’t writable on this site.', 'culprit-finder' );
 		if ( is_string( $error ) && '' !== $error ) {
 			$message .= ' ' . esc_html( $error );
 		}

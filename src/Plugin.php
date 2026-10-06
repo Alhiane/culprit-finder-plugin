@@ -74,7 +74,6 @@ final class Plugin {
 	public function register() {
 		add_action( 'init', array( $this, 'bind_session' ), 1 );
 		add_action( 'init', array( $this, 'report_recovery' ), 1 );
-		add_action( 'admin_init', array( $this, 'ensure_loader' ) );
 		( new Admin\Page( $this ) )->register();
 		( new Admin\Handlers( $this ) )->register();
 		( new Admin\AdminBar( $this ) )->register();
@@ -123,7 +122,8 @@ final class Plugin {
 	}
 
 	/**
-	 * Activation: refuse network activation, install the loader.
+	 * Activation: refuse network activation. Nothing is written: the loader is installed only when
+	 * the user starts troubleshooting (ADR-0023).
 	 *
 	 * @param bool $network_wide Network activation.
 	 */
@@ -135,7 +135,6 @@ final class Plugin {
 				array( 'back_link' => true )
 			);
 		}
-		LoaderInstaller::maybe_install( true );
 	}
 
 	/**
@@ -148,16 +147,8 @@ final class Plugin {
 	}
 
 	/**
-	 * Reinstall the loader when missing or outdated.
-	 */
-	public function ensure_loader() {
-		if ( current_user_can( 'activate_plugins' ) ) {
-			LoaderInstaller::maybe_install();
-		}
-	}
-
-	/**
-	 * Report a session the recovery URL ended in this request (the loader ran before us).
+	 * Report a session the recovery URL ended in this request (the loader ran before us), and remove
+	 * the loader now that no session needs it.
 	 */
 	public function report_recovery() {
 		if ( ! class_exists( 'Culprit_Finder_Loader', false ) || ! method_exists( 'Culprit_Finder_Loader', 'recovered_session' ) ) {
@@ -165,6 +156,7 @@ final class Plugin {
 		}
 		$session = \Culprit_Finder_Loader::recovered_session();
 		if ( is_array( $session ) ) {
+			LoaderInstaller::remove();
 			Hooks::action( 'culprit_finder_session_ended', 'recovery', View::of( $session ) );
 		}
 	}

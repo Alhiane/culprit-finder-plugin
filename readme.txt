@@ -40,7 +40,7 @@ Culprit Finder is free software (GPLv2 or later). The source code is on GitHub: 
 == Installation ==
 
 1. Install Culprit Finder from Plugins → Add New, or upload the zip, then activate it.
-2. Culprit Finder copies a small helper file to `wp-content/mu-plugins/culprit-finder-loader.php`. If your host doesn't allow that, the Culprit Finder page shows how to copy it by hand.
+2. Activation changes nothing on your site. When you press **Start troubleshooting**, Culprit Finder adds a small helper file, `wp-content/mu-plugins/culprit-finder-loader.php`, which is what lets it switch plugins off for your browser only. It removes the file again when troubleshooting ends, and it never touches a file it didn't create. If your host doesn't allow writing there, the Culprit Finder page shows how to add it by hand.
 3. Open **Culprit Finder** in the admin menu, bookmark the two safety links, tick "I've saved both links", and press **Start troubleshooting**.
 
 == Frequently Asked Questions ==
@@ -90,6 +90,10 @@ Your theme, must-use plugins, drop-ins (such as `object-cache.php` or `advanced-
 = Does it work on multisite? =
 
 Not yet. It refuses to start on multisite networks.
+
+= Why does it add a file to wp-content/mu-plugins? =
+
+To switch plugins off for your browser only, Culprit Finder must run before WordPress loads the other plugins, and only must-use plugins load that early. So when you press Start it adds one small helper file there, the same approach as WordPress's own Health Check & Troubleshooting plugin. Without your troubleshooting cookie the file does nothing. It is removed when troubleshooting ends (Exit, the emergency exit link, the 60-minute timeout, or deactivating the plugin), and Culprit Finder never overwrites or deletes a file it didn't create.
 
 = Can I manage plugins during troubleshooting? =
 
