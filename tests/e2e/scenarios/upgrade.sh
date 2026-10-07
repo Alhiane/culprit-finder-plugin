@@ -4,8 +4,8 @@
 # length, and the next Start installs the current loader.
 source "$(dirname "$0")/../lib.sh"
 trap 'wpcli culprit-finder exit >/dev/null 2>&1 || true' EXIT
-OLD=$(git -C "$ROOT" show v0.1.0:mu-loader/culprit-finder-loader.php)
-grep -q "Version: 0.1.1" <<<"$OLD" || fail "could not read the 0.1.0 loader from git"
+OLD=$(cat "$E2E_DIR/fixtures/culprit-finder-loader-0.1.1.php")
+grep -q "Version: 0.1.1" <<<"$OLD" || fail "could not read the 0.1.0 loader fixture"
 BEFORE=$(reset_site $(noise 1 4) cff-fixtures/cff-solo)
 loader_md5() { wpcli eval 'echo file_exists( WPMU_PLUGIN_DIR . "/culprit-finder-loader.php" ) ? md5_file( WPMU_PLUGIN_DIR . "/culprit-finder-loader.php" ) : "absent";'; }
 
