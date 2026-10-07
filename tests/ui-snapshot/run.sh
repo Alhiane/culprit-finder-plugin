@@ -22,6 +22,8 @@ s = re.sub(r"\d+ min left", "M min left", s)
 s = re.sub(r"(January|February|March|April|May|June|July|August|September|October|November|December) \d{1,2}, \d{4}( \d{1,2}:\d{2} [ap]m)?", "DATE", s)
 s = re.sub(r"ver=[^\"&]+", "ver=V", s)
 s = re.sub(r"Culprit Finder \d+\.\d+\.\d+", "Culprit Finder VERSION", s)
+s = re.sub(r"(<dt>(?:WordPress|PHP)</dt>\s*<dd>)[0-9][^<]*(</dd>)", r"\1X\2", s)
+s = re.sub(r"WordPress [0-9][0-9.]*(?:-[A-Za-z0-9.-]+)?, PHP [0-9][0-9.]*", "WordPress X, PHP X", s)
 s = re.sub(r">\s*<", ">\n<", s)
 print(s)
 '
