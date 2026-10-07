@@ -9,10 +9,13 @@ namespace CulpritFinder\Admin;
 
 use CulpritFinder\Engine\Engine;
 use CulpritFinder\Engine\Step;
+use CulpritFinder\Hooks;
 use CulpritFinder\Plugin;
+use CulpritFinder\Session\AddOns;
 use CulpritFinder\Session\LoaderInstaller;
 use CulpritFinder\Session\Store;
 use CulpritFinder\Session\Token;
+use CulpritFinder\Session\View;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -60,16 +63,22 @@ final class TroubleshootView {
 	}
 
 	/**
-	 * Setup: how it works, the start form, and a one-line safety note.
+	 * Setup: how it works, the start form, and a one-line safety note. After a start an add-on
+	 * refused, the form keeps what the user entered, including the emergency exit link they saved.
 	 */
 	private function render_setup() {
 		$manager  = $this->plugin->manager();
 		$self     = plugin_basename( CULPRIT_FINDER_FILE );
 		$active   = array_values( array_diff( $manager->real_active_plugins(), array( $self ) ) );
+		$always   = $manager->always_on( $manager->real_active_plugins() );
 		$names    = Page::plugin_names();
 		$problems = $this->environment_problems();
-		$key      = Token::generate();
-		$count    = count( $active );
+		$kept     = $this->plugin->start_input();
+		$key      = null !== $kept && ! empty( $kept['recovery'] ) && Token::is_valid_format( $kept['recovery'] ) ? $kept['recovery'] : Token::generate();
+		$typed    = null !== $kept && isset( $kept['problem_url'] ) && is_string( $kept['problem_url'] ) ? $kept['problem_url'] : '';
+		$ticked   = null !== $kept && isset( $kept['pinned'] ) && is_array( $kept['pinned'] ) ? $kept['pinned'] : array();
+		$required = true === Hooks::filter( 'culprit_finder_problem_url_required', false, null );
+		$count    = count( $active ) - count( $always );
 		$steps    = 2 + Engine::ceil_log2( max( 1, $count ) );
 		$minutes  = (int) ceil( $manager->ttl() / 60 );
 
@@ -88,20 +97,32 @@ final class TroubleshootView {
 		echo '<input type="hidden" name="action" value="culprit_finder_start">';
 		echo '<input type="hidden" name="culprit_finder_recovery" value="' . esc_attr( $key ) . '">';
 
-		echo '<fieldset class="cf-field"><legend>' . esc_html__( 'Where do you see the problem?', 'culprit-finder' ) . ' <span class="cf-optional">' . esc_html__( 'Optional', 'culprit-finder' ) . '</span></legend>';
+		echo '<fieldset class="cf-field"><legend>' . esc_html__( 'Where do you see the problem?', 'culprit-finder' ) . ' <span class="cf-optional">' . ( $required ? esc_html__( 'Required', 'culprit-finder' ) : esc_html__( 'Optional', 'culprit-finder' ) ) . '</span></legend>';
 		echo '<label for="culprit-finder-problem-url">' . esc_html__( 'Paste the address of the broken page. Every step gets a one-click link to it.', 'culprit-finder' ) . '</label>';
-		echo '<input type="url" class="regular-text cf-input" id="culprit-finder-problem-url" name="culprit_finder_problem_url" placeholder="' . esc_attr( home_url( '/' ) ) . '">';
+		echo '<input type="url" class="regular-text cf-input" id="culprit-finder-problem-url" name="culprit_finder_problem_url" placeholder="' . esc_attr( home_url( '/' ) ) . '"' . ( '' !== $typed ? ' value="' . esc_attr( $typed ) . '"' : '' ) . ( $required ? ' required' : '' ) . '>';
 		echo '</fieldset>';
+
+		Hooks::action( 'culprit_finder_setup_fields', null !== $kept && isset( $kept['addon'] ) && is_array( $kept['addon'] ) ? $kept['addon'] : array() );
 
 		echo '<fieldset class="cf-field"><legend>' . esc_html__( 'Keep any plugins on?', 'culprit-finder' ) . ' <span class="cf-optional">' . esc_html__( 'Optional', 'culprit-finder' ) . '</span></legend>';
 		echo '<p class="cf-help">' . esc_html__( 'Tick plugins the problem needs to show up, like your shop plugin for a checkout problem. They stay on in every step and are never blamed. Plugins they require stay on too.', 'culprit-finder' ) . '</p>';
 		if ( $active ) {
 			echo '<div class="cf-pins">';
 			foreach ( $active as $basename ) {
+				$name = isset( $names[ $basename ] ) ? $names[ $basename ] : $basename;
+				if ( in_array( $basename, $always, true ) ) {
+					printf(
+						'<label class="cf-addon"><input type="checkbox" checked disabled> %1$s <span class="cf-muted">%2$s</span></label>',
+						esc_html( $name ),
+						esc_html__( 'Always on · Culprit Finder add-on', 'culprit-finder' )
+					);
+					continue;
+				}
 				printf(
-					'<label><input type="checkbox" name="culprit_finder_pin[]" value="%1$s"> %2$s</label>',
+					'<label><input type="checkbox" name="culprit_finder_pin[]" value="%1$s"%3$s> %2$s</label>',
 					esc_attr( $basename ),
-					esc_html( isset( $names[ $basename ] ) ? $names[ $basename ] : $basename )
+					esc_html( $name ),
+					in_array( $basename, $ticked, true ) ? ' checked' : ''
 				);
 			}
 			echo '</div>';
@@ -116,7 +137,7 @@ final class TroubleshootView {
 		$this->safety_link( 'culprit-finder-panel-url', __( 'Control panel', 'culprit-finder' ), __( 'Answer questions even when pages are broken.', 'culprit-finder' ), Links::control_panel() );
 		$this->safety_link( 'culprit-finder-exit-url', __( 'Emergency exit', 'culprit-finder' ), __( 'Ends troubleshooting at once, even when logged out. Keep it private.', 'culprit-finder' ), Links::recovery( $key ) );
 		echo '</div>';
-		echo '<label class="cf-saved"><input type="checkbox" name="culprit_finder_saved" value="1" required> ' . esc_html__( 'I’ve saved both links', 'culprit-finder' ) . '</label>';
+		echo '<label class="cf-saved"><input type="checkbox" name="culprit_finder_saved" value="1" required' . ( null !== $kept ? ' checked' : '' ) . '> ' . esc_html__( 'I’ve saved both links', 'culprit-finder' ) . '</label>';
 
 		echo '<div class="cf-start">';
 		echo '<button type="submit" class="button cf-button cf-button--primary cf-button--large"' . ( $problems || ! $count ? ' disabled' : '' ) . '>' . esc_html__( 'Start troubleshooting', 'culprit-finder' ) . '</button>';
@@ -171,7 +192,8 @@ final class TroubleshootView {
 	}
 
 	/**
-	 * Running: progress and the question.
+	 * Running: progress and the question. An add-on that prints into `culprit_finder_step_panel`
+	 * replaces the question, its buttons and Undo; progress, Stop and exit and the plugin lists stay.
 	 *
 	 * @param array $session Session.
 	 * @param Step  $step    Current step.
@@ -184,6 +206,8 @@ final class TroubleshootView {
 		$minutes  = max( 1, (int) ceil( ( (int) $session['expires_at'] - time() ) / 60 ) );
 		$redirect = Links::control_panel();
 		$problem  = isset( $session['problem_url'] ) && is_string( $session['problem_url'] ) ? $session['problem_url'] : '';
+		$always   = AddOns::of( $session );
+		$panel    = $this->step_panel( $session, $step );
 
 		echo '<section class="cf-progress" aria-label="' . esc_attr__( 'Progress', 'culprit-finder' ) . '">';
 		echo '<div class="cf-progress__row"><strong>' . esc_html(
@@ -212,22 +236,26 @@ final class TroubleshootView {
 				$total
 			)
 		) . '</p>';
-		echo '<h2>' . esc_html__( 'Is the problem still there?', 'culprit-finder' ) . '</h2>';
-		echo '<p>' . esc_html__( 'Open the broken page, reload it, and look again. A critical error page counts as Yes.', 'culprit-finder' ) . '</p>';
-		$open_url   = '' !== $problem ? $problem : home_url( '/' );
-		$open_label = '' !== $problem
-			/* translators: %s: address of the broken page */
-			? sprintf( __( 'Open %s', 'culprit-finder' ), preg_replace( '#^https?://#', '', $problem ) )
-			: __( 'Open your site', 'culprit-finder' );
-		echo '<p><a class="button cf-button cf-button--soft" href="' . esc_url( $open_url ) . '" target="_blank" rel="noopener">' . esc_html( $open_label ) . ' <span aria-hidden="true">↗</span></a></p>';
+		if ( '' !== $panel ) {
+			echo $panel; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- add-on output from culprit_finder_step_panel; callbacks escape their own output (docs/hooks.md).
+		} else {
+			echo '<h2>' . esc_html__( 'Is the problem still there?', 'culprit-finder' ) . '</h2>';
+			echo '<p>' . esc_html__( 'Open the broken page, reload it, and look again. A critical error page counts as Yes.', 'culprit-finder' ) . '</p>';
+			$open_url   = '' !== $problem ? $problem : home_url( '/' );
+			$open_label = '' !== $problem
+				/* translators: %s: address of the broken page */
+				? sprintf( __( 'Open %s', 'culprit-finder' ), preg_replace( '#^https?://#', '', $problem ) )
+				: __( 'Open your site', 'culprit-finder' );
+			echo '<p><a class="button cf-button cf-button--soft" href="' . esc_url( $open_url ) . '" target="_blank" rel="noopener">' . esc_html( $open_label ) . ' <span aria-hidden="true">↗</span></a></p>';
 
-		echo '<div class="cf-answers">';
-		echo '<a class="button cf-button cf-button--primary cf-button--answer" href="' . esc_url( Links::action( 'answer', array( 'answer' => 'yes' ), $redirect ) ) . '">' . esc_html__( 'Yes, it’s still there', 'culprit-finder' ) . '</a>';
-		echo '<a class="button cf-button cf-button--outline cf-button--answer" href="' . esc_url( Links::action( 'answer', array( 'answer' => 'no' ), $redirect ) ) . '">' . esc_html__( 'No, it’s gone', 'culprit-finder' ) . '</a>';
-		echo '</div>';
+			echo '<div class="cf-answers">';
+			echo '<a class="button cf-button cf-button--primary cf-button--answer" href="' . esc_url( Links::action( 'answer', array( 'answer' => 'yes' ), $redirect ) ) . '">' . esc_html__( 'Yes, it’s still there', 'culprit-finder' ) . '</a>';
+			echo '<a class="button cf-button cf-button--outline cf-button--answer" href="' . esc_url( Links::action( 'answer', array( 'answer' => 'no' ), $redirect ) ) . '">' . esc_html__( 'No, it’s gone', 'culprit-finder' ) . '</a>';
+			echo '</div>';
+		}
 
 		echo '<div class="cf-secondary">';
-		if ( $step->answers_used() > 0 ) {
+		if ( '' === $panel && $step->answers_used() > 0 ) {
 			echo '<a class="button" href="' . esc_url( Links::action( 'undo', array(), $redirect ) ) . '">' . esc_html__( 'Undo last answer', 'culprit-finder' ) . '</a>';
 		}
 		echo '<a class="button cf-button--danger" href="' . esc_url( Links::action( 'exit' ) ) . '">' . esc_html__( 'Stop and exit', 'culprit-finder' ) . '</a>';
@@ -238,7 +266,9 @@ final class TroubleshootView {
 		$on = array();
 		foreach ( $enabled as $basename ) {
 			$label = isset( $names[ $basename ] ) ? $names[ $basename ] : $basename;
-			if ( in_array( $basename, $session['pinned'], true ) ) {
+			if ( in_array( $basename, $always, true ) ) {
+				$label .= ' ' . __( '(always on · Culprit Finder add-on)', 'culprit-finder' );
+			} elseif ( in_array( $basename, $session['pinned'], true ) ) {
 				$label .= ' ' . __( '(kept on)', 'culprit-finder' );
 			} elseif ( in_array( $basename, $session['fixed'], true ) ) {
 				$label .= ' ' . __( '(needed by a kept-on plugin)', 'culprit-finder' );
@@ -254,6 +284,20 @@ final class TroubleshootView {
 		/* translators: %d: number of plugins */
 		$this->plugin_list( sprintf( __( 'Off, for you only (%d)', 'culprit-finder' ), count( $disabled ) ), $off );
 		echo '</div></details>';
+	}
+
+	/**
+	 * Output of `culprit_finder_step_panel` callbacks, or '' when none printed anything.
+	 *
+	 * @param array $session Session.
+	 * @param Step  $step    Current step.
+	 * @return string
+	 */
+	private function step_panel( array $session, Step $step ) {
+		ob_start();
+		Hooks::action( 'culprit_finder_step_panel', $step->to_array(), View::of( $session ) );
+		$panel = (string) ob_get_clean();
+		return '' === trim( $panel ) ? '' : $panel;
 	}
 
 	/**

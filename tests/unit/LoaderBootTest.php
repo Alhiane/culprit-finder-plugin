@@ -29,6 +29,7 @@ final class LoaderBootTest extends TestCase {
 			'culprit_finder_session' => array(
 				'v'           => 1,
 				'token_hash'  => hash( 'sha256', $token ),
+				'created_at'  => time(),
 				'expires_at'  => time() + 60,
 				'self'        => 'culprit-finder/culprit-finder.php',
 				'fixed'       => array(),

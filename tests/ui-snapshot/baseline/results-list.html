@@ -1,0 +1,52 @@
+<div class="wrap culprit-finder">
+<header class="cf-header">
+<img class="culprit-finder-symbol" src="http://localhost:8888/wp-content/plugins/culprit-finder/assets/images/symbol.svg" alt="" height="40">
+<div class="cf-header__text">
+<h1>Culprit Finder</h1>
+<p>Find the plugin that broke your site. Visitors never notice.</p>
+</div>
+</header>
+<hr class="wp-header-end">
+<nav class="cf-tabs" aria-label="Culprit Finder sections">
+<a class="cf-tab" href="http://localhost:8888/wp-admin/admin.php?page=culprit-finder">Troubleshoot</a>
+<a class="cf-tab cf-tab--active" href="http://localhost:8888/wp-admin/admin.php?page=culprit-finder&#038;tab=results" aria-current="page">Results<span class="cf-tab__count">1</span>
+</a>
+<a class="cf-tab" href="http://localhost:8888/wp-admin/admin.php?page=culprit-finder&#038;tab=help">Help</a>
+</nav>
+<div class="cf-panel">
+<div class="cf-results-head">
+<p class="cf-muted">Your last 10 results are kept on this site only. Nothing is sent anywhere.</p>
+<a class="button cf-button--danger" href="http://localhost:8888/wp-admin/admin-post.php?action=culprit_finder_clear_results&#038;culprit_safe=1&#038;_wpnonce=N">Clear all</a>
+</div>
+<table class="widefat striped cf-results">
+<thead>
+<tr>
+<th scope="col">Date</th>
+<th scope="col">Result</th>
+<th scope="col">Plugins</th>
+<th scope="col" class="cf-num">Answers</th>
+<th scope="col">
+<span class="screen-reader-text">Actions</span>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="cf-nowrap">DATE</td>
+<td>
+<span class="cf-badge cf-badge--found">One plugin</span>
+</td>
+<td>
+<a class="cf-strong" href="http://localhost:8888/wp-admin/admin.php?page=culprit-finder&#038;tab=results&#038;result=ID">CFF Solo 1.0.0</a>
+</td>
+<td class="cf-num">4</td>
+<td class="cf-row-actions">
+<a href="http://localhost:8888/wp-admin/admin-post.php?action=culprit_finder_download&#038;culprit_safe=1&#038;result=ID&#038;format=md&#038;_wpnonce=N">Download</a> · <a class="cf-delete" href="http://localhost:8888/wp-admin/admin-post.php?action=culprit_finder_delete_result&#038;culprit_safe=1&#038;result=ID&#038;_wpnonce=N">Delete</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="clear">
+</div>

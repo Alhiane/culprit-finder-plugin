@@ -9,6 +9,7 @@ namespace CulpritFinder\Report;
 
 use CulpritFinder\Engine\Engine;
 use CulpritFinder\Engine\Step;
+use CulpritFinder\Session\AddOns;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -37,8 +38,8 @@ final class Collector {
 			$plugins[ $basename ] = self::plugin_info( $basename, $engine );
 		}
 
-		$theme = wp_get_theme();
-		return array(
+		$theme  = wp_get_theme();
+		$record = array(
 			'v'           => 1,
 			'version'     => CULPRIT_FINDER_VERSION,
 			'result'      => $result,
@@ -55,6 +56,11 @@ final class Collector {
 				'multisite'     => is_multisite(),
 			),
 		);
+		$always = AddOns::of( $session );
+		if ( $always ) {
+			$record['always_on'] = $always;
+		}
+		return $record;
 	}
 
 	/**

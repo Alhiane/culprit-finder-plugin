@@ -58,6 +58,31 @@ final class Manager {
 	}
 
 	/**
+	 * Hard maximum session length in seconds: `culprit_finder_max_session_length` can lower it
+	 * (to at least one minute) but never raise it above three hours (ADR-0024).
+	 *
+	 * @return int
+	 */
+	public function max_length() {
+		return Limits::max_length( Hooks::filter( 'culprit_finder_max_session_length', Limits::MAX_LENGTH ) );
+	}
+
+	/**
+	 * Add-ons to keep on in every step: what `culprit_finder_always_on` returns, limited to active
+	 * plugins that declare `Requires Plugins: culprit-finder` (ADR-0024).
+	 *
+	 * @param string[] $snapshot Active plugin basenames.
+	 * @return string[]
+	 */
+	public function always_on( array $snapshot ) {
+		if ( ! function_exists( 'get_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+		$requested = Hooks::filter( 'culprit_finder_always_on', array(), $snapshot );
+		return AddOns::accept( $requested, $snapshot, $this->self, get_plugins() );
+	}
+
+	/**
 	 * Real active plugins, bypassing a filtering loader.
 	 *
 	 * @return string[]
@@ -95,21 +120,24 @@ final class Manager {
 			Hooks::action( 'culprit_finder_session_ended', 'replaced', View::of( $previous ) );
 		}
 
-		$pinned = array_values( array_diff( array_intersect( $snapshot, $pinned ), array( $this->self ) ) );
+		$always = $this->always_on( $snapshot );
+		$pinned = array_values( array_diff( array_intersect( $snapshot, $pinned ), array( $this->self ), $always ) );
 		$deps   = Dependencies::map( $snapshot );
-		$engine = new Engine( $snapshot, $this->self, $pinned, $deps );
+		$engine = new Engine( $snapshot, $this->self, array_merge( $pinned, $always ), $deps );
 		$step   = $engine->step( array() );
 
 		$token    = Token::generate();
 		$recovery = Token::is_valid_format( $recovery_key ) ? strtolower( $recovery_key ) : Token::generate();
 		$now      = time();
+		$ends_at  = $now + $this->max_length();
 		$session  = array(
 			'v'             => 1,
 			'user_id'       => (int) $user_id,
 			'token_hash'    => Token::hash( $token ),
 			'recovery_hash' => Token::hash( $recovery ),
 			'created_at'    => $now,
-			'expires_at'    => $now + $this->ttl(),
+			'expires_at'    => Limits::expires_at( $now, $this->ttl(), $ends_at ),
+			'ends_at'       => $ends_at,
 			'self'          => $this->self,
 			'snapshot'      => $snapshot,
 			'pinned'        => $pinned,
@@ -118,6 +146,7 @@ final class Manager {
 			'fixed'         => $engine->fixed(),
 			'enabled_now'   => $step->enabled(),
 			'problem_url'   => (string) $problem_url,
+			'always_on'     => $always,
 		);
 		$this->store->save_session( $session );
 		Hooks::action( 'culprit_finder_session_started', View::of( $session ), $step->to_array() );
@@ -134,7 +163,8 @@ final class Manager {
 	}
 
 	/**
-	 * The current, unexpired session. An expired one is deleted (with the loader) and remembered for a notice.
+	 * The current, unexpired session. A session past its idle timeout or its maximum length is
+	 * deleted (with the loader) and remembered for a notice.
 	 *
 	 * @return array|null
 	 */
@@ -147,16 +177,32 @@ final class Manager {
 			$this->store->delete_session();
 			return null;
 		}
-		if ( (int) $session['expires_at'] <= time() ) {
+		$now     = time();
+		$at_max  = $this->deadline( $session ) <= $now;
+		$is_idle = (int) $session['expires_at'] <= $now;
+		if ( $at_max || $is_idle ) {
 			$this->store->delete_session();
 			LoaderInstaller::remove();
 			Hooks::action( 'culprit_finder_session_ended', 'expired', View::of( $session ) );
 			$last                       = (array) $this->store->last_result();
-			$last['session_expired_at'] = time();
+			$last['session_expired_at'] = $now;
+			if ( $at_max ) {
+				$last['session_max_reached'] = true;
+			}
 			$this->store->save_last_result( $last );
 			return null;
 		}
 		return $session;
+	}
+
+	/**
+	 * When a session ends at the latest (sessions from 0.1.0 count from their start).
+	 *
+	 * @param array $session Session.
+	 * @return int Unix time.
+	 */
+	public function deadline( array $session ) {
+		return Limits::deadline( $session, isset( $session['ends_at'] ) ? 0 : $this->max_length() );
 	}
 
 	/**
@@ -166,7 +212,7 @@ final class Manager {
 	 * @return Engine
 	 */
 	public function engine( array $session ) {
-		return new Engine( $session['snapshot'], $session['self'], $session['pinned'], $session['deps'] );
+		return new Engine( $session['snapshot'], $session['self'], AddOns::kept( $session ), $session['deps'] );
 	}
 
 	/**
@@ -182,16 +228,20 @@ final class Manager {
 	/**
 	 * Record an answer to the current question.
 	 *
-	 * @param bool $problem_present True = "Yes, the problem is still here".
+	 * @param bool     $problem_present True = "Yes, the problem is still here".
+	 * @param int|null $question        When set, the answer is refused unless this is still the current question.
 	 * @return Step|WP_Error
 	 */
-	public function answer( $problem_present ) {
+	public function answer( $problem_present, $question = null ) {
 		$session = $this->current();
 		if ( null === $session ) {
 			return self::no_session();
 		}
 		$engine = $this->engine( $session );
 		$step   = $engine->step( $session['answers'] );
+		if ( null !== $question && ( $step->is_done() || $step->question() !== (int) $question ) ) {
+			return new WP_Error( 'culprit_finder_stale_question', __( 'That question has already been answered.', 'culprit-finder' ) );
+		}
 		if ( $step->is_done() ) {
 			return $step;
 		}
@@ -250,7 +300,7 @@ final class Manager {
 		$step                   = $engine->step( $session['answers'] );
 		$session['answers']     = array_slice( $session['answers'], 0, $step->is_done() ? $step->answers_used() : count( $session['answers'] ) );
 		$session['enabled_now'] = $step->enabled();
-		$session['expires_at']  = time() + $this->ttl();
+		$session['expires_at']  = Limits::expires_at( time(), $this->ttl(), $this->deadline( $session ) );
 		$this->store->save_session( $session );
 		if ( $step->is_done() ) {
 			$this->record_result( $session, $engine, $step );

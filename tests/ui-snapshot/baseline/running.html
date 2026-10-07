@@ -1,0 +1,74 @@
+<div class="wrap culprit-finder">
+<header class="cf-header">
+<img class="culprit-finder-symbol" src="http://localhost:8888/wp-content/plugins/culprit-finder/assets/images/symbol.svg" alt="" height="40">
+<div class="cf-header__text">
+<h1>Culprit Finder</h1>
+<p>Find the plugin that broke your site. Visitors never notice.</p>
+</div>
+</header>
+<hr class="wp-header-end">
+<nav class="cf-tabs" aria-label="Culprit Finder sections">
+<a class="cf-tab cf-tab--active" href="http://localhost:8888/wp-admin/admin.php?page=culprit-finder&#038;culprit_safe=1" aria-current="page">Troubleshoot<span class="cf-tab__dot" role="img" aria-label="Troubleshooting is running">
+</span>
+</a>
+<a class="cf-tab" href="http://localhost:8888/wp-admin/admin.php?page=culprit-finder&#038;tab=results&#038;culprit_safe=1">Results</a>
+<a class="cf-tab" href="http://localhost:8888/wp-admin/admin.php?page=culprit-finder&#038;tab=help&#038;culprit_safe=1">Help</a>
+</nav>
+<div class="cf-panel">
+<section class="cf-progress" aria-label="Progress">
+<div class="cf-progress__row">
+<strong>Step 1 of about 4</strong>
+<span class="cf-muted">M min left · resets with every answer</span>
+</div>
+<div class="cf-bar" role="progressbar" aria-valuemin="0" aria-valuemax="4" aria-valuenow="0">
+<span class="cf-bar__seg cf-bar__seg--now">
+</span>
+<span class="cf-bar__seg cf-bar__seg--todo">
+</span>
+<span class="cf-bar__seg cf-bar__seg--todo">
+</span>
+<span class="cf-bar__seg cf-bar__seg--todo">
+</span>
+</div>
+</section>
+<section class="cf-card cf-question culprit-finder-running">
+<p class="cf-eyebrow">For you only: 4 of 5 plugins switched off</p>
+<h2>Is the problem still there?</h2>
+<p>Open the broken page, reload it, and look again. A critical error page counts as Yes.</p>
+<p>
+<a class="button cf-button cf-button--soft" href="http://localhost:8888/sample-page/" target="_blank" rel="noopener">Open localhost:8888/sample-page/ <span aria-hidden="true">↗</span>
+</a>
+</p>
+<div class="cf-answers">
+<a class="button cf-button cf-button--primary cf-button--answer" href="http://localhost:8888/wp-admin/admin-post.php?action=culprit_finder_answer&#038;culprit_safe=1&#038;answer=yes&#038;redirect_to=http%3A%2F%2Flocalhost%3A8888%2Fwp-admin%2Fadmin.php%3Fpage%3Dculprit-finder%26culprit_safe%3D1&#038;_wpnonce=N">Yes, it’s still there</a>
+<a class="button cf-button cf-button--outline cf-button--answer" href="http://localhost:8888/wp-admin/admin-post.php?action=culprit_finder_answer&#038;culprit_safe=1&#038;answer=no&#038;redirect_to=http%3A%2F%2Flocalhost%3A8888%2Fwp-admin%2Fadmin.php%3Fpage%3Dculprit-finder%26culprit_safe%3D1&#038;_wpnonce=N">No, it’s gone</a>
+</div>
+<div class="cf-secondary">
+<a class="button cf-button--danger" href="http://localhost:8888/wp-admin/admin-post.php?action=culprit_finder_exit&#038;culprit_safe=1&#038;_wpnonce=N">Stop and exit</a>
+<span class="cf-muted">You can also answer from the purple toolbar on any page. If WordPress emails you about a critical error, that is expected while troubleshooting.</span>
+</div>
+</section>
+<details class="cf-card cf-details">
+<summary>Which plugins are on in this step</summary>
+<div class="cf-lists">
+<div>
+<h3>On (1)</h3>
+<ul>
+<li>CFF Noise 01 1.0.0 (kept on)</li>
+</ul>
+</div>
+<div>
+<h3>Off, for you only (4)</h3>
+<ul>
+<li>CFF Noise 02 1.0.0</li>
+<li>CFF Noise 03 1.0.0</li>
+<li>CFF Noise 04 1.0.0</li>
+<li>CFF Solo 1.0.0</li>
+</ul>
+</div>
+</div>
+</details>
+</div>
+</div>
+<div class="clear">
+</div>

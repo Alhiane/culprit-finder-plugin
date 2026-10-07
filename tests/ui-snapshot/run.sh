@@ -21,6 +21,9 @@ s = re.sub(r"result=[0-9a-f]{12}", "result=ID", s)
 s = re.sub(r"\d+ min left", "M min left", s)
 s = re.sub(r"(January|February|March|April|May|June|July|August|September|October|November|December) \d{1,2}, \d{4}( \d{1,2}:\d{2} [ap]m)?", "DATE", s)
 s = re.sub(r"ver=[^\"&]+", "ver=V", s)
+s = re.sub(r"Culprit Finder \d+\.\d+\.\d+", "Culprit Finder VERSION", s)
+s = re.sub(r"(<dt>(?:WordPress|PHP)</dt>\s*<dd>)[0-9][^<]*(</dd>)", r"\1X\2", s)
+s = re.sub(r"WordPress [0-9][0-9.]*(?:-[A-Za-z0-9.-]+)?, PHP [0-9][0-9.]*", "WordPress X, PHP X", s)
 s = re.sub(r">\s*<", ">\n<", s)
 print(s)
 '
@@ -39,8 +42,8 @@ snap dashboard-idle "/wp-admin/index.php"
 snap setup "$TOOLS"
 
 PAGE=$(fetch "$JAR" "$TOOLS")
-NONCE=$(grep -oE 'name="_wpnonce" value="[^"]+"' <<<"$PAGE" | head -1 | sed -E 's/.*value="([^"]+)"/\1/')
-KEY=$(grep -oE 'name="culprit_finder_recovery" value="[^"]+"' <<<"$PAGE" | head -1 | sed -E 's/.*value="([^"]+)"/\1/')
+NONCE=$(grep -m1 -oE 'name="_wpnonce" value="[^"]+"' <<<"$PAGE" | sed -E 's/.*value="([^"]+)"/\1/')
+KEY=$(grep -m1 -oE 'name="culprit_finder_recovery" value="[^"]+"' <<<"$PAGE" | sed -E 's/.*value="([^"]+)"/\1/')
 curl -s -o /dev/null -b "$JAR" -c "$JAR" --data-urlencode "_wpnonce=$NONCE" --data "action=culprit_finder_start&culprit_finder_saved=1&culprit_finder_recovery=$KEY" \
   --data-urlencode "culprit_finder_problem_url=$BASE/sample-page/" --data-urlencode "culprit_finder_pin[]=cff-fixtures/cff-noise-01.php" "$BASE/wp-admin/admin-post.php?culprit_safe=1"
 snap running "$TOOLS&culprit_safe=1"

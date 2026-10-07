@@ -38,7 +38,7 @@ final class Report {
 	 * @return array
 	 */
 	public static function public_record( array $record ) {
-		unset( $record['user_id'], $record['session_expired_at'] );
+		unset( $record['user_id'], $record['session_expired_at'], $record['session_max_reached'] );
 		return $record;
 	}
 }

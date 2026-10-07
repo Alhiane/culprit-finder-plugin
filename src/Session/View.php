@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
  */
 final class View {
 
-	const KEYS = array( 'user_id', 'created_at', 'expires_at', 'self', 'snapshot', 'pinned', 'deps', 'answers', 'fixed', 'enabled_now', 'problem_url' );
+	const KEYS = array( 'user_id', 'created_at', 'expires_at', 'self', 'snapshot', 'pinned', 'deps', 'answers', 'fixed', 'enabled_now', 'problem_url', 'ends_at', 'always_on' );
 
 	/**
 	 * Redacted copy of a session.
