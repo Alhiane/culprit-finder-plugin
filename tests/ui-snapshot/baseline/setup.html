@@ -1,0 +1,79 @@
+<div class="wrap culprit-finder">
+<header class="cf-header">
+<img class="culprit-finder-symbol" src="http://localhost:8888/wp-content/plugins/culprit-finder/assets/images/symbol.svg" alt="" height="40">
+<div class="cf-header__text">
+<h1>Culprit Finder</h1>
+<p>Find the plugin that broke your site. Visitors never notice.</p>
+</div>
+</header>
+<hr class="wp-header-end">
+<nav class="cf-tabs" aria-label="Culprit Finder sections">
+<a class="cf-tab cf-tab--active" href="http://localhost:8888/wp-admin/admin.php?page=culprit-finder" aria-current="page">Troubleshoot</a>
+<a class="cf-tab" href="http://localhost:8888/wp-admin/admin.php?page=culprit-finder&#038;tab=results">Results</a>
+<a class="cf-tab" href="http://localhost:8888/wp-admin/admin.php?page=culprit-finder&#038;tab=help">Help</a>
+</nav>
+<div class="cf-panel">
+<ol class="cf-how" aria-label="How it works">
+<li>We switch plugins off, for you only</li>
+<li>You check the broken page and answer</li>
+<li>We name the culprit</li>
+</ol>
+<form class="cf-card cf-setup" method="post" action="http://localhost:8888/wp-admin/admin-post.php?culprit_safe=1">
+<input type="hidden" id="_wpnonce" name="_wpnonce" value="N" />
+<input type="hidden" name="_wp_http_referer" value="/wp-admin/admin.php?page=culprit-finder" />
+<input type="hidden" name="action" value="culprit_finder_start">
+<input type="hidden" name="culprit_finder_recovery" value="KEY">
+<fieldset class="cf-field">
+<legend>Where do you see the problem? <span class="cf-optional">Optional</span>
+</legend>
+<label for="culprit-finder-problem-url">Paste the address of the broken page. Every step gets a one-click link to it.</label>
+<input type="url" class="regular-text cf-input" id="culprit-finder-problem-url" name="culprit_finder_problem_url" placeholder="http://localhost:8888/">
+</fieldset>
+<fieldset class="cf-field">
+<legend>Keep any plugins on? <span class="cf-optional">Optional</span>
+</legend>
+<p class="cf-help">Tick plugins the problem needs to show up, like your shop plugin for a checkout problem. They stay on in every step and are never blamed. Plugins they require stay on too.</p>
+<div class="cf-pins">
+<label>
+<input type="checkbox" name="culprit_finder_pin[]" value="cff-fixtures/cff-noise-01.php"> CFF Noise 01 1.0.0</label>
+<label>
+<input type="checkbox" name="culprit_finder_pin[]" value="cff-fixtures/cff-noise-02.php"> CFF Noise 02 1.0.0</label>
+<label>
+<input type="checkbox" name="culprit_finder_pin[]" value="cff-fixtures/cff-noise-03.php"> CFF Noise 03 1.0.0</label>
+<label>
+<input type="checkbox" name="culprit_finder_pin[]" value="cff-fixtures/cff-noise-04.php"> CFF Noise 04 1.0.0</label>
+<label>
+<input type="checkbox" name="culprit_finder_pin[]" value="cff-fixtures/cff-solo.php"> CFF Solo 1.0.0</label>
+</div>
+</fieldset>
+<fieldset class="cf-field">
+<legend>Save your two safety links</legend>
+<p class="cf-help">They still work if a step makes a page crash. The emergency exit is made for this session only, so press Start without reloading this page.</p>
+<div class="cf-links">
+<div class="cf-link">
+<strong>Control panel</strong>
+<span>Answer questions even when pages are broken.</span>
+<code id="culprit-finder-panel-url">http://localhost:8888/wp-admin/admin.php?page=culprit-finder&amp;culprit_safe=1</code>
+<button type="button" class="button culprit-finder-copy" data-target="culprit-finder-panel-url" data-done="Copied" hidden>Copy</button>
+</div>
+<div class="cf-link">
+<strong>Emergency exit</strong>
+<span>Ends troubleshooting at once, even when logged out. Keep it private.</span>
+<code id="culprit-finder-exit-url">http://localhost:8888/?culprit-finder-exit=KEY</code>
+<button type="button" class="button culprit-finder-copy" data-target="culprit-finder-exit-url" data-done="Copied" hidden>Copy</button>
+</div>
+</div>
+<label class="cf-saved">
+<input type="checkbox" name="culprit_finder_saved" value="1" required> I’ve saved both links</label>
+<div class="cf-start">
+<button type="submit" class="button cf-button cf-button--primary cf-button--large">Start troubleshooting</button>
+<span class="cf-muted">5 plugins to test · about 5 steps · ends by itself after 60 idle minutes</span>
+</div>
+<p class="cf-reassure">Visitors and other admins never see a change, and your plugin settings are never modified. <a href="http://localhost:8888/wp-admin/admin.php?page=culprit-finder&#038;tab=help">How it works and how to get out</a>
+</p>
+</fieldset>
+</form>
+</div>
+</div>
+<div class="clear">
+</div>

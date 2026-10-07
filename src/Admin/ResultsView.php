@@ -7,11 +7,13 @@
 
 namespace CulpritFinder\Admin;
 
+use CulpritFinder\Hooks;
 use CulpritFinder\Plugin;
 use CulpritFinder\Report\Builder;
 use CulpritFinder\Report\Report;
 use CulpritFinder\Session\Store;
 use CulpritFinder\Session\Token;
+use CulpritFinder\Session\View;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -143,9 +145,12 @@ final class ResultsView {
 		}
 
 		echo '<div class="cf-env"><h3>' . esc_html__( 'Environment', 'culprit-finder' ) . '</h3><dl>';
-		$kept = array();
+		$addons = Builder::addons( $record );
+		$kept   = array();
 		foreach ( $result['kept_on'] as $basename ) {
-			$kept[] = Builder::label( $basename, $plugins );
+			if ( ! in_array( $basename, $addons, true ) ) {
+				$kept[] = Builder::label( $basename, $plugins );
+			}
 		}
 		$rows = array(
 			__( 'WordPress', 'culprit-finder' )      => $env['wp'],
@@ -153,9 +158,16 @@ final class ResultsView {
 			__( 'Theme', 'culprit-finder' )          => trim( $env['theme'] . ' ' . $env['theme_version'] ),
 			__( 'Plugins tested', 'culprit-finder' ) => number_format_i18n( (int) $record['tested'] ),
 			__( 'Kept on', 'culprit-finder' )        => $kept ? implode( ', ', $kept ) : __( 'None', 'culprit-finder' ),
-			__( 'Not tested', 'culprit-finder' )     => __( 'Must-use plugins, drop-ins, theme', 'culprit-finder' ),
-			__( 'Multisite', 'culprit-finder' )      => ! empty( $env['multisite'] ) ? __( 'Yes', 'culprit-finder' ) : __( 'No', 'culprit-finder' ),
 		);
+		if ( $addons ) {
+			$labels = array();
+			foreach ( $addons as $basename ) {
+				$labels[] = Builder::label( $basename, $plugins );
+			}
+			$rows[ __( 'Add-ons kept on', 'culprit-finder' ) ] = implode( ', ', $labels );
+		}
+		$rows[ __( 'Not tested', 'culprit-finder' ) ] = __( 'Must-use plugins, drop-ins, theme', 'culprit-finder' );
+		$rows[ __( 'Multisite', 'culprit-finder' ) ]  = ! empty( $env['multisite'] ) ? __( 'Yes', 'culprit-finder' ) : __( 'No', 'culprit-finder' );
 		foreach ( $rows as $label => $value ) {
 			echo '<dt>' . esc_html( $label ) . '</dt><dd>' . esc_html( $value ) . '</dd>';
 		}
@@ -181,6 +193,7 @@ final class ResultsView {
 				)
 			)
 		) . '">' . esc_html__( 'Download .txt', 'culprit-finder' ) . '</a>';
+		Hooks::action( 'culprit_finder_result_actions', Report::public_record( $record ), $current ? View::of( $session ) : null );
 		echo '<a class="button cf-button--danger cf-push-right" href="' . esc_url( Links::action( 'delete_result', array( 'result' => $record['id'] ) ) ) . '">' . esc_html__( 'Delete', 'culprit-finder' ) . '</a>';
 		echo '</div>';
 		echo '<p class="cf-help">' . esc_html__( 'Safe to share publicly: no site address, user names or emails.', 'culprit-finder' ) . '</p>';

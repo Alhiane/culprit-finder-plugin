@@ -50,15 +50,29 @@ final class Builder {
 			$lines[] = $after;
 		}
 
-		$kept = array();
+		$addons = self::addons( $record );
+		$kept   = array();
+		$extra  = array();
 		foreach ( $result['kept_on'] as $basename ) {
-			$kept[] = self::label( $basename, $plugins );
+			if ( ! in_array( $basename, $addons, true ) ) {
+				$kept[] = self::label( $basename, $plugins );
+			}
+		}
+		if ( $kept ) {
+			$extra[] = 'kept on: ' . implode( ', ', $kept );
+		}
+		if ( $addons ) {
+			$labels = array();
+			foreach ( $addons as $basename ) {
+				$labels[] = self::label( $basename, $plugins );
+			}
+			$extra[] = 'Culprit Finder add-ons kept on: ' . implode( ', ', $labels );
 		}
 		$environment = array(
 			'Environment',
 			'- WordPress ' . $env['wp'] . ', PHP ' . $env['php'],
 			'- Theme: ' . trim( $env['theme'] . ' ' . $env['theme_version'] ),
-			'- Plugins tested: ' . (int) $record['tested'] . ( $kept ? ' (kept on: ' . implode( ', ', $kept ) . ')' : '' ),
+			'- Plugins tested: ' . (int) $record['tested'] . ( $extra ? ' (' . implode( '; ', $extra ) . ')' : '' ),
 			'- Not tested: must-use plugins, drop-ins, theme',
 			'- Multisite: ' . ( ! empty( $env['multisite'] ) ? 'yes' : 'no' ),
 		);
@@ -145,6 +159,16 @@ final class Builder {
 			default:
 				return '';
 		}
+	}
+
+	/**
+	 * Add-ons that were kept on automatically (`always_on` in records from 0.2.0 on).
+	 *
+	 * @param array $record Result record.
+	 * @return string[]
+	 */
+	public static function addons( array $record ) {
+		return isset( $record['always_on'] ) && is_array( $record['always_on'] ) ? array_values( array_filter( $record['always_on'], 'is_string' ) ) : array();
 	}
 
 	/**

@@ -16,12 +16,14 @@ When something on your site breaks, the usual advice is "deactivate all plugins,
 
 Culprit Finder switches plugins off **for your browser only**. It asks one question per step: "Is the problem still there?" Answer Yes or No, and it narrows things down until it names the plugin that causes the problem, or the two plugins that conflict with each other. Visitors and other admins see the normal site the whole time.
 
+Guides and answers to common questions are in the documentation: https://getculpritfinder.com/docs
+
 * **Visitors never notice.** Only your browser sees plugins switched off. Nothing is deactivated, and your real plugin settings never change.
 * **Fast.** About 7 answers for 30 plugins, because each answer halves the list.
 * **Catches two-plugin conflicts**, such as two plugins that only crash together ("Cannot redeclare" fatal errors).
 * **Keep plugins on** that the problem needs, for example your shop plugin for a checkout problem. Plugin dependencies ("Requires Plugins") are respected.
 * **Answer from anywhere:** the Culprit Finder page, the toolbar on any page, the dashboard widget, or a control panel that keeps working even when a step breaks your pages.
-* **Always a way out:** an Exit button, a logged-out emergency exit link, and an automatic end after an hour without answers.
+* **Always a way out:** an Exit button, a logged-out emergency exit link, and an automatic end after an hour without answers, or after three hours at most.
 * **A support report** for forums and plugin authors, with no site address, user names or emails. Copy it, or download it as .md or .txt.
 * **Results history:** your last 10 results stay on the Results tab, on your own site.
 
@@ -70,7 +72,7 @@ Any of these ends troubleshooting:
 
 * Press **Exit** on the Culprit Finder page, in the dashboard widget, or in the admin bar.
 * Open the **emergency exit** link you bookmarked. It works even when you're logged out.
-* Wait an hour without answering; the session expires by itself.
+* Wait an hour without answering; the session expires by itself. Every session also ends by itself after three hours at most.
 * Deactivate Culprit Finder.
 * Clear your browser cookies or use another browser: only your browser was affected.
 * Delete `wp-content/mu-plugins/culprit-finder-loader.php` with FTP or your host's file manager.
@@ -93,7 +95,7 @@ Not yet. It refuses to start on multisite networks.
 
 = Why does it add a file to wp-content/mu-plugins? =
 
-To switch plugins off for your browser only, Culprit Finder must run before WordPress loads the other plugins, and only must-use plugins load that early. So when you press Start it adds one small helper file there, the same approach as WordPress's own Health Check & Troubleshooting plugin. Without your troubleshooting cookie the file does nothing. It is removed when troubleshooting ends (Exit, the emergency exit link, the 60-minute timeout, or deactivating the plugin), and Culprit Finder never overwrites or deletes a file it didn't create.
+To switch plugins off for your browser only, Culprit Finder must run before WordPress loads the other plugins, and only must-use plugins load that early. So when you press Start it adds one small helper file there, the same approach as WordPress's own Health Check & Troubleshooting plugin. Without your troubleshooting cookie the file does nothing. It is removed when troubleshooting ends (Exit, the emergency exit link, the 60-minute timeout or the three-hour limit, or deactivating the plugin), and Culprit Finder never overwrites or deletes a file it didn't create.
 
 = Can I manage plugins during troubleshooting? =
 
@@ -110,10 +112,19 @@ No. The Plugins screen is paused for you while a session runs, so the shortened 
 
 == Changelog ==
 
+= 0.2.0 =
+* Add-ons for Culprit Finder now stay on automatically during troubleshooting. You no longer need to tick them under "Keep any plugins on?", and the setup screen, each step and the report show them as kept on.
+* Every troubleshooting session now ends by itself after three hours at most, even when answers keep coming.
+* Fixed: when answers came in automatically, your browser could drop out of a session that was still running.
+* For developers: new hooks and functions for add-ons (keep an add-on on, add setup fields, a step panel, result buttons and a toolbar label, and answer the current question from your own code). See https://getculpritfinder.com/docs/developers/hooks/
+
 = 0.1.0 =
 * First release: switch plugins off for your browser only, find the plugin (or the two plugins) behind a problem, keep plugins on, respect plugin dependencies, answer from the page, the toolbar or the dashboard widget, results history with .md and .txt downloads, and a WP-CLI command.
 
 == Upgrade Notice ==
+
+= 0.2.0 =
+Add-ons now stay on automatically during troubleshooting, and every session ends after three hours at most.
 
 = 0.1.0 =
 First release.

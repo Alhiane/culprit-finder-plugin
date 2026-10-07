@@ -33,7 +33,9 @@ final class LoaderTest extends TestCase {
 				'v'             => 1,
 				'token_hash'    => hash( 'sha256', $this->token ),
 				'recovery_hash' => hash( 'sha256', str_repeat( 'cd', 32 ) ),
+				'created_at'    => time() - 60,
 				'expires_at'    => time() + 600,
+				'ends_at'       => time() + 3600,
 				'self'          => self::SELF,
 				'fixed'         => array( 'pinned/pinned.php' ),
 				'enabled_now'   => array( 'b/b.php' ),
@@ -117,12 +119,32 @@ final class LoaderTest extends TestCase {
 			'array token'       => array( function () { $_COOKIE['wp-culprit-finder'] = array( 'x' ); } ),
 			'wrong token'       => array( function () { $_COOKIE['wp-culprit-finder'] = str_repeat( 'ef', 32 ); } ),
 			'expired'           => array( function () { $GLOBALS['cf_stub_options']['culprit_finder_session']['expires_at'] = time() - 1; } ),
+			'past max length'   => array( function () { $GLOBALS['cf_stub_options']['culprit_finder_session']['ends_at'] = time() - 1; } ),
+			'0.1.0 over 3 h'    => array(
+				function () {
+					unset( $GLOBALS['cf_stub_options']['culprit_finder_session']['ends_at'] );
+					$GLOBALS['cf_stub_options']['culprit_finder_session']['created_at'] = time() - 10801;
+				},
+			),
+			'no start time'     => array(
+				function () {
+					unset( $GLOBALS['cf_stub_options']['culprit_finder_session']['ends_at'], $GLOBALS['cf_stub_options']['culprit_finder_session']['created_at'] );
+				},
+			),
 			'wrong version'     => array( function () { $GLOBALS['cf_stub_options']['culprit_finder_session']['v'] = 2; } ),
 			'malformed session' => array( function () { $GLOBALS['cf_stub_options']['culprit_finder_session'] = 'garbage'; } ),
 			'no session'        => array( function () { unset( $GLOBALS['cf_stub_options']['culprit_finder_session'] ); } ),
 			'multisite'         => array( function () { $GLOBALS['cf_stub_multisite'] = true; } ),
 			'bad recovery key'  => array( function () { $_COOKIE = array(); $_GET['culprit-finder-exit'] = array( 'x' ); } ),
 		);
+	}
+
+	public function test_session_from_0_1_0_without_ends_at_still_filters(): void {
+		unset( $GLOBALS['cf_stub_options']['culprit_finder_session']['ends_at'] );
+		$GLOBALS['cf_stub_options']['culprit_finder_session']['created_at'] = time() - 10700;
+		$this->login();
+		\Culprit_Finder_Loader::boot();
+		$this->assertTrue( \Culprit_Finder_Loader::is_filtering(), 'A running 0.1.0 session keeps working until three hours after its start.' );
 	}
 
 	public function test_wrong_recovery_key_keeps_session(): void {

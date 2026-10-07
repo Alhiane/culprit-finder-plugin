@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Culprit Finder Loader
  * Description: Lets Culprit Finder switch plugins off for one admin's browser session only. Deleting this file ends any troubleshooting session.
- * Version: 0.1.1
+ * Version: 0.2.0
  * License: GPLv2 or later
  *
  * Marker: culprit-finder-loader-marker (deactivating Culprit Finder deletes this file only when this line is present).
@@ -26,11 +26,12 @@ define( 'CULPRIT_FINDER_LOADER_FILE', __FILE__ );
  */
 final class Culprit_Finder_Loader {
 
-	const VERSION  = '0.1.1';
-	const COOKIE   = 'wp-culprit-finder';
-	const OPTION   = 'culprit_finder_session';
-	const SAFE_ARG = 'culprit_safe';
-	const EXIT_ARG = 'culprit-finder-exit';
+	const VERSION    = '0.2.0';
+	const COOKIE     = 'wp-culprit-finder';
+	const OPTION     = 'culprit_finder_session';
+	const SAFE_ARG   = 'culprit_safe';
+	const EXIT_ARG   = 'culprit-finder-exit';
+	const MAX_LENGTH = 10800;
 
 	/**
 	 * Verified session for this request, or null when not filtering.
@@ -254,7 +255,8 @@ final class Culprit_Finder_Loader {
 	}
 
 	/**
-	 * Session option matches the v1 contract and hasn't expired.
+	 * Session option matches the v1 contract and has passed neither its idle timeout nor its
+	 * maximum length (`ends_at`, or three hours after `created_at` for sessions without it).
 	 *
 	 * @param mixed $session Option value.
 	 * @return bool
@@ -264,6 +266,7 @@ final class Culprit_Finder_Loader {
 			&& isset( $session['v'], $session['expires_at'], $session['token_hash'], $session['self'], $session['fixed'], $session['enabled_now'] )
 			&& 1 === $session['v']
 			&& (int) $session['expires_at'] > time()
+			&& ( isset( $session['ends_at'] ) ? (int) $session['ends_at'] : (int) ( isset( $session['created_at'] ) ? $session['created_at'] : 0 ) + self::MAX_LENGTH ) > time()
 			&& is_string( $session['token_hash'] )
 			&& is_string( $session['self'] )
 			&& is_array( $session['fixed'] )

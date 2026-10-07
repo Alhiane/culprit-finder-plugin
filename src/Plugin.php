@@ -50,11 +50,25 @@ final class Plugin {
 	private $manager;
 
 	/**
+	 * Add-on API.
+	 *
+	 * @var Api
+	 */
+	private $api;
+
+	/**
 	 * The current user's verified session for this request (set at init), or null.
 	 *
 	 * @var array|null
 	 */
 	private $owned_session = null;
+
+	/**
+	 * Input of a Start that an add-on refused, read once per request (false until read).
+	 *
+	 * @var array|null|false
+	 */
+	private $start_input = false;
 
 	/**
 	 * Constructor.
@@ -66,6 +80,7 @@ final class Plugin {
 		$this->store   = new Store();
 		$this->cookie  = new Cookie();
 		$this->manager = new Manager( $this->store, plugin_basename( $file ) );
+		$this->api     = new Api( $this );
 	}
 
 	/**
@@ -95,6 +110,15 @@ final class Plugin {
 	}
 
 	/**
+	 * Add-on API (src/functions.php).
+	 *
+	 * @return Api
+	 */
+	public function api() {
+		return $this->api;
+	}
+
+	/**
 	 * Cookie handler.
 	 *
 	 * @return Cookie
@@ -119,6 +143,73 @@ final class Plugin {
 	 */
 	public function owned_session() {
 		return $this->owned_session;
+	}
+
+	/**
+	 * The running session, verified again right now: our cookie's token matches, the current user
+	 * owns it and can manage plugins. Never in WP-CLI. Use this, not owned_session(), in requests
+	 * where the user can change after init (REST cookie authentication without a nonce).
+	 *
+	 * @return array|null
+	 */
+	public function verified_session() {
+		if ( ( defined( 'WP_CLI' ) && WP_CLI ) || ! $this->cookie->present() ) {
+			return null;
+		}
+		$session = $this->manager->current();
+		if ( null === $session || ! Token::matches( $this->cookie->token(), $session['token_hash'] ) ) {
+			return null;
+		}
+		if ( get_current_user_id() !== (int) $session['user_id'] || ! current_user_can( 'activate_plugins' ) ) {
+			return null;
+		}
+		return $session;
+	}
+
+	/**
+	 * Move this browser's cookie expiry to the session's current expiry (after any answer).
+	 */
+	public function refresh_cookie() {
+		$session = $this->manager->current();
+		$token   = $this->cookie->token();
+		if ( null !== $session && null !== $token && Token::matches( $token, $session['token_hash'] ) ) {
+			$this->cookie->set( $token, $session['expires_at'] );
+		}
+	}
+
+	/**
+	 * Remember the input of a Start that didn't happen, so the setup screen can show the reason
+	 * and keep what the user typed (including the emergency exit key they already saved).
+	 *
+	 * @param array $input Input: message, problem_url, pinned, recovery, addon.
+	 */
+	public function keep_start_input( array $input ) {
+		set_transient( self::start_input_key(), $input, 10 * MINUTE_IN_SECONDS );
+	}
+
+	/**
+	 * The kept Start input for the current user, removed on first read; null when there is none.
+	 *
+	 * @return array|null
+	 */
+	public function start_input() {
+		if ( false === $this->start_input ) {
+			$input = get_transient( self::start_input_key() );
+			if ( false !== $input ) {
+				delete_transient( self::start_input_key() );
+			}
+			$this->start_input = is_array( $input ) ? $input : null;
+		}
+		return $this->start_input;
+	}
+
+	/**
+	 * Transient name for the kept Start input of the current user.
+	 *
+	 * @return string
+	 */
+	private static function start_input_key() {
+		return 'culprit_finder_start_input_' . get_current_user_id();
 	}
 
 	/**

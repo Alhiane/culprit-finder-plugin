@@ -7,7 +7,9 @@
 
 namespace CulpritFinder\Admin;
 
+use CulpritFinder\Hooks;
 use CulpritFinder\Plugin;
+use CulpritFinder\Session\View;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -74,6 +76,10 @@ final class AdminBar {
 				$step->question(),
 				$step->estimated_total()
 			);
+		}
+		$label = Hooks::filter( 'culprit_finder_admin_bar_label', $title, $step->to_array(), View::of( $session ) );
+		if ( is_string( $label ) && '' !== trim( $label ) ) {
+			$title = $label;
 		}
 		$bar->add_node(
 			array(

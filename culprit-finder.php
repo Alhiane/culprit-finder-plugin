@@ -18,7 +18,7 @@
 defined( 'ABSPATH' ) || exit;
 
 define( 'CULPRIT_FINDER_VERSION', '0.1.0' );
-define( 'CULPRIT_FINDER_LOADER_VERSION', '0.1.1' );
+define( 'CULPRIT_FINDER_LOADER_VERSION', '0.2.0' );
 define( 'CULPRIT_FINDER_FILE', __FILE__ );
 
 spl_autoload_register(
@@ -33,6 +33,8 @@ spl_autoload_register(
 		}
 	}
 );
+
+require __DIR__ . '/src/functions.php';
 
 $culprit_finder_plugin = new CulpritFinder\Plugin( __FILE__ );
 $culprit_finder_plugin->register();

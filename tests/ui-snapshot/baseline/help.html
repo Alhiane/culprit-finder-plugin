@@ -1,0 +1,57 @@
+<div class="wrap culprit-finder">
+<header class="cf-header">
+<img class="culprit-finder-symbol" src="http://localhost:8888/wp-content/plugins/culprit-finder/assets/images/symbol.svg" alt="" height="40">
+<div class="cf-header__text">
+<h1>Culprit Finder</h1>
+<p>Find the plugin that broke your site. Visitors never notice.</p>
+</div>
+</header>
+<hr class="wp-header-end">
+<nav class="cf-tabs" aria-label="Culprit Finder sections">
+<a class="cf-tab" href="http://localhost:8888/wp-admin/admin.php?page=culprit-finder">Troubleshoot</a>
+<a class="cf-tab" href="http://localhost:8888/wp-admin/admin.php?page=culprit-finder&#038;tab=results">Results</a>
+<a class="cf-tab cf-tab--active" href="http://localhost:8888/wp-admin/admin.php?page=culprit-finder&#038;tab=help" aria-current="page">Help</a>
+</nav>
+<div class="cf-panel">
+<div class="cf-help-page">
+<section>
+<h2>How it works</h2>
+<p>Culprit Finder switches plugins off for your browser only and asks after each change whether the problem is still there. It narrows the list down by halves, so 30 plugins take about 7 answers. It also catches two plugins that only fail together.</p>
+</section>
+<section>
+<h2>What happens to my site?</h2>
+<ul>
+<li>Visitors and other admins always see every plugin.</li>
+<li>Your real plugin settings never change. Nothing is deactivated.</li>
+<li>Plugin management is paused for you while troubleshooting runs.</li>
+<li>Results stay on this site. Nothing is sent anywhere.</li>
+</ul>
+</section>
+<section>
+<h2>How to get out</h2>
+<ul>
+<li>
+<strong>Stop and exit</strong> on this page, in the dashboard widget, or in the toolbar.</li>
+<li>The <strong>emergency exit</strong> link you saved. It works even when you are logged out.</li>
+<li>Wait an hour without answering: troubleshooting ends by itself.</li>
+<li>Deactivate Culprit Finder, or delete <code>wp-content/mu-plugins/culprit-finder-loader.php</code> with FTP or your host’s file manager.</li>
+<li>Clear your browser cookies or use another browser: only your browser was affected.</li>
+</ul>
+</section>
+<section>
+<h2>A step shows a critical error</h2>
+<p>That usually means the plugins switched on in that step are the problem: answer Yes. Open your bookmarked control panel to answer when the page itself is broken. WordPress may email you about the error; that is expected while troubleshooting.</p>
+</section>
+<section>
+<h2>Whole site down?</h2>
+<p>Open the recovery link WordPress emailed you and log in, start here, then click <strong>Exit Recovery Mode</strong> in the toolbar before you answer. If the email never arrives, ask another administrator, use WP-CLI, or rename the plugin’s folder with FTP to get back in.</p>
+</section>
+<section>
+<h2>What it can’t test</h2>
+<p>Your theme, must-use plugins, drop-ins such as object-cache.php, and server settings. If the problem stays with every plugin off, the result says so.</p>
+</section>
+</div>
+</div>
+</div>
+<div class="clear">
+</div>

@@ -7,6 +7,7 @@
 
 namespace CulpritFinder\Admin;
 
+use CulpritFinder\Hooks;
 use CulpritFinder\Plugin;
 use CulpritFinder\Report\Builder;
 use CulpritFinder\Report\Report;
@@ -47,7 +48,9 @@ final class Handlers {
 
 	/**
 	 * Start a session. Refused unless the user confirmed saving the safety links (ADR-0018);
-	 * pinned basenames are validated against the snapshot in Manager::start().
+	 * pinned basenames are validated against the snapshot in Manager::start(). Add-ons can require
+	 * the problem page address and refuse the start (`culprit_finder_problem_url_required`,
+	 * `culprit_finder_before_start`); the setup screen then shows why and keeps the input.
 	 */
 	public function handle_start() {
 		$this->guard( 'start' );
@@ -57,12 +60,33 @@ final class Handlers {
 			$pins = array_map( 'sanitize_text_field', wp_unslash( $_POST['culprit_finder_pin'] ) );
 		}
 		$key     = isset( $_POST['culprit_finder_recovery'] ) ? sanitize_text_field( wp_unslash( $_POST['culprit_finder_recovery'] ) ) : '';
-		$problem = isset( $_POST['culprit_finder_problem_url'] ) ? Links::problem_url( sanitize_text_field( wp_unslash( $_POST['culprit_finder_problem_url'] ) ) ) : '';
+		$typed   = isset( $_POST['culprit_finder_problem_url'] ) ? sanitize_text_field( wp_unslash( $_POST['culprit_finder_problem_url'] ) ) : '';
+		$problem = Links::problem_url( $typed );
 		$saved   = ! empty( $_POST['culprit_finder_saved'] );
+		$addon   = isset( $_POST['culprit_finder_addon'] ) ? self::addon_input( wp_unslash( $_POST['culprit_finder_addon'] ) ) : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized recursively by addon_input().
 		// phpcs:enable
 
 		if ( ! $saved ) {
 			$this->redirect( Links::tools( array( 'culprit_notice' => 'unsaved' ) ) );
+		}
+
+		$input   = array(
+			'problem_url' => $problem,
+			'pinned'      => array_values( $pins ),
+			'addon'       => $addon,
+		);
+		$refusal = $this->start_refusal( $input );
+		if ( '' !== $refusal ) {
+			$this->plugin->keep_start_input(
+				array(
+					'message'     => $refusal,
+					'problem_url' => $typed,
+					'pinned'      => $input['pinned'],
+					'recovery'    => Token::is_valid_format( $key ) ? strtolower( $key ) : '',
+					'addon'       => $addon,
+				)
+			);
+			$this->redirect( Links::tools() );
 		}
 
 		$start = $this->plugin->manager()->start( get_current_user_id(), $pins, Token::is_valid_format( $key ) ? $key : null, $problem );
@@ -172,16 +196,58 @@ final class Handlers {
 		if ( $step instanceof WP_Error ) {
 			$this->die_with( $step );
 		}
-		$session = $this->plugin->manager()->current();
-		$token   = $this->plugin->cookie()->token();
-		if ( null !== $session && null !== $token ) {
-			$this->plugin->cookie()->set( $token, $session['expires_at'] );
-		}
+		$this->plugin->refresh_cookie();
 		if ( $step->is_done() ) {
 			$last = $this->plugin->store()->last_result();
 			$this->redirect( is_array( $last ) && isset( $last['id'] ) ? Links::result( $last['id'] ) : Links::tools() );
 		}
 		$this->redirect( $this->redirect_target() );
+	}
+
+	/**
+	 * Why an add-on refuses this start, or '' to go ahead.
+	 *
+	 * @param array $input Start input (problem_url, pinned, addon).
+	 * @return string Plain-text message.
+	 */
+	private function start_refusal( array $input ) {
+		$required = Hooks::filter( 'culprit_finder_problem_url_required', false, $input );
+		if ( true === $required && '' === $input['problem_url'] ) {
+			return __( 'Please paste the address of the page where you see the problem. It must be a page of this site.', 'culprit-finder' );
+		}
+		$check = Hooks::filter( 'culprit_finder_before_start', true, $input );
+		if ( $check instanceof WP_Error ) {
+			$message = $check->get_error_message();
+			return is_string( $message ) && '' !== trim( $message ) ? wp_strip_all_tags( $message ) : __( 'Troubleshooting didn’t start. Check the options above and try again.', 'culprit-finder' );
+		}
+		return '';
+	}
+
+	/**
+	 * Sanitize add-on fields (`culprit_finder_addon[...]`): keys with sanitize_key(), values with
+	 * sanitize_textarea_field(), at most three levels deep.
+	 *
+	 * @param mixed $value Unslashed input.
+	 * @param int   $depth Current depth.
+	 * @return array
+	 */
+	private static function addon_input( $value, $depth = 0 ) {
+		if ( ! is_array( $value ) || $depth > 2 ) {
+			return array();
+		}
+		$clean = array();
+		foreach ( $value as $key => $item ) {
+			$key = sanitize_key( (string) $key );
+			if ( '' === $key ) {
+				continue;
+			}
+			if ( is_array( $item ) ) {
+				$clean[ $key ] = self::addon_input( $item, $depth + 1 );
+			} elseif ( is_scalar( $item ) ) {
+				$clean[ $key ] = sanitize_textarea_field( (string) $item );
+			}
+		}
+		return $clean;
 	}
 
 	/**

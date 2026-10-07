@@ -79,28 +79,34 @@ final class Page {
 	/**
 	 * Let an auto-answer provider answer steps (`culprit_finder_auto_answer`, ADR-0021).
 	 * Honored only on the Troubleshoot tab of the browser that owns the session, and only for
-	 * exactly 'yes' or 'no'; anything else leaves the question to the user.
+	 * exactly 'yes' or 'no'; anything else leaves the question to the user. After automatic
+	 * answers the browser's cookie gets the session's new expiry, like after a manual answer.
 	 */
 	public function auto_answer() {
 		$owned = $this->plugin->owned_session();
 		if ( null === $owned || ! current_user_can( 'activate_plugins' ) || self::TAB_TROUBLESHOOT !== $this->current_tab() ) {
 			return;
 		}
-		$manager = $this->plugin->manager();
+		$manager  = $this->plugin->manager();
+		$answered = false;
 		for ( $i = 0; $i < 64; $i++ ) {
 			$session = $manager->current();
 			if ( null === $session ) {
-				return;
+				break;
 			}
 			$step = $manager->step( $session );
 			if ( $step->is_done() ) {
-				return;
+				break;
 			}
 			$answer = Hooks::filter( 'culprit_finder_auto_answer', null, $step->to_array(), View::of( $session ) );
 			if ( 'yes' !== $answer && 'no' !== $answer ) {
-				return;
+				break;
 			}
 			$manager->answer( 'yes' === $answer );
+			$answered = true;
+		}
+		if ( $answered ) {
+			$this->plugin->refresh_cookie();
 		}
 	}
 
@@ -269,11 +275,19 @@ final class Page {
 			printf( '<div class="notice notice-%1$s is-dismissible"><p>%2$s</p></div>', esc_attr( $messages[ $notice ][0] ), esc_html( $messages[ $notice ][1] ) );
 		}
 
+		$kept = $this->plugin->start_input();
+		if ( null !== $kept && isset( $kept['message'] ) && is_string( $kept['message'] ) ) {
+			printf( '<div class="notice notice-error culprit-finder-not-started"><p>%s</p></div>', esc_html( $kept['message'] ) );
+		}
+
 		$store = $this->plugin->store();
 		$last  = $store->last_result();
 		if ( is_array( $last ) && ! empty( $last['session_expired_at'] ) ) {
-			printf( '<div class="notice notice-warning"><p>%s</p></div>', esc_html__( 'Your troubleshooting session expired after an hour without answers and was ended. The site is back to normal for you.', 'culprit-finder' ) );
-			unset( $last['session_expired_at'] );
+			$message = ! empty( $last['session_max_reached'] )
+				? __( 'Your troubleshooting session reached its maximum length and was ended. The site is back to normal for you.', 'culprit-finder' )
+				: __( 'Your troubleshooting session expired after an hour without answers and was ended. The site is back to normal for you.', 'culprit-finder' );
+			printf( '<div class="notice notice-warning"><p>%s</p></div>', esc_html( $message ) );
+			unset( $last['session_expired_at'], $last['session_max_reached'] );
 			if ( isset( $last['result'] ) ) {
 				$store->save_last_result( $last );
 			} else {

@@ -1,0 +1,84 @@
+<div class="wrap culprit-finder">
+<header class="cf-header">
+<img class="culprit-finder-symbol" src="http://localhost:8888/wp-content/plugins/culprit-finder/assets/images/symbol.svg" alt="" height="40">
+<div class="cf-header__text">
+<h1>Culprit Finder</h1>
+<p>Find the plugin that broke your site. Visitors never notice.</p>
+</div>
+</header>
+<hr class="wp-header-end">
+<nav class="cf-tabs" aria-label="Culprit Finder sections">
+<a class="cf-tab" href="http://localhost:8888/wp-admin/admin.php?page=culprit-finder">Troubleshoot</a>
+<a class="cf-tab cf-tab--active" href="http://localhost:8888/wp-admin/admin.php?page=culprit-finder&#038;tab=results" aria-current="page">Results<span class="cf-tab__count">1</span>
+</a>
+<a class="cf-tab" href="http://localhost:8888/wp-admin/admin.php?page=culprit-finder&#038;tab=help">Help</a>
+</nav>
+<div class="cf-panel">
+<p>
+<a class="cf-back" href="http://localhost:8888/wp-admin/admin.php?page=culprit-finder&#038;tab=results">← All results</a>
+</p>
+<section class="cf-card cf-question culprit-finder-result">
+<p class="cf-eyebrow cf-eyebrow--success">Found it · 4 answers · DATE</p>
+<h2>One plugin causes the problem</h2>
+<p>The problem appears whenever this plugin is on.</p>
+<div class="cf-culprit">
+<div class="cf-culprit__who">
+<h3>CFF Solo <span class="cf-muted">1.0.0</span>
+</h3>
+</div>
+<div class="cf-culprit__next">
+<strong>What you can do next</strong>
+<ul>
+<li>Check for an update on the <a href="http://localhost:8888/wp-admin/plugins.php">Plugins screen</a> (after you exit).</li>
+<li>Send this report to the plugin’s support forum.</li>
+<li>If you can live without it, deactivate it for everyone from the Plugins screen.</li>
+</ul>
+</div>
+</div>
+<div class="cf-env">
+<h3>Environment</h3>
+<dl>
+<dt>WordPress</dt>
+<dd>7.1.2</dd>
+<dt>PHP</dt>
+<dd>8.2.34</dd>
+<dt>Theme</dt>
+<dd>Twenty Twenty-Five 1.5</dd>
+<dt>Plugins tested</dt>
+<dd>4</dd>
+<dt>Kept on</dt>
+<dd>CFF Noise 01 1.0.0</dd>
+<dt>Not tested</dt>
+<dd>Must-use plugins, drop-ins, theme</dd>
+<dt>Multisite</dt>
+<dd>No</dd>
+</dl>
+</div>
+<div class="cf-secondary cf-report-actions">
+<button type="button" class="button cf-button cf-button--primary culprit-finder-copy" data-target="culprit-finder-report" data-done="Copied!" hidden>Copy for forum</button>
+<a class="button" href="http://localhost:8888/wp-admin/admin-post.php?action=culprit_finder_download&#038;culprit_safe=1&#038;result=ID&#038;format=md&#038;_wpnonce=N">Download .md</a>
+<a class="button" href="http://localhost:8888/wp-admin/admin-post.php?action=culprit_finder_download&#038;culprit_safe=1&#038;result=ID&#038;format=txt&#038;_wpnonce=N">Download .txt</a>
+<a class="button cf-button--danger cf-push-right" href="http://localhost:8888/wp-admin/admin-post.php?action=culprit_finder_delete_result&#038;culprit_safe=1&#038;result=ID&#038;_wpnonce=N">Delete</a>
+</div>
+<p class="cf-help">Safe to share publicly: no site address, user names or emails.</p>
+<details class="cf-plain">
+<summary>Show plain text</summary>
+<pre id="culprit-finder-report" class="cf-report__text">### Plugin conflict report (Culprit Finder VERSION)
+Result: Caused by one plugin
+- CFF Solo 1.0.0
+
+Environment
+- WordPress 7.1.2, PHP 8.2.34
+- Theme: Twenty Twenty-Five 1.5
+- Plugins tested: 4 (kept on: CFF Noise 01 1.0.0)
+- Not tested: must-use plugins, drop-ins, theme
+- Multisite: no
+
+Found in 4 answers on 2026-09-21 (UTC).
+</pre>
+</details>
+</section>
+</div>
+</div>
+<div class="clear">
+</div>
