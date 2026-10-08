@@ -81,7 +81,7 @@ final class TroubleshootView {
 		$ticked   = null !== $kept && isset( $kept['pinned'] ) && is_array( $kept['pinned'] ) ? $kept['pinned'] : array();
 		$required = true === Hooks::filter( 'culprit_finder_problem_url_required', false, null );
 		$count    = count( $active ) - count( $always );
-		$steps    = 2 + Engine::ceil_log2( max( 1, $count ) );
+		$steps    = $count > 0 ? 2 + Engine::ceil_log2( $count ) : 0;
 		$minutes  = (int) ceil( $manager->ttl() / 60 );
 		$addon    = $this->setup_fields( null !== $kept && isset( $kept['addon'] ) && is_array( $kept['addon'] ) ? $kept['addon'] : array() );
 		$number   = 0;
@@ -214,7 +214,7 @@ final class TroubleshootView {
 	 * Sidebar card: what will happen, the saved-links box and Start.
 	 *
 	 * @param int  $count    Plugins to test.
-	 * @param int  $steps    Estimated steps.
+	 * @param int  $steps    Estimated steps (0 when there is nothing to test).
 	 * @param int  $minutes  Idle minutes before the session ends by itself.
 	 * @param bool $saved    Tick the saved-links box (kept input after a refused start).
 	 * @param bool $blocked  An environment problem (shown above the form) keeps Start off.
@@ -225,9 +225,13 @@ final class TroubleshootView {
 		echo '<h2 class="cf-ready__title" id="culprit-finder-ready">' . esc_html__( 'Ready to start', 'culprit-finder' ) . '</h2>';
 		echo '<div class="cf-stats">';
 		echo '<p class="cf-stat"><strong class="cf-stat__num">' . esc_html( number_format_i18n( $count ) ) . '</strong> <span class="cf-stat__label">' . esc_html( _n( 'plugin to test', 'plugins to test', $count, 'culprit-finder' ) ) . '</span></p>';
-		echo '<p class="cf-stat"><strong class="cf-stat__num" aria-hidden="true">~' . esc_html( number_format_i18n( $steps ) ) . '</strong> <span class="cf-stat__label" aria-hidden="true">' . esc_html( _n( 'step', 'steps', $steps, 'culprit-finder' ) ) . '</span>';
-		/* translators: %d: estimated number of steps */
-		echo '<span class="screen-reader-text">' . esc_html( sprintf( _n( 'about %d step', 'about %d steps', $steps, 'culprit-finder' ), $steps ) ) . '</span></p>';
+		if ( $steps > 0 ) {
+			echo '<p class="cf-stat"><strong class="cf-stat__num" aria-hidden="true">~' . esc_html( number_format_i18n( $steps ) ) . '</strong> <span class="cf-stat__label" aria-hidden="true">' . esc_html( _n( 'step', 'steps', $steps, 'culprit-finder' ) ) . '</span>';
+			/* translators: %d: estimated number of steps */
+			echo '<span class="screen-reader-text">' . esc_html( sprintf( _n( 'about %d step', 'about %d steps', $steps, 'culprit-finder' ), $steps ) ) . '</span></p>';
+		} else {
+			echo '<p class="cf-stat"><strong class="cf-stat__num">0</strong> <span class="cf-stat__label">' . esc_html__( 'steps', 'culprit-finder' ) . '</span></p>';
+		}
 		echo '</div>';
 		echo '<ul class="cf-checks">';
 		echo '<li>' . esc_html__( 'Visitors and other admins never see a change', 'culprit-finder' ) . '</li>';

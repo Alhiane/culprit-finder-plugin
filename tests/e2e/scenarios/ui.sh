@@ -140,3 +140,8 @@ assert_contains "$(browse /wp-admin/)" "Run a new search" "dashboard widget (aft
 wpcli option get culprit_finder_session >/dev/null 2>&1 && fail "session still exists after exit"
 assert_not_contains "$(browse /)" "wp-admin-bar-culprit-finder" "admin bar node gone after exit"
 assert_eq "$(wpcli option get active_plugins --format=json)" "$BEFORE" "AC-2 active_plugins unchanged"
+
+reset_site >/dev/null
+EMPTY=$(browse "$TOOLS")
+assert_contains "$EMPTY" '<strong class="cf-stat__num">0</strong> <span class="cf-stat__label">steps</span>' "nothing to test: 0 steps"
+assert_not_contains "$EMPTY" 'cf-stat__num" aria-hidden="true">~' "nothing to test: no step estimate"
