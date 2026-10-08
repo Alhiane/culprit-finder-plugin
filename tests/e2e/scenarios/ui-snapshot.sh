@@ -5,6 +5,8 @@
 #   pro     CULPRIT_FINDER_PRO_VERSION defined    → byte-for-byte equal to the baseline
 #   tips    default                               → equal to the baseline once the placements are removed,
 #                                                   and each placement is on exactly the expected screens
+# The setup screen was re-baselined on purpose in 0.3.0 for its two-column layout (ADR-0026); every
+# other screen's baseline is unchanged since 0.2.0.
 source "$(dirname "$0")/../lib.sh"
 TIP_ATTR=data-culprit-finder-pro-tip
 cleanup() {

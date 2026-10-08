@@ -43,7 +43,7 @@ Culprit Finder is free software (GPLv2 or later). The source code is on GitHub: 
 
 1. Install Culprit Finder from Plugins → Add New, or upload the zip, then activate it.
 2. Activation changes nothing on your site. When you press **Start troubleshooting**, Culprit Finder adds a small helper file, `wp-content/mu-plugins/culprit-finder-loader.php`, which is what lets it switch plugins off for your browser only. It removes the file again when troubleshooting ends, and it never touches a file it didn't create. If your host doesn't allow writing there, the Culprit Finder page shows how to add it by hand.
-3. Open **Culprit Finder** in the admin menu, bookmark the two safety links, tick "I've saved both links", and press **Start troubleshooting**.
+3. Open **Culprit Finder** in the admin menu, bookmark the two safety links, tick "I've saved both safety links", and press **Start troubleshooting**.
 
 == Frequently Asked Questions ==
 
@@ -124,6 +124,7 @@ Culprit Finder stays free and fully functional without it, and your settings and
 
 = 0.3.0 =
 * New: a Pro tab explaining Culprit Finder Pro. Tips can be hidden with one click.
+* Improved: a clearer setup screen with numbered sections, plugin tiles, and a sidebar with the summary, Start and the two safety links.
 
 = 0.2.0 =
 * Add-ons for Culprit Finder now stay on automatically during troubleshooting. You no longer need to tick them under "Keep any plugins on?", and the setup screen, each step and the report show them as kept on.

@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-07T16:29:07+00:00\n"
+"POT-Creation-Date: 2026-10-08T18:07:37+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: culprit-finder\n"
@@ -61,25 +61,25 @@ msgstr ""
 
 #: src/Admin/AdminBar.php:96
 #: src/Admin/DashboardWidget.php:159
-#: src/Admin/TroubleshootView.php:254
+#: src/Admin/TroubleshootView.php:374
 msgid "No, it’s gone"
 msgstr ""
 
 #: src/Admin/AdminBar.php:99
 #: src/Admin/ResultsView.php:217
-#: src/Admin/TroubleshootView.php:260
-#: src/Admin/TroubleshootView.php:319
+#: src/Admin/TroubleshootView.php:380
+#: src/Admin/TroubleshootView.php:439
 msgid "Undo last answer"
 msgstr ""
 
 #: src/Admin/AdminBar.php:101
 #: src/Admin/DashboardWidget.php:106
-#: src/Admin/TroubleshootView.php:318
+#: src/Admin/TroubleshootView.php:438
 msgid "View result"
 msgstr ""
 
 #: src/Admin/AdminBar.php:101
-#: src/Admin/TroubleshootView.php:137
+#: src/Admin/TroubleshootView.php:256
 msgid "Control panel"
 msgstr ""
 
@@ -137,13 +137,13 @@ msgstr[1] ""
 
 #. translators: 1: current step number, 2: estimated number of steps
 #: src/Admin/DashboardWidget.php:134
-#: src/Admin/TroubleshootView.php:217
+#: src/Admin/TroubleshootView.php:337
 #, php-format
 msgid "Step %1$d of about %2$d"
 msgstr ""
 
 #: src/Admin/DashboardWidget.php:146
-#: src/Admin/TroubleshootView.php:243
+#: src/Admin/TroubleshootView.php:363
 msgid "Is the problem still there?"
 msgstr ""
 
@@ -205,7 +205,6 @@ msgid "Back to Culprit Finder"
 msgstr ""
 
 #: src/Admin/HelpView.php:40
-#: src/Admin/TroubleshootView.php:89
 msgid "How it works"
 msgstr ""
 
@@ -330,7 +329,7 @@ msgid "Troubleshooting ended. The site is back to normal for you."
 msgstr ""
 
 #: src/Admin/Page.php:286
-msgid "Please save both safety links and tick “I’ve saved both links” before you start."
+msgid "Please save both safety links and tick “I’ve saved both safety links” before you start."
 msgstr ""
 
 #: src/Admin/Page.php:287
@@ -571,7 +570,7 @@ msgid "When a search finishes, its result and report appear here."
 msgstr ""
 
 #: src/Admin/ResultsView.php:68
-#: src/Admin/TroubleshootView.php:143
+#: src/Admin/TroubleshootView.php:239
 msgid "Start troubleshooting"
 msgstr ""
 
@@ -716,7 +715,7 @@ msgid "Your site is back to normal for you while you read it."
 msgstr ""
 
 #: src/Admin/ResultsView.php:216
-#: src/Admin/TroubleshootView.php:320
+#: src/Admin/TroubleshootView.php:440
 msgid "Done, exit"
 msgstr ""
 
@@ -766,18 +765,6 @@ msgstr ""
 msgid "None of the plugins tested"
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:90
-msgid "We switch plugins off, for you only"
-msgstr ""
-
-#: src/Admin/TroubleshootView.php:91
-msgid "You check the broken page and answer"
-msgstr ""
-
-#: src/Admin/TroubleshootView.php:92
-msgid "We name the culprit"
-msgstr ""
-
 #: src/Admin/TroubleshootView.php:100
 msgid "Where do you see the problem?"
 msgstr ""
@@ -787,7 +774,7 @@ msgid "Required"
 msgstr ""
 
 #: src/Admin/TroubleshootView.php:100
-#: src/Admin/TroubleshootView.php:107
+#: src/Admin/TroubleshootView.php:114
 msgid "Optional"
 msgstr ""
 
@@ -795,90 +782,130 @@ msgstr ""
 msgid "Paste the address of the broken page. Every step gets a one-click link to it."
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:107
+#: src/Admin/TroubleshootView.php:114
 msgid "Keep any plugins on?"
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:108
+#: src/Admin/TroubleshootView.php:115
 msgid "Tick plugins the problem needs to show up, like your shop plugin for a checkout problem. They stay on in every step and are never blamed. Plugins they require stay on too."
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:117
-msgid "Always on · Culprit Finder add-on"
-msgstr ""
-
-#: src/Admin/TroubleshootView.php:130
+#: src/Admin/TroubleshootView.php:119
 msgid "No other plugins are active, so there is nothing to test."
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:134
-msgid "Save your two safety links"
-msgstr ""
-
-#: src/Admin/TroubleshootView.php:135
-msgid "They still work if a step makes a page crash. The emergency exit is made for this session only, so press Start without reloading this page."
-msgstr ""
-
-#: src/Admin/TroubleshootView.php:137
-msgid "Answer questions even when pages are broken."
-msgstr ""
-
-#: src/Admin/TroubleshootView.php:138
-msgid "Emergency exit"
-msgstr ""
-
-#: src/Admin/TroubleshootView.php:138
-msgid "Ends troubleshooting at once, even when logged out. Keep it private."
-msgstr ""
-
-#: src/Admin/TroubleshootView.php:140
-msgid "I’ve saved both links"
-msgstr ""
-
-#. translators: 1: number of plugins, 2: estimated steps, 3: minutes
-#: src/Admin/TroubleshootView.php:147
-#, php-format
-msgid "%1$d plugin to test · about %2$d steps · ends by itself after %3$d idle minutes"
-msgid_plural "%1$d plugins to test · about %2$d steps · ends by itself after %3$d idle minutes"
-msgstr[0] ""
-msgstr[1] ""
-
-#: src/Admin/TroubleshootView.php:154
-msgid "Visitors and other admins never see a change, and your plugin settings are never modified."
-msgstr ""
-
-#: src/Admin/TroubleshootView.php:154
+#: src/Admin/TroubleshootView.php:126
 msgid "How it works and how to get out"
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:171
+#: src/Admin/TroubleshootView.php:208
+msgid "Always on · Culprit Finder add-on"
+msgstr ""
+
+#: src/Admin/TroubleshootView.php:224
+msgid "Ready to start"
+msgstr ""
+
+#: src/Admin/TroubleshootView.php:226
+msgid "plugin to test"
+msgid_plural "plugins to test"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Admin/TroubleshootView.php:227
+msgid "step"
+msgid_plural "steps"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: estimated number of steps
+#: src/Admin/TroubleshootView.php:229
+#, php-format
+msgid "about %d step"
+msgid_plural "about %d steps"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Admin/TroubleshootView.php:232
+msgid "Visitors and other admins never see a change"
+msgstr ""
+
+#: src/Admin/TroubleshootView.php:233
+msgid "Your plugin settings are never modified"
+msgstr ""
+
+#. translators: %d: minutes
+#: src/Admin/TroubleshootView.php:235
+#, php-format
+msgid "Ends by itself after %d idle minute"
+msgid_plural "Ends by itself after %d idle minutes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Admin/TroubleshootView.php:237
+msgid "I’ve saved both safety links"
+msgstr ""
+
+#: src/Admin/TroubleshootView.php:237
+msgid "They’re below and still work if a step makes a page crash."
+msgstr ""
+
+#: src/Admin/TroubleshootView.php:240
+msgid "Tick the box above to enable Start."
+msgstr ""
+
+#: src/Admin/TroubleshootView.php:240
+msgid "Press Start without reloading this page: the emergency exit is made for this session only."
+msgstr ""
+
+#: src/Admin/TroubleshootView.php:253
+msgid "Safety links"
+msgstr ""
+
+#: src/Admin/TroubleshootView.php:254
+msgid "Bookmark or copy these before you start."
+msgstr ""
+
+#: src/Admin/TroubleshootView.php:256
+msgid "Answer questions even when pages are broken."
+msgstr ""
+
+#: src/Admin/TroubleshootView.php:257
+msgid "Emergency exit"
+msgstr ""
+
+#: src/Admin/TroubleshootView.php:257
+msgid "Ends troubleshooting at once, even when logged out. Keep it private."
+msgstr ""
+
+#: src/Admin/TroubleshootView.php:273
 msgid "Copied"
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:171
+#: src/Admin/TroubleshootView.php:273
 msgid "Copy"
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:182
+#: src/Admin/TroubleshootView.php:302
 msgid "another administrator"
 msgstr ""
 
 #. translators: %s: user display name
-#: src/Admin/TroubleshootView.php:187
+#: src/Admin/TroubleshootView.php:307
 #, php-format
 msgid "A troubleshooting session started by %s is running in another browser. It only affects that browser. Starting a new session here ends it."
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:191
+#: src/Admin/TroubleshootView.php:311
 msgid "End that session"
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:213
+#: src/Admin/TroubleshootView.php:333
 msgid "Progress"
 msgstr ""
 
 #. translators: %d: minutes
-#: src/Admin/TroubleshootView.php:224
+#: src/Admin/TroubleshootView.php:344
 #, php-format
 msgid "%d min left · resets with every answer"
 msgid_plural "%d min left · resets with every answer"
@@ -886,93 +913,93 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: 1: plugins switched off, 2: plugins in total
-#: src/Admin/TroubleshootView.php:235
+#: src/Admin/TroubleshootView.php:355
 #, php-format
 msgid "For you only: %1$d of %2$d plugins switched off"
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:244
+#: src/Admin/TroubleshootView.php:364
 msgid "Open the broken page, reload it, and look again. A critical error page counts as Yes."
 msgstr ""
 
 #. translators: %s: address of the broken page
-#: src/Admin/TroubleshootView.php:248
+#: src/Admin/TroubleshootView.php:368
 #, php-format
 msgid "Open %s"
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:249
+#: src/Admin/TroubleshootView.php:369
 msgid "Open your site"
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:253
+#: src/Admin/TroubleshootView.php:373
 msgid "Yes, it’s still there"
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:262
+#: src/Admin/TroubleshootView.php:382
 msgid "Stop and exit"
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:263
+#: src/Admin/TroubleshootView.php:383
 msgid "You can also answer from the purple toolbar on any page. If WordPress emails you about a critical error, that is expected while troubleshooting."
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:266
+#: src/Admin/TroubleshootView.php:386
 msgid "Which plugins are on in this step"
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:271
+#: src/Admin/TroubleshootView.php:391
 msgid "(always on · Culprit Finder add-on)"
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:273
+#: src/Admin/TroubleshootView.php:393
 msgid "(kept on)"
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:275
+#: src/Admin/TroubleshootView.php:395
 msgid "(needed by a kept-on plugin)"
 msgstr ""
 
 #. translators: %d: number of plugins
-#: src/Admin/TroubleshootView.php:280
+#: src/Admin/TroubleshootView.php:400
 #, php-format
 msgid "On (%d)"
 msgstr ""
 
 #. translators: %d: number of plugins
-#: src/Admin/TroubleshootView.php:286
+#: src/Admin/TroubleshootView.php:406
 #, php-format
 msgid "Off, for you only (%d)"
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:314
+#: src/Admin/TroubleshootView.php:434
 msgid "Result ready"
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:316
+#: src/Admin/TroubleshootView.php:436
 msgid "Your site is back to normal for you while you read the result."
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:333
+#: src/Admin/TroubleshootView.php:453
 msgid "(none)"
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:349
+#: src/Admin/TroubleshootView.php:469
 msgid "Culprit Finder does not support multisite networks yet, so troubleshooting cannot start here."
 msgstr ""
 
 #. translators: %s: file path
-#: src/Admin/TroubleshootView.php:355
+#: src/Admin/TroubleshootView.php:475
 #, php-format
 msgid "A different file already exists at %s. Culprit Finder never overwrites files it didn’t create. If that file isn’t needed, rename or remove it with FTP or your host’s file manager, then reload this page."
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:364
+#: src/Admin/TroubleshootView.php:484
 msgid "When you press Start, Culprit Finder adds a small helper file to wp-content/mu-plugins and removes it when you’re done. That folder isn’t writable on this site."
 msgstr ""
 
 #. translators: 1: source file path, 2: target folder path
-#: src/Admin/TroubleshootView.php:370
+#: src/Admin/TroubleshootView.php:490
 #, php-format
 msgid "To fix it, copy %1$s into %2$s (create the folder if needed) with FTP or your host’s file manager, then reload this page."
 msgstr ""

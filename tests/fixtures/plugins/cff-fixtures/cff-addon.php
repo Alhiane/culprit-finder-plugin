@@ -53,6 +53,10 @@ add_action(
 	'culprit_finder_setup_fields',
 	function ( $values ) {
 		$note = isset( $values['cff']['note'] ) ? $values['cff']['note'] : '';
+		if ( cff_addon_mode( 'setup-hidden' ) ) {
+			echo "<!-- CFF-ADDON-HIDDEN -->\n<input type=\"hidden\" name=\"culprit_finder_addon[cff][note]\" value=\"hidden-only\">\n<script>window.cffAddon = 1;</script>";
+			return;
+		}
 		echo '<fieldset class="cf-field"><legend>CFF-ADDON-SETUP</legend>';
 		echo '<input type="text" name="culprit_finder_addon[cff][note]" value="' . esc_attr( $note ) . '">';
 		echo '<span>CFF-ADDON-KEPT:' . esc_html( $note ) . '</span></fieldset>';

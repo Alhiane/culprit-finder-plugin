@@ -283,7 +283,7 @@ final class Page {
 		$messages = array(
 			'started' => array( 'success', __( 'Troubleshooting started. Plugins are switched off for you only; visitors see the normal site.', 'culprit-finder' ) ),
 			'exited'  => array( 'success', __( 'Troubleshooting ended. The site is back to normal for you.', 'culprit-finder' ) ),
-			'unsaved' => array( 'error', __( 'Please save both safety links and tick “I’ve saved both links” before you start.', 'culprit-finder' ) ),
+			'unsaved' => array( 'error', __( 'Please save both safety links and tick “I’ve saved both safety links” before you start.', 'culprit-finder' ) ),
 			'deleted' => array( 'success', __( 'Result deleted.', 'culprit-finder' ) ),
 			'cleared' => array( 'success', __( 'All results deleted.', 'culprit-finder' ) ),
 		);

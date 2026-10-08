@@ -41,6 +41,9 @@ cd "$(dirname "$0")"
 # CAPTURE=pro-discovery.mjs OUT=docs/screenshots captures the Pro discovery placements instead (ADR-0025).
 OUTDIR="$ROOT/${OUT:-.wordpress-org}"
 mkdir -p "$OUTDIR"
+# WordPress.org screenshots show the plugin's own features, so Pro tips are hidden for them (ADR-0026).
+if [ -z "${CAPTURE:-}" ]; then wpcli user meta update admin culprit_finder_hide_pro_tips 1 >/dev/null; fi
 BASE="$BASE" WPENV_CLI_CONTAINER="$CLI_CONTAINER" node "${CAPTURE:-capture.mjs}" "$OUTDIR"
+wpcli user meta delete admin culprit_finder_hide_pro_tips >/dev/null 2>&1 || true
 wpcli culprit-finder exit >/dev/null 2>&1 || true
 wpcli user meta delete admin admin_color >/dev/null 2>&1 || true
