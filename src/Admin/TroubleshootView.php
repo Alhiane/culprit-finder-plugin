@@ -121,7 +121,7 @@ final class TroubleshootView {
 		echo '</fieldset></div>';
 
 		echo '</div><div class="cf-setup__side">';
-		$this->ready_card( $count, $steps, $minutes, null !== $kept, (bool) ( $problems || ! $count ) );
+		$this->ready_card( $count, $steps, $minutes, null !== $kept, (bool) $problems );
 		$this->safety_card( $key );
 		echo '<p class="cf-setup__more"><a href="' . esc_url( Links::tools( array( 'tab' => Page::TAB_HELP ) ) ) . '">' . esc_html__( 'How it works and how to get out', 'culprit-finder' ) . '</a></p>';
 		echo '</div></div></form>';
@@ -217,9 +217,10 @@ final class TroubleshootView {
 	 * @param int  $steps    Estimated steps.
 	 * @param int  $minutes  Idle minutes before the session ends by itself.
 	 * @param bool $saved    Tick the saved-links box (kept input after a refused start).
-	 * @param bool $disabled Start can't be used (environment problem or nothing to test).
+	 * @param bool $blocked  An environment problem (shown above the form) keeps Start off.
 	 */
-	private function ready_card( $count, $steps, $minutes, $saved, $disabled ) {
+	private function ready_card( $count, $steps, $minutes, $saved, $blocked ) {
+		$disabled = $blocked || ! $count;
 		echo '<section class="cf-card cf-ready" aria-labelledby="culprit-finder-ready">';
 		echo '<h2 class="cf-ready__title" id="culprit-finder-ready">' . esc_html__( 'Ready to start', 'culprit-finder' ) . '</h2>';
 		echo '<div class="cf-stats">';
@@ -237,7 +238,14 @@ final class TroubleshootView {
 		echo '<label class="cf-saved"><input type="checkbox" name="culprit_finder_saved" value="1" required' . ( $saved ? ' checked' : '' ) . '> <span><strong>' . esc_html__( 'I’ve saved both safety links', 'culprit-finder' ) . '</strong> <span class="cf-saved__help">' . esc_html__( 'They’re below and still work if a step makes a page crash.', 'culprit-finder' ) . '</span></span></label>';
 		echo '<div class="cf-start">';
 		echo '<button type="submit" class="button cf-button cf-button--primary cf-button--large" aria-describedby="culprit-finder-start-help"' . ( $disabled ? ' disabled' : '' ) . '>' . esc_html__( 'Start troubleshooting', 'culprit-finder' ) . '</button>';
-		echo '<p class="cf-start__help" id="culprit-finder-start-help" data-locked="' . esc_attr__( 'Tick the box above to enable Start.', 'culprit-finder' ) . '">' . esc_html__( 'Press Start without reloading this page: the emergency exit is made for this session only.', 'culprit-finder' ) . '</p>';
+		if ( $blocked ) {
+			$help = __( 'Start stays off until the problem shown above is fixed.', 'culprit-finder' );
+		} elseif ( ! $count ) {
+			$help = __( 'There are no other active plugins to test.', 'culprit-finder' );
+		} else {
+			$help = __( 'Press Start without reloading this page: the emergency exit is made for this session only.', 'culprit-finder' );
+		}
+		echo '<p class="cf-start__help" id="culprit-finder-start-help" data-locked="' . esc_attr__( 'Tick the box above to enable Start.', 'culprit-finder' ) . '">' . esc_html( $help ) . '</p>';
 		echo '</div>';
 		$this->plugin->pro_discovery()->render_setup_line();
 		echo '</section>';
