@@ -4,7 +4,7 @@ Tags: troubleshooting, plugin conflict, debug, critical error, white screen
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.2.0
+Stable tag: 0.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -101,6 +101,16 @@ To switch plugins off for your browser only, Culprit Finder must run before Word
 
 No. The Plugins screen is paused for you while a session runs, so the shortened list you see can never be saved by accident. Exit first.
 
+== Culprit Finder Pro ==
+
+Culprit Finder Pro is an optional add-on for this plugin, available at https://getculpritfinder.com/pro/. It adds:
+
+* **Check it for me:** describe what "broken" looks like, and Culprit Finder Pro opens the page at every step and answers for you.
+* **Theme check:** one extra check tells you whether your theme is involved, for your browser only.
+* **Client reports:** turn a result into a branded, plain-English report you can print or save as a PDF.
+
+Culprit Finder stays free and fully functional without it, and your settings and results history stay when you add it. Plans: From $29/year per site, with a 14-day refund. The Pro tab inside Culprit Finder describes it; you can hide it and the other tips with one click (Hide Pro tips). Culprit Finder makes no external requests for any of this: the text ships with the plugin.
+
 == Screenshots ==
 
 1. Pick plugins to keep on and save your two safety links.
@@ -112,6 +122,9 @@ No. The Plugins screen is paused for you while a session runs, so the shortened 
 
 == Changelog ==
 
+= 0.3.0 =
+* New: a Pro tab explaining Culprit Finder Pro. Tips can be hidden with one click.
+
 = 0.2.0 =
 * Add-ons for Culprit Finder now stay on automatically during troubleshooting. You no longer need to tick them under "Keep any plugins on?", and the setup screen, each step and the report show them as kept on.
 * Every troubleshooting session now ends by itself after three hours at most, even when answers keep coming.
@@ -122,6 +135,9 @@ No. The Plugins screen is paused for you while a session runs, so the shortened 
 * First release: switch plugins off for your browser only, find the plugin (or the two plugins) behind a problem, keep plugins on, respect plugin dependencies, answer from the page, the toolbar or the dashboard widget, results history with .md and .txt downloads, and a WP-CLI command.
 
 == Upgrade Notice ==
+
+= 0.3.0 =
+Adds a Pro tab that explains Culprit Finder Pro. Tips can be hidden with one click. Troubleshooting works exactly as before.
 
 = 0.2.0 =
 Add-ons now stay on automatically during troubleshooting, and every session ends after three hours at most.

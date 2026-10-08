@@ -152,6 +152,7 @@ final class TroubleshootView {
 		) . '</span>';
 		echo '</div>';
 		echo '<p class="cf-reassure">' . esc_html__( 'Visitors and other admins never see a change, and your plugin settings are never modified.', 'culprit-finder' ) . ' <a href="' . esc_url( Links::tools( array( 'tab' => Page::TAB_HELP ) ) ) . '">' . esc_html__( 'How it works and how to get out', 'culprit-finder' ) . '</a></p>';
+		$this->plugin->pro_discovery()->render_setup_line();
 		echo '</fieldset></form>';
 	}
 

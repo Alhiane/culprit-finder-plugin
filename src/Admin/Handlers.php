@@ -41,7 +41,7 @@ final class Handlers {
 	 * Hook the admin-post actions.
 	 */
 	public function register() {
-		foreach ( array( 'start', 'answer', 'undo', 'exit', 'download', 'delete_result', 'clear_results' ) as $action ) {
+		foreach ( array( 'start', 'answer', 'undo', 'exit', 'download', 'delete_result', 'clear_results', 'hide_pro_tips' ) as $action ) {
 			add_action( 'admin_post_culprit_finder_' . $action, array( $this, 'handle_' . $action ) );
 		}
 	}
@@ -188,6 +188,15 @@ final class Handlers {
 	}
 
 	/**
+	 * Hide Pro tips for this user, permanently (user meta, ADR-0025), then go back.
+	 */
+	public function handle_hide_pro_tips() {
+		$this->guard( 'hide_pro_tips' );
+		$this->plugin->pro_discovery()->hide();
+		$this->redirect( $this->redirect_target( Links::tools() ) );
+	}
+
+	/**
 	 * Refresh the cookie and redirect: to the saved result when done, else back where the user was.
 	 *
 	 * @param mixed $step Step or WP_Error.
@@ -284,10 +293,11 @@ final class Handlers {
 	/**
 	 * Validated redirect_to, defaulting to the control panel.
 	 *
+	 * @param string $fallback Where to go without a valid redirect_to ('' for the control panel).
 	 * @return string
 	 */
-	private function redirect_target() {
-		$fallback = Links::control_panel();
+	private function redirect_target( $fallback = '' ) {
+		$fallback = '' !== $fallback ? $fallback : Links::control_panel();
 		if ( empty( $_REQUEST['redirect_to'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- nonce checked in guard().
 			return $fallback;
 		}

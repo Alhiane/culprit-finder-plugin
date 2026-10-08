@@ -15,6 +15,22 @@ defined( 'ABSPATH' ) || exit;
 final class HelpView {
 
 	/**
+	 * Pro discovery, for the "Is there a Pro version?" entry (ADR-0025).
+	 *
+	 * @var ProDiscovery|null
+	 */
+	private $pro_discovery;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param ProDiscovery|null $pro_discovery Pro discovery.
+	 */
+	public function __construct( $pro_discovery = null ) {
+		$this->pro_discovery = $pro_discovery instanceof ProDiscovery ? $pro_discovery : null;
+	}
+
+	/**
 	 * Render the tab.
 	 */
 	public function render() {
@@ -64,6 +80,10 @@ final class HelpView {
 			__( 'What it can’t test', 'culprit-finder' ),
 			'<p>' . esc_html__( 'Your theme, must-use plugins, drop-ins such as object-cache.php, and server settings. If the problem stays with every plugin off, the result says so.', 'culprit-finder' ) . '</p>'
 		);
+
+		if ( null !== $this->pro_discovery ) {
+			$this->pro_discovery->render_help_entry();
+		}
 
 		echo '</div>';
 	}

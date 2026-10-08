@@ -132,3 +132,46 @@
 .culprit-finder .cf-link code { display: block; font-size: 12px; line-height: 1.5; word-break: break-all; overflow-wrap: anywhere; user-select: all; background: transparent; padding: 0; margin: 2px 0; }
 .culprit-finder .cf-reassure a, .culprit-finder .cf-back, .culprit-finder .cf-results a:not(.cf-delete) { color: var(--cf-brand-ink); }
 .culprit-finder .cf-reassure a:hover, .culprit-finder .cf-back:hover, .culprit-finder .cf-results a:not(.cf-delete):hover { color: var(--cf-brand-dark); }
+
+.culprit-finder .cf-tip { padding: 14px 20px; display: grid; gap: 6px; border-color: var(--cf-brand-line); }
+.culprit-finder .cf-tip p { margin: 0; color: #3c434a; }
+.culprit-finder .cf-tip__links { font-size: 13px; }
+.culprit-finder .cf-tip__links a, .culprit-finder .cf-tip-line a, .culprit-finder .cf-pro a:not(.button) { color: var(--cf-brand-ink); }
+.culprit-finder .cf-tip__hide { margin-left: 12px; font-size: 12px; color: var(--cf-muted) !important; }
+.culprit-finder .cf-tip-line { margin: 0; color: var(--cf-muted); font-size: 13px; }
+
+.culprit-finder .cf-pro { display: grid; gap: 20px; }
+.culprit-finder .cf-pro h2 { margin: 0; font-size: 20px; }
+.culprit-finder .cf-pro p { margin: 0; }
+.culprit-finder .cf-pro__intro { padding: 20px 24px; display: grid; gap: 6px; }
+.culprit-finder .cf-pro__features { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.culprit-finder .cf-pro__feature { padding: 16px 18px; display: grid; gap: 8px; align-content: start; }
+.culprit-finder .cf-pro__feature h3 { margin: 4px 0 0; font-size: 15px; }
+.culprit-finder .cf-pro__feature p { color: #3c434a; font-size: 13px; }
+.culprit-finder .cf-pro__plans { padding: 20px 24px; display: grid; gap: 12px; }
+.culprit-finder .cf-pro__price { font-size: 15px; font-weight: 600; }
+.culprit-finder .cf-pro__plan-list { margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.culprit-finder .cf-pro__plan { margin: 0; padding: 14px 16px; border: 1px solid var(--cf-line); border-radius: 4px; display: grid; gap: 2px; font-size: 13px; }
+.culprit-finder .cf-pro__plan strong { font-size: 14px; }
+.culprit-finder .cf-pro__amount { font-size: 18px; font-weight: 600; color: var(--cf-brand-ink); }
+.culprit-finder .cf-pro__facts { margin: 0; padding-left: 18px; list-style: disc; color: #3c434a; }
+.culprit-finder .cf-pro__cta { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+
+.culprit-finder .cf-mini { height: 84px; background: #f6f7f7; border-radius: 4px; padding: 12px; box-sizing: border-box; display: grid; gap: 6px; align-content: center; }
+.culprit-finder .cf-mini__bar { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 3px; margin-bottom: 4px; }
+.culprit-finder .cf-mini__seg { height: 6px; border-radius: 3px; background: #dcdcde; }
+.culprit-finder .cf-mini__seg--done { background: var(--cf-brand); }
+.culprit-finder .cf-mini__seg--now { background: #c9a9e3; }
+.culprit-finder .cf-mini__row { display: flex; align-items: center; gap: 6px; }
+.culprit-finder .cf-mini__dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+.culprit-finder .cf-mini__dot--ok { background: var(--cf-ok); }
+.culprit-finder .cf-mini__dot--now { background: #c9a9e3; }
+.culprit-finder .cf-mini__line { display: block; height: 6px; border-radius: 3px; background: #dcdcde; width: 80%; }
+.culprit-finder .cf-mini__line--mid { width: 60%; }
+.culprit-finder .cf-mini__line--short { width: 40%; }
+.culprit-finder .cf-mini__themes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.culprit-finder .cf-mini__theme { display: grid; gap: 6px; background: #fff; border: 1px solid var(--cf-line); border-radius: 4px; padding: 8px; }
+.culprit-finder .cf-mini__head { display: block; height: 14px; border-radius: 3px; background: var(--cf-brand); }
+.culprit-finder .cf-mini__theme--default .cf-mini__head { background: #1d2327; }
+.culprit-finder .cf-mini__doc { justify-self: center; width: 70%; display: grid; gap: 5px; background: #fff; border: 1px solid var(--cf-line); border-radius: 4px; padding: 8px 10px; }
+.culprit-finder .cf-mini__brand { display: block; height: 8px; width: 40%; border-radius: 3px; background: var(--cf-brand); margin-bottom: 2px; }
