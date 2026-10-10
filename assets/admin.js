@@ -25,13 +25,19 @@
 
 ( function () {
 	document.querySelectorAll( '.cf-setup' ).forEach( function ( form ) {
+		form.classList.add( 'cf-js' );
 		var box = form.querySelector( 'input[name="culprit_finder_saved"]' );
 		var start = form.querySelector( '.cf-start button[type="submit"]' );
+		var help = form.querySelector( '.cf-start__help' );
 		if ( ! box || ! start || start.disabled ) {
 			return;
 		}
+		var text = help ? help.textContent : '';
 		var sync = function () {
 			start.disabled = ! box.checked;
+			if ( help ) {
+				help.textContent = box.checked ? text : help.getAttribute( 'data-locked' );
+			}
 		};
 		box.addEventListener( 'change', sync );
 		sync();

@@ -11,6 +11,7 @@ delete_option( 'culprit_finder_session' );
 delete_option( 'culprit_finder_last_result' );
 delete_option( 'culprit_finder_loader_error' );
 delete_option( 'culprit_finder_results' );
+delete_metadata( 'user', 0, 'culprit_finder_hide_pro_tips', '', true );
 
 $culprit_finder_loader = WPMU_PLUGIN_DIR . '/culprit-finder-loader.php';
 if ( is_file( $culprit_finder_loader ) ) {

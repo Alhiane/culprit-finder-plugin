@@ -11,7 +11,20 @@ href() { grep -oE "id=['\"]wp-admin-bar-$1['\"]><a [^>]*href=['\"][^'\"]+" <<<"$
 
 # Idle page.
 IDLE=$(browse "$TOOLS")
-assert_contains "$IDLE" "9 plugins to test" "idle: plugin count"
+assert_contains "$IDLE" '<strong class="cf-stat__num">9</strong> <span class="cf-stat__label">plugins to test</span>' "idle: plugin count"
+# Setup layout (ADR-0026): numbered sections, plugin tiles, sidebar with the summary, saved-links box, Start and safety links.
+assert_eq "$(grep -oE '<span class="cf-section__num" aria-hidden="true">[0-9]+</span>' <<<"$IDLE" | sed -E 's/.*>([0-9]+)<.*/\1/' | tr '\n' ' ')" "1 2 " "idle: two numbered sections without add-ons"
+assert_contains "$IDLE" '<label class="cf-tile"><input type="checkbox" name="culprit_finder_pin[]" value="cff-fixtures/cff-solo.php"> <span class="cf-tile__name">CFF Solo</span> <span class="cf-tile__version">1.0.0</span></label>' "idle: plugin tile with name and version"
+assert_eq "$(grep -o 'class="cf-tile"' <<<"$IDLE" | wc -l | tr -d ' ')" 9 "idle: one tile per plugin to test"
+assert_contains "$IDLE" '<div class="cf-setup__side"><section class="cf-card cf-ready" aria-labelledby="culprit-finder-ready">' "idle: sidebar with the Ready to start card"
+assert_contains "$IDLE" '<strong class="cf-stat__num" aria-hidden="true">~6</strong>' "idle: step estimate"
+assert_contains "$IDLE" '<li>Ends by itself after 60 idle minutes</li>' "idle: idle limit in the checklist"
+assert_contains "$IDLE" '<input type="checkbox" name="culprit_finder_saved" value="1" required>' "idle: saved-links box is required"
+assert_contains "$IDLE" '<button type="submit" class="button cf-button cf-button--primary cf-button--large" aria-describedby="culprit-finder-start-help">Start troubleshooting</button>' "idle: Start works without JavaScript (the required box guards it)"
+assert_contains "$IDLE" 'data-locked="Tick the box above to enable Start."' "idle: Start help for the locked state"
+assert_contains "$IDLE" '<section class="cf-card cf-safety" aria-labelledby="culprit-finder-safety">' "idle: Safety links card"
+JS=$(curl -s "$BASE/wp-content/plugins/culprit-finder/assets/admin.js")
+assert_contains "$JS" "start.disabled = ! box.checked;" "admin.js: Start disabled until the box is ticked"
 assert_contains "$IDLE" "toplevel_page_culprit-finder" "top-level menu item"
 assert_contains "$IDLE" "culprit_finder_saved" "idle: saved-links checkbox"
 assert_contains "$IDLE" "culprit_finder_pin[]" "idle: pin checkboxes"
@@ -127,3 +140,8 @@ assert_contains "$(browse /wp-admin/)" "Run a new search" "dashboard widget (aft
 wpcli option get culprit_finder_session >/dev/null 2>&1 && fail "session still exists after exit"
 assert_not_contains "$(browse /)" "wp-admin-bar-culprit-finder" "admin bar node gone after exit"
 assert_eq "$(wpcli option get active_plugins --format=json)" "$BEFORE" "AC-2 active_plugins unchanged"
+
+reset_site >/dev/null
+EMPTY=$(browse "$TOOLS")
+assert_contains "$EMPTY" '<strong class="cf-stat__num">0</strong> <span class="cf-stat__label">steps</span>' "nothing to test: 0 steps"
+assert_not_contains "$EMPTY" 'cf-stat__num" aria-hidden="true">~' "nothing to test: no step estimate"

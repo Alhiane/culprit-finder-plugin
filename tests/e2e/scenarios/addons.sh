@@ -26,14 +26,35 @@ browser_start() {
 }
 token_of() { awk '$6 == "wp-culprit-finder" { print $7 }' "$1" | tail -n 1; }
 
-# Setup screen: the add-on is listed as always on (checked, disabled, not submitted); the intruder is a normal choice.
+# Setup screen: the add-on is listed as always on (grey row, checked, disabled, not submitted); the intruder is a normal tile.
 SETUP=$(fetch "$JAR" "$TOOLS")
-assert_contains "$SETUP" '<label class="cf-addon"><input type="checkbox" checked disabled> CFF Add-on 1.0.0 <span class="cf-muted">Always on · Culprit Finder add-on</span></label>' "setup: add-on shown as always on"
+assert_contains "$SETUP" '<label class="cf-always"><input type="checkbox" checked disabled> <span class="cf-always__name">CFF Add-on 1.0.0</span> <span class="cf-always__note">Always on · Culprit Finder add-on</span></label>' "setup: add-on shown as always on"
 assert_not_contains "$SETUP" "value=\"$ADDON\"" "setup: add-on is not a pin choice"
-assert_contains "$SETUP" "name=\"culprit_finder_pin[]\" value=\"$INTRUDER\"" "setup: intruder is an ordinary plugin"
-assert_contains "$SETUP" "6 plugins to test" "setup: the add-on is not counted as tested"
+assert_contains "$SETUP" "<label class=\"cf-tile\"><input type=\"checkbox\" name=\"culprit_finder_pin[]\" value=\"$INTRUDER\"> <span class=\"cf-tile__name\">CFF Intruder</span> <span class=\"cf-tile__version\">1.0.0</span></label>" "setup: intruder is an ordinary plugin tile"
+assert_contains "$SETUP" '<strong class="cf-stat__num">6</strong> <span class="cf-stat__label">plugins to test</span>' "setup: the add-on is not counted as tested"
 assert_contains "$SETUP" "CFF-ADDON-SETUP" "setup_fields: add-on fields render inside the form"
 assert_contains "$SETUP" ">Optional<" "problem_url_required: optional by default"
+# section_numbers <html>: the numbers of the setup sections, in order.
+section_numbers() { grep -oE '<span class="cf-section__num" aria-hidden="true">[0-9]+</span>' <<<"$1" | sed -E 's/.*>([0-9]+)<.*/\1/' | tr '\n' ' ' || true; }
+assert_eq "$(section_numbers "$SETUP")" "1 2 3 " "setup_fields: the add-on section gets number 2"
+assert_contains "$SETUP" '<div class="cf-section cf-section--addon"><span class="cf-section__num" aria-hidden="true">2</span><fieldset class="cf-field"><legend>CFF-ADDON-SETUP</legend>' "setup_fields: add-on output inside its own numbered row"
+FORM=$(python3 -c 'import re,sys; print("".join(re.findall(r"<form class=\"cf-setup\".*?</form>", sys.stdin.read(), re.S)))' <<<"$SETUP")
+assert_contains "$FORM" "CFF-ADDON-SETUP" "setup_fields: the add-on section is inside the setup form"
+assert_contains "$FORM" 'name="culprit_finder_saved"' "setup: the sidebar is inside the setup form"
+
+# An add-on that prints only hidden fields (and a comment and a script) gets no numbered row; its fields still submit.
+mode setup-hidden
+SETUP=$(fetch "$JAR" "$TOOLS")
+assert_eq "$(section_numbers "$SETUP")" "1 2 " "setup_fields: hidden-only output makes no numbered row"
+assert_not_contains "$SETUP" "cf-section--addon" "setup_fields: no empty add-on row"
+FORM=$(python3 -c 'import re,sys; print("".join(re.findall(r"<form class=\"cf-setup\".*?</form>", sys.stdin.read(), re.S)))' <<<"$SETUP")
+assert_contains "$FORM" '<input type="hidden" name="culprit_finder_addon[cff][note]" value="hidden-only">' "setup_fields: hidden fields stay inside the form"
+mode block
+browser_start --data-urlencode "culprit_finder_addon[cff][note]=hidden-only"
+LOG=$(wpjson option get cff_addon_log --format=json)
+assert_eq "$(jq -r '[.[] | select(.hook == "before_start")] | last | .data.input.addon.cff.note' <<<"$LOG")" "hidden-only" "setup_fields: hidden field value arrives in before_start"
+fetch "$JAR" "$TOOLS" >/dev/null
+mode ''
 
 # Start without ticking anything.
 browser_start

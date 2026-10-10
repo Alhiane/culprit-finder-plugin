@@ -40,6 +40,10 @@ done
 source "$DIR/lib.sh"
 wpcli culprit-finder exit >/dev/null 2>&1 || true
 wpcli config delete CULPRIT_FINDER_SESSION_TTL >/dev/null 2>&1 || true
+wpcli config delete CULPRIT_FINDER_PRO_VERSION >/dev/null 2>&1 || true
+wpcli user meta delete admin culprit_finder_hide_pro_tips >/dev/null 2>&1 || true
+wpcli plugin deactivate culprit-finder-pro/culprit-finder-pro.php >/dev/null 2>&1 || true
+[ -n "$CLI_CONTAINER" ] && docker exec -w /var/www/html "$CLI_CONTAINER" sh -c 'grep -qs "Culprit Finder Pro (test stub)" wp-content/plugins/culprit-finder-pro/culprit-finder-pro.php && rm -rf wp-content/plugins/culprit-finder-pro' >/dev/null 2>&1 || true
 
 echo
 printf '%s\n' "${RESULTS[@]}"

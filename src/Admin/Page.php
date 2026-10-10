@@ -41,6 +41,13 @@ final class Page {
 	private $hook = '';
 
 	/**
+	 * Whether the last tabs() call added the free Pro tab (ADR-0025).
+	 *
+	 * @var bool
+	 */
+	private $free_pro_tab = false;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param Plugin $plugin Plugin.
@@ -135,7 +142,9 @@ final class Page {
 	}
 
 	/**
-	 * Tabs: the three core tabs first, then add-on tabs from `culprit_finder_admin_tabs` (ADR-0021).
+	 * Tabs: the three core tabs first, then add-on tabs from `culprit_finder_admin_tabs` (ADR-0021),
+	 * then the free Pro tab when no tab uses the id `pro` and the Pro tips show (ADR-0025).
+	 * Culprit Finder Pro registers its own `pro` tab, so the two never clash.
 	 *
 	 * @return array<string, string> Tab id => label.
 	 */
@@ -154,6 +163,10 @@ final class Page {
 					$tabs[ $id ] = $label;
 				}
 			}
+		}
+		$this->free_pro_tab = $this->plugin->pro_discovery()->adds_tab( $tabs );
+		if ( $this->free_pro_tab ) {
+			$tabs[ ProDiscovery::TAB ] = __( 'Pro', 'culprit-finder' );
 		}
 		return $tabs;
 	}
@@ -190,7 +203,9 @@ final class Page {
 		if ( self::TAB_RESULTS === $tab ) {
 			( new ResultsView( $this->plugin ) )->render( $session, $owned );
 		} elseif ( self::TAB_HELP === $tab ) {
-			( new HelpView() )->render();
+			( new HelpView( $this->plugin->pro_discovery() ) )->render();
+		} elseif ( ProDiscovery::TAB === $tab && $this->free_pro_tab ) {
+			$this->plugin->pro_discovery()->render_tab();
 		} elseif ( self::TAB_TROUBLESHOOT !== $tab ) {
 			Hooks::action( 'culprit_finder_render_tab_' . $tab, null !== $session && $owned ? View::of( $session ) : null );
 		} else {
@@ -226,7 +241,8 @@ final class Page {
 				$args['culprit_safe'] = 1;
 			}
 			$active = $id === $current;
-			echo '<a class="cf-tab' . ( $active ? ' cf-tab--active' : '' ) . '" href="' . esc_url( Links::tools( $args ) ) . '"' . ( $active ? ' aria-current="page"' : '' ) . '>' . esc_html( $label );
+			$tip    = ProDiscovery::TAB === $id && $this->free_pro_tab;
+			echo '<a ' . ( $tip ? esc_attr( ProDiscovery::ATTRIBUTE ) . '="' . esc_attr( ProDiscovery::PLACEMENT_PRO_TAB ) . '" ' : '' ) . 'class="cf-tab' . ( $active ? ' cf-tab--active' : '' ) . '" href="' . esc_url( Links::tools( $args ) ) . '"' . ( $active ? ' aria-current="page"' : '' ) . '>' . esc_html( $label );
 			if ( self::TAB_TROUBLESHOOT === $id && $running ) {
 				echo '<span class="cf-tab__dot" role="img" aria-label="' . esc_attr__( 'Troubleshooting is running', 'culprit-finder' ) . '"></span>';
 			}
@@ -267,7 +283,7 @@ final class Page {
 		$messages = array(
 			'started' => array( 'success', __( 'Troubleshooting started. Plugins are switched off for you only; visitors see the normal site.', 'culprit-finder' ) ),
 			'exited'  => array( 'success', __( 'Troubleshooting ended. The site is back to normal for you.', 'culprit-finder' ) ),
-			'unsaved' => array( 'error', __( 'Please save both safety links and tick “I’ve saved both links” before you start.', 'culprit-finder' ) ),
+			'unsaved' => array( 'error', __( 'Please save both safety links and tick “I’ve saved both safety links” before you start.', 'culprit-finder' ) ),
 			'deleted' => array( 'success', __( 'Result deleted.', 'culprit-finder' ) ),
 			'cleared' => array( 'success', __( 'All results deleted.', 'culprit-finder' ) ),
 		);
@@ -391,17 +407,31 @@ final class Page {
 	}
 
 	/**
+	 * Name and version of every installed plugin, by basename. The one walk of `get_plugins()`;
+	 * plugin_names() derives the joined "Name Version" form from it.
+	 *
+	 * @return array<string, array{0: string, 1: string}>
+	 */
+	public static function plugin_headers() {
+		if ( ! function_exists( 'get_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+		$headers = array();
+		foreach ( get_plugins() as $basename => $data ) {
+			$headers[ $basename ] = array( (string) $data['Name'], (string) $data['Version'] );
+		}
+		return $headers;
+	}
+
+	/**
 	 * Basename => "Name Version" for installed plugins.
 	 *
 	 * @return array<string, string>
 	 */
 	public static function plugin_names() {
-		if ( ! function_exists( 'get_plugins' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/plugin.php';
-		}
 		$names = array();
-		foreach ( get_plugins() as $basename => $data ) {
-			$names[ $basename ] = trim( $data['Name'] . ' ' . $data['Version'] );
+		foreach ( self::plugin_headers() as $basename => $data ) {
+			$names[ $basename ] = trim( $data[0] . ' ' . $data[1] );
 		}
 		return $names;
 	}

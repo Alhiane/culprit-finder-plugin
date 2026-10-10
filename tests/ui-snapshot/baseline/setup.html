@@ -13,65 +13,116 @@
 <a class="cf-tab" href="http://localhost:8888/wp-admin/admin.php?page=culprit-finder&#038;tab=help">Help</a>
 </nav>
 <div class="cf-panel">
-<ol class="cf-how" aria-label="How it works">
-<li>We switch plugins off, for you only</li>
-<li>You check the broken page and answer</li>
-<li>We name the culprit</li>
-</ol>
-<form class="cf-card cf-setup" method="post" action="http://localhost:8888/wp-admin/admin-post.php?culprit_safe=1">
+<form class="cf-setup" method="post" action="http://localhost:8888/wp-admin/admin-post.php?culprit_safe=1">
 <input type="hidden" id="_wpnonce" name="_wpnonce" value="N" />
 <input type="hidden" name="_wp_http_referer" value="/wp-admin/admin.php?page=culprit-finder" />
 <input type="hidden" name="action" value="culprit_finder_start">
 <input type="hidden" name="culprit_finder_recovery" value="KEY">
+<div class="cf-setup__grid">
+<div class="cf-card cf-setup__main">
+<div class="cf-section">
+<span class="cf-section__num" aria-hidden="true">1</span>
 <fieldset class="cf-field">
 <legend>Where do you see the problem? <span class="cf-optional">Optional</span>
 </legend>
-<label for="culprit-finder-problem-url">Paste the address of the broken page. Every step gets a one-click link to it.</label>
+<label class="cf-help" for="culprit-finder-problem-url">Paste the address of the broken page. Every step gets a one-click link to it.</label>
 <input type="url" class="regular-text cf-input" id="culprit-finder-problem-url" name="culprit_finder_problem_url" placeholder="http://localhost:8888/">
 </fieldset>
+</div>
+<div class="cf-section">
+<span class="cf-section__num" aria-hidden="true">2</span>
 <fieldset class="cf-field">
 <legend>Keep any plugins on? <span class="cf-optional">Optional</span>
 </legend>
 <p class="cf-help">Tick plugins the problem needs to show up, like your shop plugin for a checkout problem. They stay on in every step and are never blamed. Plugins they require stay on too.</p>
-<div class="cf-pins">
-<label>
-<input type="checkbox" name="culprit_finder_pin[]" value="cff-fixtures/cff-noise-01.php"> CFF Noise 01 1.0.0</label>
-<label>
-<input type="checkbox" name="culprit_finder_pin[]" value="cff-fixtures/cff-noise-02.php"> CFF Noise 02 1.0.0</label>
-<label>
-<input type="checkbox" name="culprit_finder_pin[]" value="cff-fixtures/cff-noise-03.php"> CFF Noise 03 1.0.0</label>
-<label>
-<input type="checkbox" name="culprit_finder_pin[]" value="cff-fixtures/cff-noise-04.php"> CFF Noise 04 1.0.0</label>
-<label>
-<input type="checkbox" name="culprit_finder_pin[]" value="cff-fixtures/cff-solo.php"> CFF Solo 1.0.0</label>
+<div class="cf-tiles">
+<label class="cf-tile">
+<input type="checkbox" name="culprit_finder_pin[]" value="cff-fixtures/cff-noise-01.php">
+<span class="cf-tile__name">CFF Noise 01</span>
+<span class="cf-tile__version">1.0.0</span>
+</label>
+<label class="cf-tile">
+<input type="checkbox" name="culprit_finder_pin[]" value="cff-fixtures/cff-noise-02.php">
+<span class="cf-tile__name">CFF Noise 02</span>
+<span class="cf-tile__version">1.0.0</span>
+</label>
+<label class="cf-tile">
+<input type="checkbox" name="culprit_finder_pin[]" value="cff-fixtures/cff-noise-03.php">
+<span class="cf-tile__name">CFF Noise 03</span>
+<span class="cf-tile__version">1.0.0</span>
+</label>
+<label class="cf-tile">
+<input type="checkbox" name="culprit_finder_pin[]" value="cff-fixtures/cff-noise-04.php">
+<span class="cf-tile__name">CFF Noise 04</span>
+<span class="cf-tile__version">1.0.0</span>
+</label>
+<label class="cf-tile">
+<input type="checkbox" name="culprit_finder_pin[]" value="cff-fixtures/cff-solo.php">
+<span class="cf-tile__name">CFF Solo</span>
+<span class="cf-tile__version">1.0.0</span>
+</label>
 </div>
 </fieldset>
-<fieldset class="cf-field">
-<legend>Save your two safety links</legend>
-<p class="cf-help">They still work if a step makes a page crash. The emergency exit is made for this session only, so press Start without reloading this page.</p>
+</div>
+</div>
+<div class="cf-setup__side">
+<section class="cf-card cf-ready" aria-labelledby="culprit-finder-ready">
+<h2 class="cf-ready__title" id="culprit-finder-ready">Ready to start</h2>
+<div class="cf-stats">
+<p class="cf-stat">
+<strong class="cf-stat__num">5</strong>
+<span class="cf-stat__label">plugins to test</span>
+</p>
+<p class="cf-stat">
+<strong class="cf-stat__num" aria-hidden="true">~5</strong>
+<span class="cf-stat__label" aria-hidden="true">steps</span>
+<span class="screen-reader-text">about 5 steps</span>
+</p>
+</div>
+<ul class="cf-checks">
+<li>Visitors and other admins never see a change</li>
+<li>Your plugin settings are never modified</li>
+<li>Ends by itself after 60 idle minutes</li>
+</ul>
+<label class="cf-saved">
+<input type="checkbox" name="culprit_finder_saved" value="1" required>
+<span>
+<strong>I’ve saved both safety links</strong>
+<span class="cf-saved__help">They’re below and still work if a step makes a page crash.</span>
+</span>
+</label>
+<div class="cf-start">
+<button type="submit" class="button cf-button cf-button--primary cf-button--large" aria-describedby="culprit-finder-start-help">Start troubleshooting</button>
+<p class="cf-start__help" id="culprit-finder-start-help" data-locked="Tick the box above to enable Start.">Press Start without reloading this page: the emergency exit is made for this session only.</p>
+</div>
+</section>
+<section class="cf-card cf-safety" aria-labelledby="culprit-finder-safety">
+<h2 class="cf-safety__title" id="culprit-finder-safety">Safety links</h2>
+<p class="cf-help">Bookmark or copy these before you start.</p>
 <div class="cf-links">
 <div class="cf-link">
-<strong>Control panel</strong>
+<div class="cf-link__head">
+<strong id="culprit-finder-panel-url-title">Control panel</strong>
+<button type="button" class="button culprit-finder-copy" data-target="culprit-finder-panel-url" data-done="Copied" aria-describedby="culprit-finder-panel-url-title" hidden>Copy</button>
+</div>
 <span>Answer questions even when pages are broken.</span>
 <code id="culprit-finder-panel-url">http://localhost:8888/wp-admin/admin.php?page=culprit-finder&amp;culprit_safe=1</code>
-<button type="button" class="button culprit-finder-copy" data-target="culprit-finder-panel-url" data-done="Copied" hidden>Copy</button>
 </div>
-<div class="cf-link">
-<strong>Emergency exit</strong>
+<div class="cf-link cf-link--exit">
+<div class="cf-link__head">
+<strong id="culprit-finder-exit-url-title">Emergency exit</strong>
+<button type="button" class="button culprit-finder-copy" data-target="culprit-finder-exit-url" data-done="Copied" aria-describedby="culprit-finder-exit-url-title" hidden>Copy</button>
+</div>
 <span>Ends troubleshooting at once, even when logged out. Keep it private.</span>
 <code id="culprit-finder-exit-url">http://localhost:8888/?culprit-finder-exit=KEY</code>
-<button type="button" class="button culprit-finder-copy" data-target="culprit-finder-exit-url" data-done="Copied" hidden>Copy</button>
 </div>
 </div>
-<label class="cf-saved">
-<input type="checkbox" name="culprit_finder_saved" value="1" required> I’ve saved both links</label>
-<div class="cf-start">
-<button type="submit" class="button cf-button cf-button--primary cf-button--large">Start troubleshooting</button>
-<span class="cf-muted">5 plugins to test · about 5 steps · ends by itself after 60 idle minutes</span>
-</div>
-<p class="cf-reassure">Visitors and other admins never see a change, and your plugin settings are never modified. <a href="http://localhost:8888/wp-admin/admin.php?page=culprit-finder&#038;tab=help">How it works and how to get out</a>
+</section>
+<p class="cf-setup__more">
+<a href="http://localhost:8888/wp-admin/admin.php?page=culprit-finder&#038;tab=help">How it works and how to get out</a>
 </p>
-</fieldset>
+</div>
+</div>
 </form>
 </div>
 </div>

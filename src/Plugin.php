@@ -57,6 +57,13 @@ final class Plugin {
 	private $api;
 
 	/**
+	 * Pro discovery placements (ADR-0025).
+	 *
+	 * @var Admin\ProDiscovery
+	 */
+	private $pro_discovery;
+
+	/**
 	 * The current user's verified session for this request (set at init), or null.
 	 *
 	 * @var array|null
@@ -81,6 +88,8 @@ final class Plugin {
 		$this->cookie  = new Cookie();
 		$this->manager = new Manager( $this->store, plugin_basename( $file ) );
 		$this->api     = new Api( $this );
+
+		$this->pro_discovery = new Admin\ProDiscovery( $this );
 	}
 
 	/**
@@ -94,6 +103,7 @@ final class Plugin {
 		( new Admin\AdminBar( $this ) )->register();
 		( new Admin\PluginsLock( $this ) )->register();
 		( new Admin\DashboardWidget( $this ) )->register();
+		$this->pro_discovery->register();
 
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
 			\WP_CLI::add_command( 'culprit-finder', new CLI\Command( $this->manager, $this->store ) );
@@ -116,6 +126,15 @@ final class Plugin {
 	 */
 	public function api() {
 		return $this->api;
+	}
+
+	/**
+	 * Pro discovery placements (ADR-0025).
+	 *
+	 * @return Admin\ProDiscovery
+	 */
+	public function pro_discovery() {
+		return $this->pro_discovery;
 	}
 
 	/**

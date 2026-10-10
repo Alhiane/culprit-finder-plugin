@@ -200,6 +200,7 @@ final class ResultsView {
 		echo '<details class="cf-plain"><summary>' . esc_html__( 'Show plain text', 'culprit-finder' ) . '</summary>';
 		echo '<pre id="culprit-finder-report" class="cf-report__text">' . esc_html( $report ) . '</pre></details>';
 		echo '</section>';
+		$this->plugin->pro_discovery()->render_result_card();
 	}
 
 	/**
