@@ -83,6 +83,7 @@ final class HelpView {
 
 		if ( null !== $this->pro_discovery ) {
 			$this->pro_discovery->render_help_entry();
+			$this->pro_discovery->render_help_show_again();
 		}
 
 		echo '</div>';

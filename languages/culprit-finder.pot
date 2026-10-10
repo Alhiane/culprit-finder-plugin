@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-08T18:35:01+00:00\n"
+"POT-Creation-Date: 2026-10-10T20:52:43+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: culprit-finder\n"
@@ -17,7 +17,7 @@ msgstr ""
 #. Plugin Name of the plugin
 #: culprit-finder.php
 #: src/Admin/DashboardWidget.php:66
-#: src/Admin/Handlers.php:316
+#: src/Admin/Handlers.php:325
 #: src/Admin/Page.php:72
 #: src/Admin/Page.php:73
 #: src/Admin/Page.php:223
@@ -61,20 +61,20 @@ msgstr ""
 
 #: src/Admin/AdminBar.php:96
 #: src/Admin/DashboardWidget.php:159
-#: src/Admin/TroubleshootView.php:386
+#: src/Admin/TroubleshootView.php:370
 msgid "No, it’s gone"
 msgstr ""
 
 #: src/Admin/AdminBar.php:99
 #: src/Admin/ResultsView.php:217
-#: src/Admin/TroubleshootView.php:392
-#: src/Admin/TroubleshootView.php:451
+#: src/Admin/TroubleshootView.php:376
+#: src/Admin/TroubleshootView.php:435
 msgid "Undo last answer"
 msgstr ""
 
 #: src/Admin/AdminBar.php:101
 #: src/Admin/DashboardWidget.php:106
-#: src/Admin/TroubleshootView.php:450
+#: src/Admin/TroubleshootView.php:434
 msgid "View result"
 msgstr ""
 
@@ -137,13 +137,13 @@ msgstr[1] ""
 
 #. translators: 1: current step number, 2: estimated number of steps
 #: src/Admin/DashboardWidget.php:134
-#: src/Admin/TroubleshootView.php:349
+#: src/Admin/TroubleshootView.php:333
 #, php-format
 msgid "Step %1$d of about %2$d"
 msgstr ""
 
 #: src/Admin/DashboardWidget.php:146
-#: src/Admin/TroubleshootView.php:375
+#: src/Admin/TroubleshootView.php:359
 msgid "Is the problem still there?"
 msgstr ""
 
@@ -182,25 +182,25 @@ msgstr ""
 msgid "That result no longer exists."
 msgstr ""
 
-#: src/Admin/Handlers.php:225
+#: src/Admin/Handlers.php:234
 msgid "Please paste the address of the page where you see the problem. It must be a page of this site."
 msgstr ""
 
-#: src/Admin/Handlers.php:230
+#: src/Admin/Handlers.php:239
 msgid "Troubleshooting didn’t start. Check the options above and try again."
 msgstr ""
 
-#: src/Admin/Handlers.php:269
+#: src/Admin/Handlers.php:278
 msgid "Sorry, you are not allowed to do that."
 msgstr ""
 
 #. translators: %s: Tools page URL
-#: src/Admin/Handlers.php:283
+#: src/Admin/Handlers.php:292
 #, php-format
 msgid "There is no troubleshooting session for you in this browser. <a href=\"%s\">Go to Culprit Finder</a>."
 msgstr ""
 
-#: src/Admin/Handlers.php:320
+#: src/Admin/Handlers.php:329
 msgid "Back to Culprit Finder"
 msgstr ""
 
@@ -430,135 +430,131 @@ msgstr ""
 msgid "<strong>Plugin management is paused while Culprit Finder is running.</strong> The list below shows only the plugins switched on for you in this step; nothing has changed for visitors. <a href=\"%1$s\">Exit troubleshooting</a> or go to the <a href=\"%2$s\">control panel</a>."
 msgstr ""
 
-#: src/Admin/ProDiscovery.php:71
+#: src/Admin/ProDiscovery.php:72
 msgid "Single Site"
 msgstr ""
 
-#: src/Admin/ProDiscovery.php:74
+#: src/Admin/ProDiscovery.php:75
 msgid "One license for one site."
 msgstr ""
 
-#: src/Admin/ProDiscovery.php:77
+#: src/Admin/ProDiscovery.php:78
 msgid "5 Sites"
 msgstr ""
 
-#: src/Admin/ProDiscovery.php:80
+#: src/Admin/ProDiscovery.php:81
 msgid "One license for up to five sites."
 msgstr ""
 
-#: src/Admin/ProDiscovery.php:83
+#: src/Admin/ProDiscovery.php:84
 msgid "Unlimited Sites"
 msgstr ""
 
-#: src/Admin/ProDiscovery.php:86
+#: src/Admin/ProDiscovery.php:87
 msgid "One license for every site you manage."
 msgstr ""
 
-#: src/Admin/ProDiscovery.php:187
-#: src/Admin/ProDiscovery.php:280
+#: src/Admin/ProDiscovery.php:223
+#: src/Admin/ProDiscovery.php:327
 msgid "Get Pro"
 msgstr ""
 
-#: src/Admin/ProDiscovery.php:199
+#: src/Admin/ProDiscovery.php:235
 msgid "Fixing this for a client? Culprit Finder Pro turns this result into a branded report you can send them, and next time it finds the culprit without you answering."
 msgstr ""
 
-#: src/Admin/ProDiscovery.php:200
+#: src/Admin/ProDiscovery.php:236
 msgid "See Pro"
 msgstr ""
 
-#: src/Admin/ProDiscovery.php:211
+#: src/Admin/ProDiscovery.php:247
 msgid "Prefer hands-free? Culprit Finder Pro checks the page at every step for you."
 msgstr ""
 
-#: src/Admin/ProDiscovery.php:211
+#: src/Admin/ProDiscovery.php:247
 msgid "Learn more"
 msgstr ""
 
-#: src/Admin/ProDiscovery.php:222
+#: src/Admin/ProDiscovery.php:258
 msgid "Is there a Pro version?"
 msgstr ""
 
-#: src/Admin/ProDiscovery.php:223
+#: src/Admin/ProDiscovery.php:259
 msgid "Yes. Culprit Finder Pro is an add-on that checks the page for you at every step, tests your theme, and turns results into branded client reports. This plugin stays free and works fully without it."
 msgstr ""
 
-#: src/Admin/ProDiscovery.php:224
+#: src/Admin/ProDiscovery.php:260
 msgid "About Culprit Finder Pro"
 msgstr ""
 
-#: src/Admin/ProDiscovery.php:246
+#: src/Admin/ProDiscovery.php:273
+msgid "Pro tips are hidden."
+msgstr ""
+
+#: src/Admin/ProDiscovery.php:294
 msgid "Check it for me"
 msgstr ""
 
-#: src/Admin/ProDiscovery.php:246
+#: src/Admin/ProDiscovery.php:294
 msgid "Describe what broken looks like, and Culprit Finder Pro opens the page at every step and answers for you."
 msgstr ""
 
-#: src/Admin/ProDiscovery.php:247
+#: src/Admin/ProDiscovery.php:295
 msgid "Theme check"
 msgstr ""
 
-#: src/Admin/ProDiscovery.php:247
+#: src/Admin/ProDiscovery.php:295
 msgid "One extra check tells you whether your theme is involved, without changing your real theme."
 msgstr ""
 
-#: src/Admin/ProDiscovery.php:248
+#: src/Admin/ProDiscovery.php:296
 msgid "Client reports"
 msgstr ""
 
-#: src/Admin/ProDiscovery.php:248
+#: src/Admin/ProDiscovery.php:296
 msgid "Turn any result into a branded, plain-English report you can print or save as a PDF for your client."
 msgstr ""
 
-#: src/Admin/ProDiscovery.php:253
+#: src/Admin/ProDiscovery.php:301
 msgid "Culprit Finder Pro"
 msgstr ""
 
-#: src/Admin/ProDiscovery.php:254
+#: src/Admin/ProDiscovery.php:302
 msgid "An add-on for this plugin, for people who troubleshoot often or for clients."
 msgstr ""
 
-#: src/Admin/ProDiscovery.php:267
+#: src/Admin/ProDiscovery.php:315
 msgid "Plans"
 msgstr ""
 
-#: src/Admin/ProDiscovery.php:268
+#: src/Admin/ProDiscovery.php:316
 msgid "From $29/year per site"
 msgstr ""
 
-#: src/Admin/ProDiscovery.php:269
+#: src/Admin/ProDiscovery.php:317
 msgid "Every plan has the same features. Only the number of sites differs."
 msgstr ""
 
 #. translators: %d: price in US dollars
-#: src/Admin/ProDiscovery.php:274
+#: src/Admin/ProDiscovery.php:322
 #, php-format
 msgid "$%d/year"
 msgstr ""
 
-#: src/Admin/ProDiscovery.php:279
+#: src/Admin/ProDiscovery.php:326
 msgid "14-day refund"
 msgstr ""
 
-#: src/Admin/ProDiscovery.php:279
+#: src/Admin/ProDiscovery.php:326
 msgid "Your settings and history stay. Pro adds to this plugin."
 msgstr ""
 
-#: src/Admin/ProDiscovery.php:293
-msgid "Unlimited sites"
+#: src/Admin/ProDiscovery.php:369
+msgid "Hide Pro tips"
 msgstr ""
 
-#. translators: %d: number of sites
-#: src/Admin/ProDiscovery.php:296
-#, php-format
-msgid "%d site"
-msgid_plural "%d sites"
-msgstr[0] ""
-msgstr[1] ""
-
-#: src/Admin/ProDiscovery.php:336
-msgid "Hide Pro tips"
+#: src/Admin/ProDiscovery.php:378
+msgid "Show them again"
 msgstr ""
 
 #: src/Admin/ResultsView.php:66
@@ -715,7 +711,7 @@ msgid "Your site is back to normal for you while you read it."
 msgstr ""
 
 #: src/Admin/ResultsView.php:216
-#: src/Admin/TroubleshootView.php:452
+#: src/Admin/TroubleshootView.php:436
 msgid "Done, exit"
 msgstr ""
 
@@ -898,26 +894,26 @@ msgstr ""
 msgid "Copy"
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:314
+#: src/Admin/TroubleshootView.php:298
 msgid "another administrator"
 msgstr ""
 
 #. translators: %s: user display name
-#: src/Admin/TroubleshootView.php:319
+#: src/Admin/TroubleshootView.php:303
 #, php-format
 msgid "A troubleshooting session started by %s is running in another browser. It only affects that browser. Starting a new session here ends it."
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:323
+#: src/Admin/TroubleshootView.php:307
 msgid "End that session"
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:345
+#: src/Admin/TroubleshootView.php:329
 msgid "Progress"
 msgstr ""
 
 #. translators: %d: minutes
-#: src/Admin/TroubleshootView.php:356
+#: src/Admin/TroubleshootView.php:340
 #, php-format
 msgid "%d min left · resets with every answer"
 msgid_plural "%d min left · resets with every answer"
@@ -925,93 +921,93 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: 1: plugins switched off, 2: plugins in total
-#: src/Admin/TroubleshootView.php:367
+#: src/Admin/TroubleshootView.php:351
 #, php-format
 msgid "For you only: %1$d of %2$d plugins switched off"
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:376
+#: src/Admin/TroubleshootView.php:360
 msgid "Open the broken page, reload it, and look again. A critical error page counts as Yes."
 msgstr ""
 
 #. translators: %s: address of the broken page
-#: src/Admin/TroubleshootView.php:380
+#: src/Admin/TroubleshootView.php:364
 #, php-format
 msgid "Open %s"
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:381
+#: src/Admin/TroubleshootView.php:365
 msgid "Open your site"
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:385
+#: src/Admin/TroubleshootView.php:369
 msgid "Yes, it’s still there"
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:394
+#: src/Admin/TroubleshootView.php:378
 msgid "Stop and exit"
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:395
+#: src/Admin/TroubleshootView.php:379
 msgid "You can also answer from the purple toolbar on any page. If WordPress emails you about a critical error, that is expected while troubleshooting."
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:398
+#: src/Admin/TroubleshootView.php:382
 msgid "Which plugins are on in this step"
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:403
+#: src/Admin/TroubleshootView.php:387
 msgid "(always on · Culprit Finder add-on)"
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:405
+#: src/Admin/TroubleshootView.php:389
 msgid "(kept on)"
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:407
+#: src/Admin/TroubleshootView.php:391
 msgid "(needed by a kept-on plugin)"
 msgstr ""
 
 #. translators: %d: number of plugins
-#: src/Admin/TroubleshootView.php:412
+#: src/Admin/TroubleshootView.php:396
 #, php-format
 msgid "On (%d)"
 msgstr ""
 
 #. translators: %d: number of plugins
-#: src/Admin/TroubleshootView.php:418
+#: src/Admin/TroubleshootView.php:402
 #, php-format
 msgid "Off, for you only (%d)"
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:446
+#: src/Admin/TroubleshootView.php:430
 msgid "Result ready"
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:448
+#: src/Admin/TroubleshootView.php:432
 msgid "Your site is back to normal for you while you read the result."
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:465
+#: src/Admin/TroubleshootView.php:449
 msgid "(none)"
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:481
+#: src/Admin/TroubleshootView.php:465
 msgid "Culprit Finder does not support multisite networks yet, so troubleshooting cannot start here."
 msgstr ""
 
 #. translators: %s: file path
-#: src/Admin/TroubleshootView.php:487
+#: src/Admin/TroubleshootView.php:471
 #, php-format
 msgid "A different file already exists at %s. Culprit Finder never overwrites files it didn’t create. If that file isn’t needed, rename or remove it with FTP or your host’s file manager, then reload this page."
 msgstr ""
 
-#: src/Admin/TroubleshootView.php:496
+#: src/Admin/TroubleshootView.php:480
 msgid "When you press Start, Culprit Finder adds a small helper file to wp-content/mu-plugins and removes it when you’re done. That folder isn’t writable on this site."
 msgstr ""
 
 #. translators: 1: source file path, 2: target folder path
-#: src/Admin/TroubleshootView.php:502
+#: src/Admin/TroubleshootView.php:486
 #, php-format
 msgid "To fix it, copy %1$s into %2$s (create the folder if needed) with FTP or your host’s file manager, then reload this page."
 msgstr ""

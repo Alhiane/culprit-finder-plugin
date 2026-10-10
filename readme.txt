@@ -109,7 +109,7 @@ Culprit Finder Pro is an optional add-on for this plugin, available at https://g
 * **Theme check:** one extra check tells you whether your theme is involved, for your browser only.
 * **Client reports:** turn a result into a branded, plain-English report you can print or save as a PDF.
 
-Culprit Finder stays free and fully functional without it, and your settings and results history stay when you add it. Plans: From $29/year per site, with a 14-day refund. The Pro tab inside Culprit Finder describes it; you can hide it and the other tips with one click (Hide Pro tips). Culprit Finder makes no external requests for any of this: the text ships with the plugin.
+Culprit Finder stays free and fully functional without it, and your settings and results history stay when you add it. Plans: From $29/year per site, with a 14-day refund. The Pro tab inside Culprit Finder describes it; you can hide it and the other tips with one click (Hide Pro tips), and show them again from the Help tab. Culprit Finder makes no external requests for any of this: the text ships with the plugin.
 
 == Screenshots ==
 

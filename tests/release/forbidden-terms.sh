@@ -31,7 +31,7 @@ HITS=$(grep -nHiE "$BANNED" "${FILES[@]}" 2>/dev/null | grep -viE 'Upgrade Notic
 # 2. "Pro" and prices only inside the approved discovery copy (ADR-0025). Each approved phrase is removed
 #    from the line first; any "Pro" or "$<n>" left over is a finding.
 APPROVED=(
-  'Culprit Finder Pro' 'Get Pro' 'See Pro' 'Hide Pro tips' 'Pro tips' 'Pro tab' 'Is there a Pro version\?'
+  'Culprit Finder Pro' 'Get Pro' 'See Pro' 'Hide Pro tips' 'Show them again' 'Pro tips are hidden\.' 'Pro tips' 'Pro tab' 'Is there a Pro version\?'
   'Pro adds to this plugin\.' 'From \$29/year per site' '\$%d/year'
   "__\\( 'Pro', 'culprit-finder' \\)" 'msgid "Pro"' 'Pro discovery' 'ProDiscovery' 'PRO_[A-Z_]+' 'culprit-finder-pro'
   '\$29/year' '\$99/year' '\$199/year'

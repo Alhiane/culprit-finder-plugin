@@ -41,7 +41,7 @@ final class Handlers {
 	 * Hook the admin-post actions.
 	 */
 	public function register() {
-		foreach ( array( 'start', 'answer', 'undo', 'exit', 'download', 'delete_result', 'clear_results', 'hide_pro_tips' ) as $action ) {
+		foreach ( array( 'start', 'answer', 'undo', 'exit', 'download', 'delete_result', 'clear_results', 'hide_pro_tips', 'show_pro_tips' ) as $action ) {
 			add_action( 'admin_post_culprit_finder_' . $action, array( $this, 'handle_' . $action ) );
 		}
 	}
@@ -193,6 +193,15 @@ final class Handlers {
 	public function handle_hide_pro_tips() {
 		$this->guard( 'hide_pro_tips' );
 		$this->plugin->pro_discovery()->hide();
+		$this->redirect( $this->redirect_target( Links::tools() ) );
+	}
+
+	/**
+	 * Show Pro tips again for this user: clear what handle_hide_pro_tips set, then go back.
+	 */
+	public function handle_show_pro_tips() {
+		$this->guard( 'show_pro_tips' );
+		$this->plugin->pro_discovery()->unhide();
 		$this->redirect( $this->redirect_target( Links::tools() ) );
 	}
 

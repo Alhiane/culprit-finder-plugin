@@ -41,7 +41,7 @@ assert_not_contains "$CLIOUT" "getculpritfinder.com/pro" "WP-CLI output has no P
 wpcli culprit-finder exit >/dev/null
 RID=$(wpjson option get culprit_finder_last_result --format=json | jq -r .id)
 
-no_tips() { # <label> <html>
+no_tips() { # <label> <html>; the "show them again" line is the way back and lives on the hidden Help tab.
   assert_not_contains "$2" "$ATTR" "$1: no placement"
   assert_not_contains "$2" "getculpritfinder.com/pro" "$1: no Pro link"
   assert_not_contains "$2" "Culprit Finder Pro checks" "$1: no setup copy"
@@ -49,6 +49,7 @@ no_tips() { # <label> <html>
   assert_not_contains "$2" "Is there a Pro version" "$1: no help copy"
   assert_not_contains "$2" "From \$29/year" "$1: no price"
   assert_not_contains "$2" "Hide Pro tips" "$1: no hide link"
+  assert_not_contains "$2" "Show them again" "$1: no show-again link"
 }
 href() { python3 -c 'import re,sys,html; m=re.search(sys.argv[1], sys.stdin.read()); print(html.unescape(m.group(1)) if m else "")' "$1"; }
 utm_link() { # <html> <placement> → the Pro link of that placement
@@ -114,7 +115,14 @@ LOC=$(curl -s -o /dev/null -w '%{redirect_url}' -b "$JAR" "$HIDE")
 assert_contains "$LOC" "page=culprit-finder" "hide redirects back"
 assert_eq "$LOC" "$BASE$TOOLS&tab=help" "hide from the Help tab redirects to the exact Help URL"
 assert_eq "$(wpcli user meta get admin culprit_finder_hide_pro_tips)" 1 "hidden in user meta"
-for p in "$TOOLS" "$TOOLS&tab=help" "$TOOLS&tab=pro" "$TOOLS&tab=results&result=$RID" /wp-admin/plugins.php; do
+# The hidden Help tab is the one screen with a placement: the quiet way back, and nothing else.
+HIDDEN_HELP=$(fetch "$JAR" "$TOOLS&tab=help")
+assert_contains "$HIDDEN_HELP" "$ATTR=\"show_again\"" "hidden: the show-again line is on the Help tab"
+assert_contains "$HIDDEN_HELP" "Pro tips are hidden. " "hidden: the line says the tips are hidden"
+assert_contains "$HIDDEN_HELP" ">Show them again</a>" "hidden: the link is Show them again"
+assert_contains "$HIDDEN_HELP" "action=culprit_finder_show_pro_tips" "hidden: the way back is a nonced action"
+assert_eq "$(grep -oE "$ATTR=\"[a-z_]+\"" <<<"$HIDDEN_HELP" | wc -l | tr -d ' ')" 1 "hidden: the Help tab has exactly the one placement"
+for p in "$TOOLS" "$TOOLS&tab=pro" "$TOOLS&tab=results&result=$RID" /wp-admin/plugins.php /wp-admin/index.php /; do
   no_tips "hidden: $p" "$(fetch "$JAR" "$p")"
 done
 assert_not_contains "$(fetch "$JAR" "$TOOLS&tab=pro")" "class=\"cf-pro\"" "hidden: no Pro tab"
@@ -122,9 +130,31 @@ JAR2=$TMP/admin3.jar
 wpcli user get cfadmin3 >/dev/null 2>&1 || wpcli user create cfadmin3 cfadmin3@example.test --role=administrator --user_pass=password >/dev/null
 login "$JAR2" cfadmin3
 assert_contains "$(fetch "$JAR2" "$TOOLS")" "$ATTR=\"setup\"" "another admin still sees tips"
+# Hide for the second admin as well, so showing can be proved to be per user.
+wpcli user meta update cfadmin3 culprit_finder_hide_pro_tips 1 >/dev/null
+assert_eq "$(wpcli user meta get cfadmin3 culprit_finder_hide_pro_tips)" 1 "the second admin is hidden too"
 login "$JAR"
 no_tips "hidden after a new login" "$(fetch "$JAR" "$TOOLS")"
-wpcli user meta delete admin culprit_finder_hide_pro_tips >/dev/null
+# Show them again: capability and nonce checked, then the tips come back for this user only.
+HIDDEN_HELP=$(fetch "$JAR" "$TOOLS&tab=help")
+SHOW_RAW=$(href "href=\"([^\"]*action=culprit_finder_show_pro_tips[^\"]*)\"" <<<"$HIDDEN_HELP")
+[ -n "$SHOW_RAW" ] || fail "no Show them again link on the hidden Help tab"
+SHOW=$(python3 -c 'import html,sys; print(html.unescape(sys.argv[1]))' "$SHOW_RAW")
+assert_eq "$(curl -s -o /dev/null -w '%{http_code}' -b "$JAR" "$(sed -E 's/[?&]_wpnonce=[^&]*//' <<<"$SHOW_RAW")")" 403 "show without nonce refused"
+assert_eq "$(curl -s -o /dev/null -w '%{http_code}' -b "$EJAR" "$SHOW")" 403 "show by an editor refused"
+assert_eq "$(wpcli user meta get admin culprit_finder_hide_pro_tips)" 1 "still hidden after refused requests"
+SHOW_LOC=$(curl -s -o /dev/null -w '%{redirect_url}' -b "$JAR" "$SHOW")
+assert_contains "$SHOW_LOC" "page=culprit-finder" "show redirects back"
+assert_eq "$SHOW_LOC" "$BASE$TOOLS&tab=help" "show from the Help tab redirects to the exact Help URL"
+assert_eq "$(wpcli user meta get admin culprit_finder_hide_pro_tips 2>/dev/null || true)" "" "showing clears the user meta"
+assert_eq "$(wpcli user meta get cfadmin3 culprit_finder_hide_pro_tips 2>/dev/null || true)" 1 "the second admin's hidden state is untouched"
+# All five placements are back, and the way back is gone.
+assert_contains "$(fetch "$JAR" "$TOOLS")" "$ATTR=\"setup\"" "back: the setup line"
+assert_contains "$(fetch "$JAR" "$TOOLS&tab=help")" "$ATTR=\"help\"" "back: the Help entry"
+assert_contains "$(fetch "$JAR" "$TOOLS&tab=pro")" "$ATTR=\"pro_tab\"" "back: the Pro tab"
+assert_contains "$(fetch "$JAR" "$TOOLS&tab=results&result=$RID")" "$ATTR=\"result\"" "back: the result card"
+assert_contains "$(fetch "$JAR" /wp-admin/plugins.php)" "$ATTR=\"plugins_row\"" "back: the Plugins row"
+assert_not_contains "$(fetch "$JAR" "$TOOLS&tab=help")" "$ATTR=\"show_again\"" "back: no show-again line"
 
 # Culprit Finder Pro active (stub at Pro's basename, no constant): nothing from discovery, one `pro` tab: Pro's.
 docker exec -w /var/www/html "$CLI_CONTAINER" cp -r "$STUB_SRC" "$STUB_DST"

@@ -23,6 +23,14 @@ final class ProDiscoveryTest extends TestCase {
 		}
 	}
 
+	public function test_the_way_back_shows_only_to_a_user_who_hid_the_tips_on_a_single_site(): void {
+		$this->assertTrue( ProDiscovery::show_again( false, true, true, false ) );
+		foreach ( array( array( true, true, true, false ), array( false, false, true, false ), array( false, true, false, false ), array( false, true, true, true ) ) as $case ) {
+			$this->assertFalse( ProDiscovery::show_again( ...$case ), 'not shown for ' . json_encode( $case ) );
+		}
+		$this->assertSame( 'show_again', ProDiscovery::PLACEMENT_SHOW_AGAIN );
+	}
+
 	public function test_pro_is_detected_by_its_basename_or_its_constant(): void {
 		$this->assertFalse( ProDiscovery::pro_present_in( array( 'culprit-finder/culprit-finder.php', 'culprit-finder-pro-extra/culprit-finder-pro.php' ), false ) );
 		$this->assertTrue( ProDiscovery::pro_present_in( array( 'culprit-finder/culprit-finder.php', 'culprit-finder-pro/culprit-finder-pro.php' ), false ) );

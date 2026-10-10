@@ -33,6 +33,7 @@ final class ProDiscovery {
 	const PLACEMENT_PRO_TAB     = 'pro_tab';
 	const PLACEMENT_SETUP       = 'setup';
 	const PLACEMENT_HELP        = 'help';
+	const PLACEMENT_SHOW_AGAIN  = 'show_again';
 	const PLACEMENT_PLUGINS_ROW = 'plugins_row';
 
 	/**
@@ -159,6 +160,41 @@ final class ProDiscovery {
 	}
 
 	/**
+	 * Whether the "Pro tips are hidden" line with its "Show them again" link applies. Pure, so it can
+	 * be unit-tested: the user hid the tips, they would otherwise be allowed to see them, and the site
+	 * is not a network.
+	 *
+	 * @param bool $pro_present Culprit Finder Pro is active or its version constant is defined.
+	 * @param bool $hidden      The user chose "Hide Pro tips".
+	 * @param bool $can_manage  The user can manage plugins.
+	 * @param bool $multisite   The site is a multisite network.
+	 * @return bool
+	 */
+	public static function show_again( $pro_present, $hidden, $can_manage, $multisite ) {
+		return ! $pro_present && $hidden && $can_manage && ! $multisite;
+	}
+
+	/**
+	 * Whether the way back belongs on the Help tab for this user: they hid the tips, and the tips
+	 * would otherwise be allowed. Nothing else in the product clears the meta hide() set.
+	 *
+	 * @return bool
+	 */
+	public function shown() {
+		if ( defined( 'WP_CLI' ) && WP_CLI ) {
+			return false;
+		}
+		return self::show_again( $this->pro_present(), $this->hidden(), current_user_can( 'activate_plugins' ), is_multisite() );
+	}
+
+	/**
+	 * Show the tips again for the current user: clear what hide() set.
+	 */
+	public function unhide() {
+		delete_user_meta( get_current_user_id(), self::META );
+	}
+
+	/**
 	 * Link to the Culprit Finder Pro page with the placement's utm parameters (unescaped).
 	 *
 	 * @param string $placement Placement id.
@@ -223,6 +259,18 @@ final class ProDiscovery {
 		echo '<p>' . esc_html__( 'Yes. Culprit Finder Pro is an add-on that checks the page for you at every step, tests your theme, and turns results into branded client reports. This plugin stays free and works fully without it.', 'culprit-finder' ) . '</p>';
 		echo '<p class="cf-tip__links">' . $this->link( self::PLACEMENT_HELP, __( 'About Culprit Finder Pro', 'culprit-finder' ) ) . $this->hide_link() . '</p>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- link() and hide_link() escape their parts.
 		echo '</section>';
+	}
+
+	/**
+	 * The way back from hide_link(), on the Help tab where the discovery entry sits while the tips
+	 * show: one quiet line only a user who hid the tips ever sees, so hiding is not one-way. Tagged
+	 * like the other placements so the snapshot test can strip it.
+	 */
+	public function render_help_show_again() {
+		if ( ! $this->shown() ) {
+			return;
+		}
+		echo '<p class="cf-tip-line" ' . esc_attr( self::ATTRIBUTE ) . '="' . esc_attr( self::PLACEMENT_SHOW_AGAIN ) . '">' . esc_html__( 'Pro tips are hidden.', 'culprit-finder' ) . ' ' . $this->show_again_link() . '</p>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- show_again_link() escapes its parts.
 	}
 
 	/**
@@ -319,5 +367,14 @@ final class ProDiscovery {
 	 */
 	private function hide_link() {
 		return ' <a class="cf-tip__hide" href="' . esc_url( Links::action( 'hide_pro_tips', array(), Links::current_url() ) ) . '">' . esc_html__( 'Hide Pro tips', 'culprit-finder' ) . '</a>';
+	}
+
+	/**
+	 * "Show them again" link, the way back from hide_link() (escaped HTML).
+	 *
+	 * @return string
+	 */
+	private function show_again_link() {
+		return '<a class="cf-tip__show" href="' . esc_url( Links::action( 'show_pro_tips', array(), Links::current_url() ) ) . '">' . esc_html__( 'Show them again', 'culprit-finder' ) . '</a>';
 	}
 }
