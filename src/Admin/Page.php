@@ -407,17 +407,31 @@ final class Page {
 	}
 
 	/**
+	 * Name and version of every installed plugin, by basename. The one walk of `get_plugins()`;
+	 * plugin_names() derives the joined "Name Version" form from it.
+	 *
+	 * @return array<string, array{0: string, 1: string}>
+	 */
+	public static function plugin_headers() {
+		if ( ! function_exists( 'get_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+		$headers = array();
+		foreach ( get_plugins() as $basename => $data ) {
+			$headers[ $basename ] = array( (string) $data['Name'], (string) $data['Version'] );
+		}
+		return $headers;
+	}
+
+	/**
 	 * Basename => "Name Version" for installed plugins.
 	 *
 	 * @return array<string, string>
 	 */
 	public static function plugin_names() {
-		if ( ! function_exists( 'get_plugins' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/plugin.php';
-		}
 		$names = array();
-		foreach ( get_plugins() as $basename => $data ) {
-			$names[ $basename ] = trim( $data['Name'] . ' ' . $data['Version'] );
+		foreach ( self::plugin_headers() as $basename => $data ) {
+			$names[ $basename ] = trim( $data[0] . ' ' . $data[1] );
 		}
 		return $names;
 	}

@@ -272,7 +272,6 @@ final class ProDiscovery {
 			echo '<li class="cf-pro__plan"><strong>' . esc_html( $plan['name'] ) . '</strong>';
 			/* translators: %d: price in US dollars */
 			echo '<span class="cf-pro__amount">' . esc_html( sprintf( __( '$%d/year', 'culprit-finder' ), (int) $plan['price'] ) ) . '</span>';
-			echo '<span class="cf-muted">' . esc_html( self::sites_label( (int) $plan['sites'] ) ) . '</span>';
 			echo '<span class="cf-muted">' . esc_html( $plan['note'] ) . '</span></li>';
 		}
 		echo '</ul>';
@@ -280,20 +279,6 @@ final class ProDiscovery {
 		echo '<p class="cf-pro__cta"><a class="button cf-button cf-button--primary cf-button--large" href="' . esc_url( self::url( self::PLACEMENT_PRO_TAB ) ) . '" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Get Pro', 'culprit-finder' ) . '</a>' . $this->hide_link() . '</p>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- hide_link() escapes its parts.
 		echo '</section>';
 		echo '</div>';
-	}
-
-	/**
-	 * "1 site", "5 sites" or "Unlimited sites".
-	 *
-	 * @param int $sites Number of sites, 0 for unlimited.
-	 * @return string
-	 */
-	private static function sites_label( $sites ) {
-		if ( $sites < 1 ) {
-			return __( 'Unlimited sites', 'culprit-finder' );
-		}
-		/* translators: %d: number of sites */
-		return sprintf( _n( '%d site', '%d sites', $sites, 'culprit-finder' ), $sites );
 	}
 
 	/**

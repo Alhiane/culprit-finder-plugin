@@ -99,16 +99,20 @@ wpcli user get cfeditor >/dev/null 2>&1 || wpcli user create cfeditor cfeditor@e
 EJAR=$TMP/editor.jar; login "$EJAR" cfeditor
 no_tips "editor dashboard" "$(fetch "$EJAR" /wp-admin/index.php)"
 
-# Hide Pro tips: capability and nonce checked, then per user and permanent.
-HIDE=$(href "href=\"([^\"]*action=culprit_finder_hide_pro_tips[^\"]*)\"" <<<"$SETUP")
-[ -n "$HIDE" ] || fail "no Hide Pro tips link on setup"
-for page in "$HELP" "$TAB" "$RESULT"; do assert_contains "$page" "Hide Pro tips" "hide link on each placement"; done
-NONONCE=$(sed -E 's/[?&]_wpnonce=[^&]*//' <<<"$HIDE")
+# Hide Pro tips: capability and nonce checked, then per user and permanent. Click it from the Help tab:
+# its redirect must land back on the Help tab, not merely on the Culprit Finder page (Links::tools()
+# is both the fallback and the target, so "contains page=culprit-finder" would pass either way).
+HIDE_RAW=$(href "href=\"([^\"]*action=culprit_finder_hide_pro_tips[^\"]*)\"" <<<"$HELP")
+[ -n "$HIDE_RAW" ] || fail "no Hide Pro tips link on the Help tab"
+HIDE=$(python3 -c 'import html,sys; print(html.unescape(sys.argv[1]))' "$HIDE_RAW")
+for page in "$SETUP" "$HELP" "$TAB" "$RESULT"; do assert_contains "$page" "Hide Pro tips" "hide link on each placement"; done
+NONONCE=$(sed -E 's/[?&]_wpnonce=[^&]*//' <<<"$HIDE_RAW")
 assert_eq "$(curl -s -o /dev/null -w '%{http_code}' -b "$JAR" "$NONONCE")" 403 "hide without nonce refused"
 assert_eq "$(curl -s -o /dev/null -w '%{http_code}' -b "$EJAR" "$HIDE")" 403 "hide by an editor refused"
 assert_eq "$(wpcli user meta get admin culprit_finder_hide_pro_tips 2>/dev/null || true)" "" "still visible after refused requests"
 LOC=$(curl -s -o /dev/null -w '%{redirect_url}' -b "$JAR" "$HIDE")
 assert_contains "$LOC" "page=culprit-finder" "hide redirects back"
+assert_eq "$LOC" "$BASE$TOOLS&tab=help" "hide from the Help tab redirects to the exact Help URL"
 assert_eq "$(wpcli user meta get admin culprit_finder_hide_pro_tips)" 1 "hidden in user meta"
 for p in "$TOOLS" "$TOOLS&tab=help" "$TOOLS&tab=pro" "$TOOLS&tab=results&result=$RID" /wp-admin/plugins.php; do
   no_tips "hidden: $p" "$(fetch "$JAR" "$p")"

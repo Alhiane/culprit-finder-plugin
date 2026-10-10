@@ -5,6 +5,10 @@
 # urgency words, exclamation marks in discovery copy, or URLs to other hosts in PHP/JS/CSS.
 # (The website repository runs its own check, unchanged.)
 set -euo pipefail
+
+# Check 2 below filters with python3; without it the check would silently pass on an empty list.
+command -v python3 >/dev/null || { echo "forbidden-terms: python3 is required" >&2; exit 1; }
+
 ROOT=$(cd "$(dirname "$0")/../.." && pwd)
 TMP=$(mktemp -d)
 trap 'rm -rf "$TMP"' EXIT

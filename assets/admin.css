@@ -41,6 +41,7 @@
 .culprit-finder .cf-tile__version { margin-left: auto; padding-left: 4px; font-size: 12px; color: var(--cf-muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
 .culprit-finder .cf-section .cf-field label.cf-always { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 10px; padding: 10px 12px; border-radius: 4px; background: #f6f7f7; font-size: 13px; color: var(--cf-muted); cursor: default; }
 .culprit-finder .cf-always__name { color: #1d2327; }
+.culprit-finder .cf-always__note { color: var(--cf-muted); font-size: 12px; }
 .culprit-finder .cf-always input[type="checkbox"]:disabled { opacity: 1; border-color: #a7aaad; background: #f0f0f1; box-shadow: none; }
 .culprit-finder .cf-always input[type="checkbox"]:disabled:checked::before { content: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2020%2020%27%3E%3Cpath%20d%3D%27M14.83%204.89l1.34.94-5.81%208.38H9.02L5.78%209.67l1.34-1.25%202.57%202.4z%27%20fill%3D%27%2350575e%27%2F%3E%3C%2Fsvg%3E"); opacity: 1; }
 

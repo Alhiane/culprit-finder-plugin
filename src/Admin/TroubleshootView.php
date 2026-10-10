@@ -73,7 +73,7 @@ final class TroubleshootView {
 		$self     = plugin_basename( CULPRIT_FINDER_FILE );
 		$active   = array_values( array_diff( $manager->real_active_plugins(), array( $self ) ) );
 		$always   = $manager->always_on( $manager->real_active_plugins() );
-		$plugins  = self::plugin_headers();
+		$plugins  = Page::plugin_headers();
 		$problems = $this->environment_problems();
 		$kept     = $this->plugin->start_input();
 		$key      = null !== $kept && ! empty( $kept['recovery'] ) && Token::is_valid_format( $kept['recovery'] ) ? $kept['recovery'] : Token::generate();
@@ -286,22 +286,6 @@ final class TroubleshootView {
 		echo '<span>' . esc_html( $description ) . '</span>';
 		echo '<code id="' . esc_attr( $id ) . '">' . esc_html( $url ) . '</code>';
 		echo '</div>';
-	}
-
-	/**
-	 * Name and version of every installed plugin, by basename.
-	 *
-	 * @return array<string, array{0: string, 1: string}>
-	 */
-	private static function plugin_headers() {
-		if ( ! function_exists( 'get_plugins' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/plugin.php';
-		}
-		$headers = array();
-		foreach ( get_plugins() as $basename => $data ) {
-			$headers[ $basename ] = array( (string) $data['Name'], (string) $data['Version'] );
-		}
-		return $headers;
 	}
 
 	/**
