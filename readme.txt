@@ -4,7 +4,7 @@ Tags: troubleshooting, plugin conflict, debug, critical error, white screen
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.3.0
+Stable tag: 0.3.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -122,6 +122,10 @@ Culprit Finder stays free and fully functional without it, and your settings and
 
 == Changelog ==
 
+= 0.3.1 =
+* Reports now list every step that was tested and your answer, so others can reproduce the result.
+* More automated tests for AJAX, REST and form requests during troubleshooting.
+
 = 0.3.0 =
 * New: a Pro tab explaining Culprit Finder Pro. Tips can be hidden with one click.
 * Improved: a clearer setup screen with numbered sections, plugin tiles, and a sidebar with the summary, Start and the two safety links.
@@ -136,6 +140,9 @@ Culprit Finder stays free and fully functional without it, and your settings and
 * First release: switch plugins off for your browser only, find the plugin (or the two plugins) behind a problem, keep plugins on, respect plugin dependencies, answer from the page, the toolbar or the dashboard widget, results history with .md and .txt downloads, and a WP-CLI command.
 
 == Upgrade Notice ==
+
+= 0.3.1 =
+Reports now list every step that was tested and your answer. Troubleshooting works exactly as before.
 
 = 0.3.0 =
 Adds a Pro tab that explains Culprit Finder Pro. Tips can be hidden with one click. Troubleshooting works exactly as before.
