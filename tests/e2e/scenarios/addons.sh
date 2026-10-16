@@ -88,7 +88,10 @@ assert_eq "$(jq -c .always_on <<<"$REC")" "[\"$ADDON\"]" "result record lists th
 assert_eq "$(jq -r .tested <<<"$REC")" 6 "result: add-on not tested"
 REPORT=$(wpcli culprit-finder result --format=report)
 assert_contains "$REPORT" "(Culprit Finder add-ons kept on: CFF Add-on 1.0.0)" "report: add-on kept on"
-assert_not_contains "$REPORT" "CFF Intruder" "report: intruder not kept on"
+assert_not_contains "$(sed '/^Steps (/,$d' <<<"$REPORT")" "CFF Intruder" "report: intruder not kept on"
+STEPS=$(sed -n '/^Steps (/,/^$/p' <<<"$REPORT")
+assert_contains "$(grep '^1\. Baseline' <<<"$STEPS")" "CFF Intruder 1.0.0" "report steps: intruder was tested (off in the baseline)"
+assert_not_contains "$STEPS" "CFF Add-on" "report steps: the add-on is never off"
 RID=$(jq -r .id <<<"$REC")
 DETAIL=$(fetch "$JAR" "$TOOLS&tab=results&result=$RID&culprit_safe=1")
 assert_contains "$DETAIL" "<dt>Add-ons kept on</dt><dd>CFF Add-on 1.0.0</dd>" "result page: add-on row"

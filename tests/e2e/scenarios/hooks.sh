@@ -37,7 +37,7 @@ assert_eq "$(jq -r .has_user_id <<<"$D")" false "result_found: no user id"
 mode section
 REPORT=$(wpcli culprit-finder result --format=report)
 assert_contains "$REPORT" "CFF-SPY-SECTION" "report_sections: added section is in the report"
-assert_eq "$(last report_sections | jq -c .sections)" '["result","environment","footer"]' "report_sections: documented sections"
+assert_eq "$(last report_sections | jq -c .sections)" '["result","environment","steps","footer"]' "report_sections: documented sections (steps since 0.3.1)"
 assert_eq "$(last report_sections | jq -r .has_user_id)" false "report_sections: no user id"
 mode ''
 
