@@ -125,6 +125,7 @@ Culprit Finder stays free and fully functional without it, and your settings and
 = 0.3.1 =
 * Reports now list every step that was tested and your answer, so others can reproduce the result.
 * More automated tests for AJAX, REST and form requests during troubleshooting.
+* Fixed: REST API responses during troubleshooting could be cached.
 
 = 0.3.0 =
 * New: a Pro tab explaining Culprit Finder Pro. Tips can be hidden with one click.
