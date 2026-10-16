@@ -168,6 +168,11 @@
 .culprit-finder .cf-env dl { margin: 0; display: grid; grid-template-columns: minmax(140px, max-content) minmax(0, 1fr); border: 1px solid #f0f0f1; border-radius: 4px; overflow: hidden; }
 .culprit-finder .cf-env dt { padding: 8px 12px; background: #f6f7f7; color: var(--cf-muted); border-bottom: 1px solid #fff; }
 .culprit-finder .cf-env dd { margin: 0; padding: 8px 12px; border-bottom: 1px solid #f6f7f7; min-width: 0; }
+.culprit-finder .cf-steps { margin: 16px 0 0; }
+.culprit-finder .cf-steps summary { cursor: pointer; font-weight: 600; font-size: 15px; }
+.culprit-finder .cf-steps__list { margin: 8px 0 0 1.6em; }
+.culprit-finder .cf-steps__list li { margin: 0 0 6px; overflow-wrap: anywhere; }
+.culprit-finder .cf-steps__answer { font-weight: 600; }
 .culprit-finder .cf-report-actions .cf-push-right { margin-left: auto; }
 .culprit-finder .cf-plain summary { cursor: pointer; font-weight: 600; font-size: 13px; }
 .culprit-finder pre.cf-report__text { margin: 8px 0 0; padding: 12px; border: 1px solid var(--cf-line); border-radius: 4px; white-space: pre-wrap; overflow-x: auto; }

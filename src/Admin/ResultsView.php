@@ -7,6 +7,7 @@
 
 namespace CulpritFinder\Admin;
 
+use CulpritFinder\Engine\Engine;
 use CulpritFinder\Hooks;
 use CulpritFinder\Plugin;
 use CulpritFinder\Report\Builder;
@@ -172,6 +173,7 @@ final class ResultsView {
 			echo '<dt>' . esc_html( $label ) . '</dt><dd>' . esc_html( $value ) . '</dd>';
 		}
 		echo '</dl></div>';
+		$this->render_steps( $record );
 
 		echo '<div class="cf-secondary cf-report-actions">';
 		echo '<button type="button" class="button cf-button cf-button--primary culprit-finder-copy" data-target="culprit-finder-report" data-done="' . esc_attr__( 'Copied!', 'culprit-finder' ) . '" hidden>' . esc_html__( 'Copy for forum', 'culprit-finder' ) . '</button>';
@@ -201,6 +203,60 @@ final class ResultsView {
 		echo '<pre id="culprit-finder-report" class="cf-report__text">' . esc_html( $report ) . '</pre></details>';
 		echo '</section>';
 		$this->plugin->pro_discovery()->render_result_card();
+	}
+
+	/**
+	 * Every answered step, collapsed (ADR-0028). Nothing for results that can't be replayed.
+	 *
+	 * @param array $record Result record.
+	 */
+	private function render_steps( array $record ) {
+		$steps = Builder::steps( $record );
+		if ( ! $steps ) {
+			return;
+		}
+		echo '<details class="cf-steps"><summary>' . esc_html(
+			sprintf(
+				/* translators: %d: number of steps */
+				__( 'Steps tested (%d)', 'culprit-finder' ),
+				count( $steps )
+			)
+		) . '</summary>';
+		echo '<p class="cf-help">' . esc_html__( 'Each step in order: which plugins were off for you, and your answer. Anyone can repeat these steps to check the result.', 'culprit-finder' ) . '</p><ol class="cf-steps__list">';
+		foreach ( $steps as $step ) {
+			$off = array();
+			foreach ( $step['off'] as $basename ) {
+				$off[] = Builder::step_label( $basename, $record );
+			}
+			echo '<li><strong>' . esc_html( self::phase_label( $step['phase'] ) ) . '</strong> · ';
+			echo esc_html(
+				$off
+					/* translators: %s: list of plugin names */
+					? sprintf( __( 'Off: %s', 'culprit-finder' ), implode( ', ', $off ) )
+					: __( 'Off: none, all plugins on', 'culprit-finder' )
+			) . ' · ';
+			echo '<span class="cf-steps__answer">' . esc_html( $step['answer'] ? __( 'Problem still there', 'culprit-finder' ) : __( 'Problem gone', 'culprit-finder' ) ) . '</span></li>';
+		}
+		echo '</ol></details>';
+	}
+
+	/**
+	 * Plain words for an engine phase, translated.
+	 *
+	 * @param string $phase Engine phase.
+	 * @return string
+	 */
+	private static function phase_label( $phase ) {
+		switch ( $phase ) {
+			case Engine::PHASE_BASELINE:
+				return __( 'Baseline', 'culprit-finder' );
+			case Engine::PHASE_FIND_FIRST:
+				return __( 'Find first', 'culprit-finder' );
+			case Engine::PHASE_FIND_PARTNER:
+				return __( 'Pair search', 'culprit-finder' );
+			default:
+				return __( 'Confirm', 'culprit-finder' );
+		}
 	}
 
 	/**

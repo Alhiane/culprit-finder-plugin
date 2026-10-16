@@ -8,8 +8,10 @@
 #                                                   and each placement is on exactly the expected screens
 # A user who hid the tips gets one "Pro tips are hidden. Show them again" line on the Help tab, so the
 # hidden mode strips tagged placements before its diff, exactly as the default mode does.
-# The setup screen was re-baselined on purpose in 0.3.0 for its two-column layout (ADR-0026); every
-# other screen's baseline is unchanged since 0.2.0.
+# The setup screen was re-baselined on purpose in 0.3.0 for its two-column layout (ADR-0026). In 0.3.1
+# result-current and result-detail were re-baselined on purpose for the Steps section (ADR-0028): the
+# only change is the added collapsed "Steps tested" list and the Steps block in the plain-text report.
+# Every other screen's baseline is unchanged since 0.2.0.
 source "$(dirname "$0")/../lib.sh"
 TIP_ATTR=data-culprit-finder-pro-tip
 cleanup() {
