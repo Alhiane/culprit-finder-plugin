@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Culprit Finder Loader
  * Description: Lets Culprit Finder switch plugins off for one admin's browser session only. Deleting this file ends any troubleshooting session.
- * Version: 0.2.0
+ * Version: 0.3.1
  * License: GPLv2 or later
  *
  * Marker: culprit-finder-loader-marker (deactivating Culprit Finder deletes this file only when this line is present).
@@ -26,7 +26,7 @@ define( 'CULPRIT_FINDER_LOADER_FILE', __FILE__ );
  */
 final class Culprit_Finder_Loader {
 
-	const VERSION    = '0.2.0';
+	const VERSION    = '0.3.1';
 	const COOKIE     = 'wp-culprit-finder';
 	const OPTION     = 'culprit_finder_session';
 	const SAFE_ARG   = 'culprit_safe';
@@ -106,6 +106,7 @@ final class Culprit_Finder_Loader {
 				define( 'DONOTCACHEPAGE', true ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound -- standard page-cache constant (ADR-0007).
 			}
 			add_action( 'send_headers', 'nocache_headers' );
+			add_filter( 'rest_send_nocache_headers', array( __CLASS__, 'no_cache' ), PHP_INT_MAX );
 		} catch ( \Throwable $e ) {
 			self::$session = null;
 		}
@@ -135,6 +136,16 @@ final class Culprit_Finder_Loader {
 	 */
 	public static function block_write( $new_value, $old_value ) {
 		return $old_value;
+	}
+
+	/**
+	 * `rest_send_nocache_headers`: a filtered REST response is never cacheable, even when core
+	 * treats the request as logged out (cookie authentication without a REST nonce).
+	 *
+	 * @return bool
+	 */
+	public static function no_cache() {
+		return true;
 	}
 
 	/**

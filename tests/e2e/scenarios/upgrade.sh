@@ -41,6 +41,6 @@ wpcli culprit-finder exit >/dev/null
 # An outdated loader left from 0.1.0 is replaced at Start (is_current/md5 path).
 printf '%s\n' "$OLD" | wpcli eval 'file_put_contents( WPMU_PLUGIN_DIR . "/culprit-finder-loader.php", stream_get_contents( STDIN ) );' >/dev/null
 start_session
-assert_contains "$(wpcli eval 'echo file_get_contents( WPMU_PLUGIN_DIR . "/culprit-finder-loader.php" );')" "const VERSION    = '0.2.0';" "Start replaces the outdated loader"
+assert_contains "$(wpcli eval 'echo file_get_contents( WPMU_PLUGIN_DIR . "/culprit-finder-loader.php" );')" "$(grep -m1 -F 'const VERSION' "$ROOT/mu-loader/culprit-finder-loader.php")" "Start replaces the outdated loader"
 wpcli culprit-finder exit >/dev/null
 assert_eq "$(wpcli option get active_plugins --format=json)" "$BEFORE" "AC-2 active_plugins unchanged"
