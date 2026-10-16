@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Culprit Finder 0.3.0\n"
+"Project-Id-Version: Culprit Finder 0.3.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/culprit-finder\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-10T20:52:43+00:00\n"
+"POT-Creation-Date: 2026-10-16T10:45:35+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: culprit-finder\n"
@@ -66,7 +66,7 @@ msgid "No, it’s gone"
 msgstr ""
 
 #: src/Admin/AdminBar.php:99
-#: src/Admin/ResultsView.php:217
+#: src/Admin/ResultsView.php:273
 #: src/Admin/TroubleshootView.php:376
 #: src/Admin/TroubleshootView.php:435
 msgid "Undo last answer"
@@ -178,7 +178,7 @@ msgid "Invalid answer."
 msgstr ""
 
 #: src/Admin/Handlers.php:144
-#: src/Admin/ResultsView.php:55
+#: src/Admin/ResultsView.php:56
 msgid "That result no longer exists."
 msgstr ""
 
@@ -557,207 +557,251 @@ msgstr ""
 msgid "Show them again"
 msgstr ""
 
-#: src/Admin/ResultsView.php:66
+#: src/Admin/ResultsView.php:67
 msgid "No results yet"
 msgstr ""
 
-#: src/Admin/ResultsView.php:67
+#: src/Admin/ResultsView.php:68
 msgid "When a search finishes, its result and report appear here."
 msgstr ""
 
-#: src/Admin/ResultsView.php:68
+#: src/Admin/ResultsView.php:69
 #: src/Admin/TroubleshootView.php:244
 msgid "Start troubleshooting"
 msgstr ""
 
 #. translators: %d: maximum number of results kept
-#: src/Admin/ResultsView.php:75
+#: src/Admin/ResultsView.php:76
 #, php-format
 msgid "Your last %d results are kept on this site only. Nothing is sent anywhere."
 msgstr ""
 
-#: src/Admin/ResultsView.php:79
+#: src/Admin/ResultsView.php:80
 msgid "Clear all"
 msgstr ""
 
-#: src/Admin/ResultsView.php:82
+#: src/Admin/ResultsView.php:83
 msgid "Date"
 msgstr ""
 
-#: src/Admin/ResultsView.php:83
-#: src/Admin/ResultsView.php:135
+#: src/Admin/ResultsView.php:84
+#: src/Admin/ResultsView.php:136
 msgid "Result"
 msgstr ""
 
-#: src/Admin/ResultsView.php:84
+#: src/Admin/ResultsView.php:85
 msgid "Plugins"
 msgstr ""
 
-#: src/Admin/ResultsView.php:85
+#: src/Admin/ResultsView.php:86
 msgid "Answers"
 msgstr ""
 
-#: src/Admin/ResultsView.php:86
+#: src/Admin/ResultsView.php:87
 msgid "Actions"
 msgstr ""
 
-#: src/Admin/ResultsView.php:103
+#: src/Admin/ResultsView.php:104
 msgid "Download"
 msgstr ""
 
-#: src/Admin/ResultsView.php:104
-#: src/Admin/ResultsView.php:197
+#: src/Admin/ResultsView.php:105
+#: src/Admin/ResultsView.php:199
 msgid "Delete"
 msgstr ""
 
-#: src/Admin/ResultsView.php:124
+#: src/Admin/ResultsView.php:125
 msgid "← All results"
 msgstr ""
 
 #. translators: 1: "Found it" or "Result", 2: number of answers, 3: date
-#: src/Admin/ResultsView.php:134
+#: src/Admin/ResultsView.php:135
 #, php-format
 msgid "%1$s · %2$d answer · %3$s"
 msgid_plural "%1$s · %2$d answers · %3$s"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Admin/ResultsView.php:135
+#: src/Admin/ResultsView.php:136
 msgid "Found it"
 msgstr ""
 
-#: src/Admin/ResultsView.php:147
+#: src/Admin/ResultsView.php:148
 msgid "Environment"
 msgstr ""
 
-#: src/Admin/ResultsView.php:156
+#: src/Admin/ResultsView.php:157
 msgid "WordPress"
 msgstr ""
 
-#: src/Admin/ResultsView.php:157
+#: src/Admin/ResultsView.php:158
 msgid "PHP"
 msgstr ""
 
-#: src/Admin/ResultsView.php:158
+#: src/Admin/ResultsView.php:159
 msgid "Theme"
 msgstr ""
 
-#: src/Admin/ResultsView.php:159
+#: src/Admin/ResultsView.php:160
 msgid "Plugins tested"
 msgstr ""
 
-#: src/Admin/ResultsView.php:160
+#: src/Admin/ResultsView.php:161
 msgid "Kept on"
 msgstr ""
 
-#: src/Admin/ResultsView.php:160
+#: src/Admin/ResultsView.php:161
 msgid "None"
 msgstr ""
 
-#: src/Admin/ResultsView.php:167
+#: src/Admin/ResultsView.php:168
 msgid "Add-ons kept on"
 msgstr ""
 
-#: src/Admin/ResultsView.php:169
+#: src/Admin/ResultsView.php:170
 msgid "Not tested"
 msgstr ""
 
-#: src/Admin/ResultsView.php:169
+#: src/Admin/ResultsView.php:170
 msgid "Must-use plugins, drop-ins, theme"
 msgstr ""
 
-#: src/Admin/ResultsView.php:170
+#: src/Admin/ResultsView.php:171
 msgid "Multisite"
 msgstr ""
 
-#: src/Admin/ResultsView.php:170
+#: src/Admin/ResultsView.php:171
 msgid "Yes"
 msgstr ""
 
-#: src/Admin/ResultsView.php:170
+#: src/Admin/ResultsView.php:171
 msgid "No"
 msgstr ""
 
-#: src/Admin/ResultsView.php:177
+#: src/Admin/ResultsView.php:179
 msgid "Copied!"
 msgstr ""
 
-#: src/Admin/ResultsView.php:177
+#: src/Admin/ResultsView.php:179
 msgid "Copy for forum"
 msgstr ""
 
-#: src/Admin/ResultsView.php:186
+#: src/Admin/ResultsView.php:188
 msgid "Download .md"
 msgstr ""
 
-#: src/Admin/ResultsView.php:195
+#: src/Admin/ResultsView.php:197
 msgid "Download .txt"
 msgstr ""
 
-#: src/Admin/ResultsView.php:199
+#: src/Admin/ResultsView.php:201
 msgid "Safe to share publicly: no site address, user names or emails."
 msgstr ""
 
-#: src/Admin/ResultsView.php:200
+#: src/Admin/ResultsView.php:202
 msgid "Show plain text"
 msgstr ""
 
-#: src/Admin/ResultsView.php:214
+#. translators: %d: number of steps
+#: src/Admin/ResultsView.php:221
+#, php-format
+msgid "Steps tested (%d)"
+msgstr ""
+
+#: src/Admin/ResultsView.php:225
+msgid "Each step in order: which plugins were off for you, and your answer. Anyone can repeat these steps to check the result."
+msgstr ""
+
+#. translators: %s: list of plugin names
+#: src/Admin/ResultsView.php:235
+#, php-format
+msgid "Off: %s"
+msgstr ""
+
+#: src/Admin/ResultsView.php:236
+msgid "Off: none, all plugins on"
+msgstr ""
+
+#: src/Admin/ResultsView.php:238
+msgid "Problem still there"
+msgstr ""
+
+#: src/Admin/ResultsView.php:238
+msgid "Problem gone"
+msgstr ""
+
+#: src/Admin/ResultsView.php:252
+msgid "Baseline"
+msgstr ""
+
+#: src/Admin/ResultsView.php:254
+msgid "Find first"
+msgstr ""
+
+#: src/Admin/ResultsView.php:256
+msgid "Pair search"
+msgstr ""
+
+#: src/Admin/ResultsView.php:258
+msgid "Confirm"
+msgstr ""
+
+#: src/Admin/ResultsView.php:270
 msgid "This is the result of your current session."
 msgstr ""
 
-#: src/Admin/ResultsView.php:214
+#: src/Admin/ResultsView.php:270
 msgid "Your site is back to normal for you while you read it."
 msgstr ""
 
-#: src/Admin/ResultsView.php:216
+#: src/Admin/ResultsView.php:272
 #: src/Admin/TroubleshootView.php:436
 msgid "Done, exit"
 msgstr ""
 
-#: src/Admin/ResultsView.php:229
+#: src/Admin/ResultsView.php:285
 msgid "Run again"
 msgstr ""
 
-#: src/Admin/ResultsView.php:231
+#: src/Admin/ResultsView.php:287
 msgid "Run again starts a new session with a new emergency exit link. Bookmark it first:"
 msgstr ""
 
 #. translators: %s: plugin author
-#: src/Admin/ResultsView.php:270
+#: src/Admin/ResultsView.php:326
 #, php-format
 msgid "By %s"
 msgstr ""
 
-#: src/Admin/ResultsView.php:273
+#: src/Admin/ResultsView.php:329
 msgid "Plugin website"
 msgstr ""
 
 #. translators: %s: list of plugin names
-#: src/Admin/ResultsView.php:284
+#: src/Admin/ResultsView.php:340
 #, php-format
 msgid "Tested together with its required plugins: %s"
 msgstr ""
 
-#: src/Admin/ResultsView.php:288
+#: src/Admin/ResultsView.php:344
 msgid "What you can do next"
 msgstr ""
 
 #. translators: %s: Plugins screen URL
-#: src/Admin/ResultsView.php:290
+#: src/Admin/ResultsView.php:346
 #, php-format
 msgid "Check for an update on the <a href=\"%s\">Plugins screen</a> (after you exit)."
 msgstr ""
 
-#: src/Admin/ResultsView.php:291
+#: src/Admin/ResultsView.php:347
 msgid "Send this report to the plugin’s support forum."
 msgstr ""
 
-#: src/Admin/ResultsView.php:292
+#: src/Admin/ResultsView.php:348
 msgid "If you can live without it, deactivate it for everyone from the Plugins screen."
 msgstr ""
 
-#: src/Admin/ResultsView.php:319
+#: src/Admin/ResultsView.php:375
 msgid "None of the plugins tested"
 msgstr ""
 

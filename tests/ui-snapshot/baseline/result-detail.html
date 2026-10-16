@@ -54,6 +54,24 @@
 <dd>No</dd>
 </dl>
 </div>
+<details class="cf-steps">
+<summary>Steps tested (4)</summary>
+<p class="cf-help">Each step in order: which plugins were off for you, and your answer. Anyone can repeat these steps to check the result.</p>
+<ol class="cf-steps__list">
+<li>
+<strong>Baseline</strong> · Off: CFF Noise 02 1.0.0, CFF Noise 03 1.0.0, CFF Noise 04 1.0.0, CFF Solo 1.0.0 · <span class="cf-steps__answer">Problem gone</span>
+</li>
+<li>
+<strong>Find first</strong> · Off: CFF Noise 04 1.0.0, CFF Solo 1.0.0 · <span class="cf-steps__answer">Problem gone</span>
+</li>
+<li>
+<strong>Find first</strong> · Off: CFF Solo 1.0.0 · <span class="cf-steps__answer">Problem gone</span>
+</li>
+<li>
+<strong>Confirm</strong> · Off: CFF Noise 02 1.0.0, CFF Noise 03 1.0.0, CFF Noise 04 1.0.0 · <span class="cf-steps__answer">Problem still there</span>
+</li>
+</ol>
+</details>
 <div class="cf-secondary cf-report-actions">
 <button type="button" class="button cf-button cf-button--primary culprit-finder-copy" data-target="culprit-finder-report" data-done="Copied!" hidden>Copy for forum</button>
 <a class="button" href="http://localhost:8888/wp-admin/admin-post.php?action=culprit_finder_download&#038;culprit_safe=1&#038;result=ID&#038;format=md&#038;_wpnonce=N">Download .md</a>
@@ -73,6 +91,12 @@ Environment
 - Plugins tested: 4 (kept on: CFF Noise 01 1.0.0)
 - Not tested: must-use plugins, drop-ins, theme
 - Multisite: no
+
+Steps (each answer, replayed in order)
+1. Baseline. Off: CFF Noise 02 1.0.0, CFF Noise 03 1.0.0, CFF Noise 04 1.0.0, CFF Solo 1.0.0 (4 plugins). Answer: problem gone
+2. Find first. Off: CFF Noise 04 1.0.0, CFF Solo 1.0.0 (2 plugins). Answer: problem gone
+3. Find first. Off: CFF Solo 1.0.0 (1 plugin). Answer: problem gone
+4. Confirm. Off: CFF Noise 02 1.0.0, CFF Noise 03 1.0.0, CFF Noise 04 1.0.0 (3 plugins). Answer: problem still there
 
 Found in 4 answers on 2026-09-21 (UTC).
 </pre>

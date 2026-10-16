@@ -41,6 +41,8 @@ final class LoaderBootTest extends TestCase {
 
 		$this->assertTrue( \Culprit_Finder_Loader::is_filtering(), 'boot() must run when the file is included.' );
 		$this->assertSame( array( 'culprit-finder/culprit-finder.php' ), \Culprit_Finder_Loader::filter_active_plugins( array( 'a/a.php', 'culprit-finder/culprit-finder.php' ) ) );
+		$this->assertSame( array( array( 'Culprit_Finder_Loader', 'no_cache' ) ), $GLOBALS['cf_stub_filters']['rest_send_nocache_headers'], 'filtered REST responses send no-cache headers' );
+		$this->assertTrue( \Culprit_Finder_Loader::no_cache() );
 	}
 
 	public function test_second_include_is_a_no_op(): void {

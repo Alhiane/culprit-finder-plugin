@@ -60,7 +60,40 @@ final class Collector {
 		if ( $always ) {
 			$record['always_on'] = $always;
 		}
+		$record['replay'] = self::replay( $session, $engine, $step );
 		return $record;
+	}
+
+	/**
+	 * The engine inputs that replay the search step by step for the report's Steps section
+	 * (ADR-0028): the same snapshot, kept-on list, dependencies and answers the session used, plus
+	 * the name and version of every suspect. No step list is stored; it is derived on display.
+	 *
+	 * @param array  $session Session.
+	 * @param Engine $engine  Engine.
+	 * @param Step   $step    Done step.
+	 * @return array{snapshot: string[], self: string, kept: string[], deps: array, answers: bool[], names: array}
+	 */
+	private static function replay( array $session, Engine $engine, Step $step ) {
+		if ( ! function_exists( 'get_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+		$headers = get_plugins();
+		$names   = array();
+		foreach ( $engine->suspects() as $basename ) {
+			$names[ $basename ] = array(
+				'name'    => ! empty( $headers[ $basename ]['Name'] ) ? $headers[ $basename ]['Name'] : $basename,
+				'version' => isset( $headers[ $basename ]['Version'] ) ? $headers[ $basename ]['Version'] : '',
+			);
+		}
+		return array(
+			'snapshot' => array_values( $session['snapshot'] ),
+			'self'     => $session['self'],
+			'kept'     => AddOns::kept( $session ),
+			'deps'     => $session['deps'],
+			'answers'  => array_map( 'boolval', array_slice( $session['answers'], 0, $step->answers_used() ) ),
+			'names'    => $names,
+		);
 	}
 
 	/**

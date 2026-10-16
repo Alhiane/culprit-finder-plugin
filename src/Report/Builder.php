@@ -7,6 +7,7 @@
 
 namespace CulpritFinder\Report;
 
+use CulpritFinder\Engine\Engine;
 use CulpritFinder\Engine\Result;
 
 defined( 'ABSPATH' ) || exit;
@@ -28,7 +29,8 @@ final class Builder {
 	}
 
 	/**
-	 * The report as ordered sections (`result`, `environment`, `footer`), each a block of lines.
+	 * The report as ordered sections (`result`, `environment`, `steps` when the record can be
+	 * replayed, `footer`), each a block of lines.
 	 * Add-ons change them through the `culprit_finder_report_sections` filter (ADR-0021).
 	 *
 	 * @param array $record Result record.
@@ -77,12 +79,119 @@ final class Builder {
 			'- Multisite: ' . ( ! empty( $env['multisite'] ) ? 'yes' : 'no' ),
 		);
 
-		$answers = (int) $record['answers'];
-		return array(
+		$answers  = (int) $record['answers'];
+		$sections = array(
 			'result'      => implode( "\n", $lines ),
 			'environment' => implode( "\n", $environment ),
-			'footer'      => 'Found in ' . $answers . ' ' . ( 1 === $answers ? 'answer' : 'answers' ) . ' on ' . gmdate( 'Y-m-d', (int) $record['finished_at'] ) . ' (UTC).',
 		);
+		$steps    = self::steps( $record );
+		if ( $steps ) {
+			$sections['steps'] = self::steps_text( $steps, $record );
+		}
+		$sections['footer'] = 'Found in ' . $answers . ' ' . ( 1 === $answers ? 'answer' : 'answers' ) . ' on ' . gmdate( 'Y-m-d', (int) $record['finished_at'] ) . ' (UTC).';
+		return $sections;
+	}
+
+	/**
+	 * Every answered step, rebuilt by replaying the stored answers through the engine (ADR-0028).
+	 *
+	 * Empty when the record has no replay inputs (results saved before 0.3.1), when they are
+	 * malformed, or when the replay does not end in exactly the stored result: nothing is guessed.
+	 *
+	 * @param array $record Result record.
+	 * @return array<int, array{question: int, phase: string, off: string[], answer: bool}>
+	 */
+	public static function steps( array $record ) {
+		$replay = isset( $record['replay'] ) && is_array( $record['replay'] ) ? $record['replay'] : array();
+		foreach ( array( 'snapshot', 'kept', 'deps', 'answers' ) as $key ) {
+			if ( ! isset( $replay[ $key ] ) || ! is_array( $replay[ $key ] ) ) {
+				return array();
+			}
+		}
+		if ( ! isset( $replay['self'] ) || ! is_string( $replay['self'] ) || count( $replay['answers'] ) !== (int) $record['answers'] ) {
+			return array();
+		}
+		$answers = array_values( $replay['answers'] );
+		try {
+			$engine = new Engine( $replay['snapshot'], $replay['self'], $replay['kept'], $replay['deps'] );
+			$steps  = array();
+			foreach ( $answers as $index => $answer ) {
+				$step = $engine->step( array_slice( $answers, 0, $index ) );
+				if ( $step->is_done() || $step->question() !== $index + 1 ) {
+					return array();
+				}
+				$steps[] = array(
+					'question' => $index + 1,
+					'phase'    => $step->phase(),
+					'off'      => $step->disabled(),
+					'answer'   => (bool) $answer,
+				);
+			}
+			$final = $engine->step( $answers );
+		} catch ( \InvalidArgumentException $e ) {
+			return array();
+		}
+		$result = $final->result();
+		if ( ! $final->is_done() || $final->answers_used() !== count( $answers ) || $result['type'] !== $record['result']['type'] || $result['culprits'] !== $record['result']['culprits'] ) {
+			return array();
+		}
+		return $steps;
+	}
+
+	/**
+	 * Plain words for an engine phase.
+	 *
+	 * @param string $phase Engine phase.
+	 * @return string
+	 */
+	public static function phase_label( $phase ) {
+		switch ( $phase ) {
+			case Engine::PHASE_BASELINE:
+				return 'Baseline';
+			case Engine::PHASE_FIND_FIRST:
+				return 'Find first';
+			case Engine::PHASE_FIND_PARTNER:
+				return 'Pair search';
+			default:
+				return 'Confirm';
+		}
+	}
+
+	/**
+	 * "Name Version" of a plugin in a step: the replay names first, then the result's plugin facts.
+	 *
+	 * @param string $basename Basename.
+	 * @param array  $record   Result record.
+	 * @return string
+	 */
+	public static function step_label( $basename, array $record ) {
+		if ( ! empty( $record['replay']['names'][ $basename ]['name'] ) ) {
+			$info = $record['replay']['names'][ $basename ];
+			return trim( $info['name'] . ' ' . ( isset( $info['version'] ) ? $info['version'] : '' ) );
+		}
+		return self::label( $basename, isset( $record['plugins'] ) ? $record['plugins'] : array() );
+	}
+
+	/**
+	 * The Steps section text.
+	 *
+	 * @param array $steps  From steps().
+	 * @param array $record Result record.
+	 * @return string
+	 */
+	private static function steps_text( array $steps, array $record ) {
+		$lines = array( 'Steps (each answer, replayed in order)' );
+		foreach ( $steps as $step ) {
+			$off = array();
+			foreach ( $step['off'] as $basename ) {
+				$off[] = self::step_label( $basename, $record );
+			}
+			$count   = count( $off );
+			$lines[] = $step['question'] . '. ' . self::phase_label( $step['phase'] ) . '. Off: '
+				. ( $off ? implode( ', ', $off ) . ' (' . $count . ' ' . ( 1 === $count ? 'plugin' : 'plugins' ) . ')' : 'none, all plugins on' )
+				. '. Answer: ' . ( $step['answer'] ? 'problem still there' : 'problem gone' );
+		}
+		return implode( "\n", $lines );
 	}
 
 	/**
