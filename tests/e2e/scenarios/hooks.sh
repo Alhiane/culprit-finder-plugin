@@ -44,8 +44,23 @@ mode ''
 # session_ended( reason, view ) for every reason.
 wpcli culprit-finder exit >/dev/null
 assert_eq "$(last session_ended | jq -r .reason)" exit "session_ended: exit"
-admin_cli start --pin="$SPY" >/dev/null; admin_cli start --pin="$SPY" >/dev/null
+JAR=$TMP/admin.jar; login "$JAR"
+start_session "$SPY"; OLD_TOKEN=$TOKEN; OLD_HASH=$(wpcli eval 'echo get_option( "culprit_finder_session" )["token_hash"];')
+add_token "$JAR" "$OLD_TOKEN"
+ENDED=$(count session_ended)
+mode block-save
+OUT=$(wpcli --user=admin culprit-finder start --pin="$SPY" 2>&1 || true)
+mode ''
+assert_contains "$OUT" "save the new session, so nothing changed" "takeover: a failed write is reported"
+assert_eq "$(wpcli eval 'echo get_option( "culprit_finder_session" )["token_hash"];')" "$OLD_HASH" "takeover: a failed write keeps the old session"
+assert_eq "$(count session_ended)" "$ENDED" "takeover: a failed write fires no session_ended"
+assert_eq "$(noise_count "$(fetch "$JAR" /)")" 0 "takeover: after a failed write the old owner is still filtered"
+admin_cli start --pin="$SPY" >/dev/null
 assert_eq "$(last session_ended | jq -r .reason)" replaced "session_ended: replaced"
+assert_eq "$(last session_ended | jq -r .stored_hash)" "$(wpcli eval 'echo get_option( "culprit_finder_session" )["token_hash"];')" "session_ended: replaced fires after the new session is stored"
+assert_eq "$(noise_count "$(fetch "$JAR" /)")" 4 "takeover: the old token gets the normal site on its next request"
+assert_contains "$(fetch "$JAR" /wp-admin/admin.php?page=culprit-finder)" "culprit-finder-replaced" "takeover: the old owner's browser gets the replaced notice"
+assert_not_contains "$(fetch "$JAR" /wp-admin/admin.php?page=culprit-finder)" "culprit-finder-replaced" "takeover: the replaced notice shows once"
 wpcli eval '$s = get_option( "culprit_finder_session" ); $s["expires_at"] = time() - 1; update_option( "culprit_finder_session", $s, false );' >/dev/null
 wpcli culprit-finder status >/dev/null 2>&1 || true
 assert_eq "$(last session_ended | jq -r .reason)" expired "session_ended: expired"

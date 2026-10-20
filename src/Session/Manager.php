@@ -97,7 +97,9 @@ final class Manager {
 
 	/**
 	 * Start a new session, replacing any existing one (ADR-0002). This user action is the only time the
-	 * loader is written into mu-plugins (ADR-0023).
+	 * loader is written into mu-plugins (ADR-0023). The new session replaces the old one in a single
+	 * option write, so the old token stops working exactly when the new one starts; `replaced` fires
+	 * only after that write succeeded.
 	 *
 	 * @param int         $user_id      Session owner.
 	 * @param string[]    $pinned       Requested keep-on basenames (validated against the snapshot).
@@ -116,9 +118,7 @@ final class Manager {
 		}
 
 		$previous = $this->store->session();
-		if ( null !== $previous && self::is_valid( $previous ) ) {
-			Hooks::action( 'culprit_finder_session_ended', 'replaced', View::of( $previous ) );
-		}
+		$previous = null !== $previous && self::is_valid( $previous ) ? $previous : null;
 
 		$always = $this->always_on( $snapshot );
 		$pinned = array_values( array_diff( array_intersect( $snapshot, $pinned ), array( $this->self ), $always ) );
@@ -148,7 +148,16 @@ final class Manager {
 			'problem_url'   => (string) $problem_url,
 			'always_on'     => $always,
 		);
-		$this->store->save_session( $session );
+		if ( ! $this->store->save_session( $session ) ) {
+			if ( null === $previous ) {
+				LoaderInstaller::remove();
+			}
+			return new WP_Error( 'culprit_finder_not_saved', __( 'Culprit Finder couldn’t save the new session, so nothing changed. Any session that was running is still running. Please try again.', 'culprit-finder' ) );
+		}
+		if ( null !== $previous ) {
+			$this->remember_replaced( $previous, $now );
+			Hooks::action( 'culprit_finder_session_ended', 'replaced', View::of( $previous ) );
+		}
 		Hooks::action( 'culprit_finder_session_started', View::of( $session ), $step->to_array() );
 		if ( $step->is_done() ) {
 			$this->record_result( $session, $engine, $step );
@@ -160,6 +169,22 @@ final class Manager {
 			'session'      => $session,
 			'step'         => $step,
 		);
+	}
+
+	/**
+	 * Remember a replaced session so its owner sees a one-time notice in the browser it ran in.
+	 *
+	 * @param array $previous Replaced session.
+	 * @param int   $now      Time of the replacement.
+	 */
+	private function remember_replaced( array $previous, $now ) {
+		$last                     = (array) $this->store->last_result();
+		$last['session_replaced'] = array(
+			'user_id'    => (int) $previous['user_id'],
+			'created_at' => (int) $previous['created_at'],
+			'at'         => (int) $now,
+		);
+		$this->store->save_last_result( $last );
 	}
 
 	/**

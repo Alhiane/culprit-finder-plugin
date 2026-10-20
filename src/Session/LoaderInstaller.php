@@ -82,9 +82,7 @@ final class LoaderInstaller {
 			return self::PROBLEM_FOREIGN;
 		}
 		$dir      = WPMU_PLUGIN_DIR;
-		$writable = file_exists( self::target() )
-			? wp_is_writable( self::target() )
-			: ( is_dir( $dir ) ? wp_is_writable( $dir ) : wp_is_writable( dirname( $dir ) ) );
+		$writable = is_dir( $dir ) ? wp_is_writable( $dir ) : wp_is_writable( dirname( $dir ) );
 		return $writable ? '' : self::PROBLEM_UNWRITABLE;
 	}
 
@@ -105,8 +103,18 @@ final class LoaderInstaller {
 	}
 
 	/**
-	 * Copy and verify; record or clear the error for the Culprit Finder page. Never replaces a file
-	 * that isn't ours.
+	 * Temporary copy next to the target. Not a .php file, so WordPress never loads it half-written.
+	 *
+	 * @return string
+	 */
+	public static function temp() {
+		return self::target() . '.tmp';
+	}
+
+	/**
+	 * Copy to a temporary file, verify, then rename it over the target in one step, so a crash never
+	 * leaves a half-written loader in mu-plugins. Record or clear the error for the Culprit Finder
+	 * page. Never replaces a file that isn't ours.
 	 *
 	 * @return bool
 	 */
@@ -114,9 +122,12 @@ final class LoaderInstaller {
 		if ( file_exists( self::target() ) && ! self::is_ours() ) {
 			return false;
 		}
-		$ok = wp_mkdir_p( WPMU_PLUGIN_DIR )
-			&& @copy( self::source(), self::target() ) // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- failure is reported on the Culprit Finder page.
-			&& md5_file( self::source() ) === md5_file( self::target() );
+		$temp = self::temp();
+		$ok   = wp_mkdir_p( WPMU_PLUGIN_DIR )
+			&& @copy( self::source(), $temp ) // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- failure is reported on the Culprit Finder page.
+			&& md5_file( self::source() ) === md5_file( $temp )
+			&& @rename( $temp, self::target() ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions.rename_rename -- atomic swap in the same folder; failure is reported on the Culprit Finder page.
+		self::remove_temp();
 		if ( $ok ) {
 			delete_option( Store::LOADER_ERROR );
 			return true;
@@ -139,6 +150,16 @@ final class LoaderInstaller {
 	public static function remove() {
 		if ( self::is_ours() ) {
 			wp_delete_file( self::target() );
+		}
+		self::remove_temp();
+	}
+
+	/**
+	 * Delete a temporary copy left by an interrupted install.
+	 */
+	private static function remove_temp() {
+		if ( is_file( self::temp() ) ) {
+			wp_delete_file( self::temp() );
 		}
 	}
 }

@@ -3,7 +3,7 @@
 source "$(dirname "$0")/../lib.sh"
 LOADER=wp-content/mu-plugins/culprit-finder-loader.php
 loader_state() { wpcli eval '$f = WPMU_PLUGIN_DIR . "/culprit-finder-loader.php"; if ( ! file_exists( $f ) ) { echo "absent"; } elseif ( false !== strpos( file_get_contents( $f ), "culprit-finder-loader-marker" ) ) { echo "ours"; } else { echo "foreign:" . md5_file( $f ); }'; }
-trap 'wpcli eval "@unlink( WPMU_PLUGIN_DIR . \"/culprit-finder-loader.php\" );" >/dev/null 2>&1; wpcli plugin activate culprit-finder >/dev/null 2>&1 || true' EXIT
+trap 'wpcli eval "@unlink( WPMU_PLUGIN_DIR . \"/culprit-finder-loader.php\" ); @unlink( WPMU_PLUGIN_DIR . \"/culprit-finder-loader.php.tmp\" );" >/dev/null 2>&1; wpcli plugin activate culprit-finder >/dev/null 2>&1 || true' EXIT
 
 BEFORE=$(reset_site $(noise 1 4) cff-fixtures/cff-solo)
 assert_eq "$(loader_state)" absent "activation writes nothing to mu-plugins"
@@ -33,6 +33,15 @@ start_session
 wpcli plugin deactivate culprit-finder >/dev/null
 assert_eq "$(loader_state)" absent "deactivation removes the loader"
 wpcli plugin activate culprit-finder >/dev/null
+
+# A temporary copy left by an interrupted install is never loaded, and the next Start cleans it up.
+wpcli eval 'file_put_contents( WPMU_PLUGIN_DIR . "/culprit-finder-loader.php.tmp", "<?php half-written(" );' >/dev/null
+assert_eq "$(code - /)" 200 "a leftover temporary copy does not break the site"
+start_session
+assert_eq "$(loader_state)" ours "Start installs the loader next to a leftover temporary copy"
+assert_eq "$(wpcli eval 'echo md5_file( WPMU_PLUGIN_DIR . "/culprit-finder-loader.php" ) === md5_file( WP_PLUGIN_DIR . "/culprit-finder/mu-loader/culprit-finder-loader.php" ) ? "same" : "different";')" same "the installed loader is a complete copy"
+assert_eq "$(wpcli eval 'echo file_exists( WPMU_PLUGIN_DIR . "/culprit-finder-loader.php.tmp" ) ? "left" : "gone";')" gone "Start removes the temporary copy"
+wpcli culprit-finder exit >/dev/null
 
 # A different file with the same name is never overwritten or deleted.
 wpcli eval 'file_put_contents( WPMU_PLUGIN_DIR . "/culprit-finder-loader.php", "<?php\n// Someone else'"'"'s must-use plugin.\n" );' >/dev/null

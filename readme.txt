@@ -4,7 +4,7 @@ Tags: troubleshooting, plugin conflict, debug, critical error, white screen
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.3.1
+Stable tag: 0.3.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -122,6 +122,11 @@ Culprit Finder stays free and fully functional without it, and your settings and
 
 == Changelog ==
 
+= 0.3.2 =
+* Starting a new session while another one runs is now all-or-nothing: if saving the new session fails, the running session keeps going and add-ons are not told it ended.
+* The helper file in wp-content/mu-plugins is now written in one step, so an interrupted Start can never leave a half-written file.
+* New: when your session is replaced by another one, you see a one-time notice next time you open Culprit Finder in that browser.
+
 = 0.3.1 =
 * Reports now list every step that was tested and your answer, so others can reproduce the result.
 * More automated tests for AJAX, REST and form requests during troubleshooting.
@@ -141,6 +146,9 @@ Culprit Finder stays free and fully functional without it, and your settings and
 * First release: switch plugins off for your browser only, find the plugin (or the two plugins) behind a problem, keep plugins on, respect plugin dependencies, answer from the page, the toolbar or the dashboard widget, results history with .md and .txt downloads, and a WP-CLI command.
 
 == Upgrade Notice ==
+
+= 0.3.2 =
+Safer session takeover and helper file install. Troubleshooting works exactly as before.
 
 = 0.3.1 =
 Reports now list every step that was tested and your answer. Troubleshooting works exactly as before.
