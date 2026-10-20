@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Culprit Finder 0.3.1\n"
+"Project-Id-Version: Culprit Finder 0.3.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/culprit-finder\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-16T10:45:35+00:00\n"
+"POT-Creation-Date: 2026-10-20T11:53:37+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: culprit-finder\n"
@@ -348,75 +348,81 @@ msgstr ""
 msgid "Your troubleshooting session expired after an hour without answers and was ended. The site is back to normal for you."
 msgstr ""
 
-#: src/Admin/Page.php:339
+#. translators: 1: time the session started, 2: time it was replaced
+#: src/Admin/Page.php:313
+#, php-format
+msgid "Your troubleshooting session from %1$s was replaced by a new session at %2$s. It ended cleanly: the site is back to normal for you, and the new session only affects the browser that started it."
+msgstr ""
+
+#: src/Admin/Page.php:360
 msgid "One plugin causes the problem"
 msgstr ""
 
-#: src/Admin/Page.php:341
+#: src/Admin/Page.php:362
 msgid "Two plugins conflict with each other"
 msgstr ""
 
-#: src/Admin/Page.php:343
+#: src/Admin/Page.php:364
 msgid "Three or more plugins are involved"
 msgstr ""
 
-#: src/Admin/Page.php:345
+#: src/Admin/Page.php:366
 msgid "It’s not one of the plugins tested"
 msgstr ""
 
-#: src/Admin/Page.php:347
+#: src/Admin/Page.php:368
 msgid "There was nothing to test"
 msgstr ""
 
-#: src/Admin/Page.php:349
+#: src/Admin/Page.php:370
 msgid "The answers didn’t add up"
 msgstr ""
 
-#: src/Admin/Page.php:362
+#: src/Admin/Page.php:383
 msgid "One plugin"
 msgstr ""
 
-#: src/Admin/Page.php:364
+#: src/Admin/Page.php:385
 msgid "Two plugins conflict"
 msgstr ""
 
-#: src/Admin/Page.php:366
+#: src/Admin/Page.php:387
 msgid "Three or more plugins"
 msgstr ""
 
-#: src/Admin/Page.php:368
+#: src/Admin/Page.php:389
 msgid "Not a plugin"
 msgstr ""
 
-#: src/Admin/Page.php:370
+#: src/Admin/Page.php:391
 msgid "Nothing to test"
 msgstr ""
 
-#: src/Admin/Page.php:372
+#: src/Admin/Page.php:393
 msgid "Inconsistent answers"
 msgstr ""
 
-#: src/Admin/Page.php:385
+#: src/Admin/Page.php:406
 msgid "The problem appears whenever this plugin is on."
 msgstr ""
 
-#: src/Admin/Page.php:387
+#: src/Admin/Page.php:408
 msgid "The problem appears only when both of these are on."
 msgstr ""
 
-#: src/Admin/Page.php:389
+#: src/Admin/Page.php:410
 msgid "These two are part of it; test further with both of them on."
 msgstr ""
 
-#: src/Admin/Page.php:391
+#: src/Admin/Page.php:412
 msgid "The problem stayed with all of them off. Check the theme, must-use plugins, or the server."
 msgstr ""
 
-#: src/Admin/Page.php:393
+#: src/Admin/Page.php:414
 msgid "Every active plugin was kept on."
 msgstr ""
 
-#: src/Admin/Page.php:395
+#: src/Admin/Page.php:416
 msgid "The problem may come and go. Try again and check each step carefully."
 msgstr ""
 
@@ -1066,7 +1072,7 @@ msgid "The answer must be yes or no."
 msgstr ""
 
 #: src/Api.php:65
-#: src/Session/Manager.php:243
+#: src/Session/Manager.php:268
 msgid "That question has already been answered."
 msgstr ""
 
@@ -1075,27 +1081,31 @@ msgid "Culprit Finder does not support multisite networks yet. Please do not net
 msgstr ""
 
 #. translators: %s: directory path
-#: src/Session/LoaderInstaller.php:128
+#: src/Session/LoaderInstaller.php:139
 #, php-format
 msgid "Could not copy the helper file into %s (the folder may not be writable)."
 msgstr ""
 
-#: src/Session/Manager.php:348
+#: src/Session/Manager.php:155
+msgid "Culprit Finder couldn’t save the new session, so nothing changed. Any session that was running is still running. Please try again."
+msgstr ""
+
+#: src/Session/Manager.php:373
 msgid "No troubleshooting session is running."
 msgstr ""
 
-#: src/Session/Manager.php:360
+#: src/Session/Manager.php:385
 msgid "Culprit Finder does not support multisite networks yet. No session was started."
 msgstr ""
 
-#: src/Session/Manager.php:363
+#: src/Session/Manager.php:388
 msgid "A different file named culprit-finder-loader.php is already in wp-content/mu-plugins. Culprit Finder never overwrites files it didn’t create, so no session was started. See the Culprit Finder page."
 msgstr ""
 
-#: src/Session/Manager.php:365
+#: src/Session/Manager.php:390
 msgid "Culprit Finder couldn’t add its small helper file to wp-content/mu-plugins, so plugins can’t be switched off for your session. See the Culprit Finder page for how to fix it."
 msgstr ""
 
-#: src/Session/Manager.php:367
+#: src/Session/Manager.php:392
 msgid "Culprit Finder must be active to start a session."
 msgstr ""
