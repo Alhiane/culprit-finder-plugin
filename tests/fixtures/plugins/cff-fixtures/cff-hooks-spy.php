@@ -62,7 +62,8 @@ add_action(
 add_action(
 	'culprit_finder_session_ended',
 	function ( $reason, $view ) {
-		cff_spy_log( 'session_ended', array( 'reason' => $reason, 'keys' => is_array( $view ) ? array_keys( $view ) : null ) );
+		$stored = get_option( 'culprit_finder_session' );
+		cff_spy_log( 'session_ended', array( 'reason' => $reason, 'keys' => is_array( $view ) ? array_keys( $view ) : null, 'stored_hash' => is_array( $stored ) ? $stored['token_hash'] : null ) );
 		cff_spy_misbehave();
 	},
 	10,
@@ -117,4 +118,13 @@ add_filter(
 	},
 	10,
 	3
+);
+
+add_filter(
+	'pre_update_option_culprit_finder_session',
+	function ( $value, $old_value ) {
+		return cff_spy_mode( 'block-save' ) ? $old_value : $value;
+	},
+	10,
+	2
 );

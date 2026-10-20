@@ -304,11 +304,32 @@ final class Page {
 				: __( 'Your troubleshooting session expired after an hour without answers and was ended. The site is back to normal for you.', 'culprit-finder' );
 			printf( '<div class="notice notice-warning"><p>%s</p></div>', esc_html( $message ) );
 			unset( $last['session_expired_at'], $last['session_max_reached'] );
-			if ( isset( $last['result'] ) ) {
-				$store->save_last_result( $last );
-			} else {
-				$store->delete_last_result();
-			}
+			$this->save_notice_state( $last );
+		}
+
+		if ( is_array( $last ) && isset( $last['session_replaced']['user_id'] ) && get_current_user_id() === (int) $last['session_replaced']['user_id'] && null === $this->plugin->verified_session() ) {
+			$message = sprintf(
+				/* translators: 1: time the session started, 2: time it was replaced */
+				__( 'Your troubleshooting session from %1$s was replaced by a new session at %2$s. It ended cleanly: the site is back to normal for you, and the new session only affects the browser that started it.', 'culprit-finder' ),
+				wp_date( get_option( 'time_format' ), (int) $last['session_replaced']['created_at'] ),
+				wp_date( get_option( 'time_format' ), (int) $last['session_replaced']['at'] )
+			);
+			printf( '<div class="notice notice-warning culprit-finder-replaced"><p>%s</p></div>', esc_html( $message ) );
+			unset( $last['session_replaced'] );
+			$this->save_notice_state( $last );
+		}
+	}
+
+	/**
+	 * Save the last result after a one-time notice was shown, or delete it when nothing is left.
+	 *
+	 * @param array $last Last result.
+	 */
+	private function save_notice_state( array $last ) {
+		if ( isset( $last['result'] ) || isset( $last['session_replaced'] ) || isset( $last['session_expired_at'] ) ) {
+			$this->plugin->store()->save_last_result( $last );
+		} else {
+			$this->plugin->store()->delete_last_result();
 		}
 	}
 

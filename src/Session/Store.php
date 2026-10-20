@@ -34,9 +34,10 @@ final class Store {
 	 * Save the session.
 	 *
 	 * @param array $session Session data (contract in ADR-0001).
+	 * @return bool Whether the session is now stored.
 	 */
 	public function save_session( array $session ) {
-		update_option( self::SESSION, $session, false );
+		return update_option( self::SESSION, $session, false ) || $this->session() === $session;
 	}
 
 	/**
