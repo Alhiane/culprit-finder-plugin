@@ -11,6 +11,8 @@
 # The setup screen was re-baselined on purpose in 0.3.0 for its two-column layout (ADR-0026). In 0.3.1
 # result-current and result-detail were re-baselined on purpose for the Steps section (ADR-0028): the
 # only change is the added collapsed "Steps tested" list and the Steps block in the plain-text report.
+# In 0.4.0 every screen with the tab bar was re-baselined on purpose for the Debug log tab, and
+# result-current and result-detail for the new environment facts (ADR-0031); nothing else changed.
 # Every other screen's baseline is unchanged since 0.2.0.
 source "$(dirname "$0")/../lib.sh"
 TIP_ATTR=data-culprit-finder-pro-tip

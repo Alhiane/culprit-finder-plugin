@@ -227,3 +227,18 @@
 .culprit-finder .cf-mini__theme--default .cf-mini__head { background: #1d2327; }
 .culprit-finder .cf-mini__doc { justify-self: center; width: 70%; display: grid; gap: 5px; background: #fff; border: 1px solid var(--cf-line); border-radius: 4px; padding: 8px 10px; }
 .culprit-finder .cf-mini__brand { display: block; height: 8px; width: 40%; border-radius: 3px; background: var(--cf-brand); margin-bottom: 2px; }
+.culprit-finder .cf-log { display: grid; gap: 16px; }
+.culprit-finder .cf-log__settings { padding: 16px 20px; }
+.culprit-finder .cf-log__settings dl { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; margin: 0 0 8px; font-size: 13px; }
+.culprit-finder .cf-log__settings dt { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: var(--cf-muted); }
+.culprit-finder .cf-log__settings dd { margin: 0; overflow-wrap: anywhere; }
+.culprit-finder .cf-log__warning { margin: 0 0 8px; padding: 8px 12px; border-left: 4px solid #dba617; background: #fcf9e8; }
+.culprit-finder .cf-log__snippet { display: inline-block; text-align: left; margin: 8px 0 12px; padding: 12px 16px; background: #f6f7f7; border-radius: 4px; font-size: 12px; }
+.culprit-finder .cf-log__range { margin: 0; display: flex; gap: 12px; }
+.culprit-finder .cf-log__entries { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.culprit-finder .cf-log__entry { margin: 0; padding: 10px 12px; background: #fff; border: 1px solid var(--cf-line); border-left-width: 4px; border-radius: 4px; }
+.culprit-finder .cf-log__entry--fatal { border-left-color: #d63638; }
+.culprit-finder .cf-log__entry--warning { border-left-color: #dba617; }
+.culprit-finder .cf-log__entry--fatal .cf-log__level { background: #fcf0f1; color: #8a2424; }
+.culprit-finder .cf-log__entry--warning .cf-log__level { background: #fcf9e8; color: #6e5300; }
+.culprit-finder .cf-log__entry pre { margin: 8px 0 0; font: 12px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 320px; overflow: auto; }

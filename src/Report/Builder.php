@@ -78,6 +78,7 @@ final class Builder {
 			'- Not tested: must-use plugins, drop-ins, theme',
 			'- Multisite: ' . ( ! empty( $env['multisite'] ) ? 'yes' : 'no' ),
 		);
+		$environment = array_merge( $environment, self::more_env( $env ) );
 
 		$answers  = (int) $record['answers'];
 		$sections = array(
@@ -90,6 +91,33 @@ final class Builder {
 		}
 		$sections['footer'] = 'Found in ' . $answers . ' ' . ( 1 === $answers ? 'answer' : 'answers' ) . ' on ' . gmdate( 'Y-m-d', (int) $record['finished_at'] ) . ' (UTC).';
 		return $sections;
+	}
+
+	/**
+	 * Environment lines added in 0.4.0, only for facts the record has (ADR-0031): reports saved
+	 * before then stay as they were.
+	 *
+	 * @param array $env Record environment.
+	 * @return string[]
+	 */
+	public static function more_env( array $env ) {
+		$lines = array();
+		if ( ! empty( $env['parent_theme'] ) ) {
+			$lines[] = '- Parent theme: ' . $env['parent_theme'];
+		}
+		if ( ! empty( $env['memory_limit'] ) ) {
+			$lines[] = '- PHP memory limit: ' . $env['memory_limit'] . ( ! empty( $env['wp_memory_limit'] ) ? ' (WordPress: ' . $env['wp_memory_limit'] . ')' : '' );
+		}
+		if ( ! empty( $env['server'] ) ) {
+			$lines[] = '- Server: ' . $env['server'];
+		}
+		if ( isset( $env['object_cache'] ) ) {
+			$lines[] = '- Persistent object cache: ' . ( $env['object_cache'] ? 'yes' : 'no' );
+		}
+		if ( isset( $env['debug'] ) ) {
+			$lines[] = '- WP_DEBUG: ' . ( $env['debug'] ? 'on' : 'off' );
+		}
+		return $lines;
 	}
 
 	/**

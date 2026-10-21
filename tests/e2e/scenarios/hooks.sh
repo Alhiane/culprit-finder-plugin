@@ -93,8 +93,8 @@ mode tab
 PAGE=$(fetch "$JAR" "$TOOLS")
 assert_contains "$PAGE" ">Spy tab<" "admin_tabs: add-on tab shown"
 assert_not_contains "$PAGE" "Hijacked" "admin_tabs: core labels cannot be replaced"
-ORDER=$(grep -oE 'class="cf-tab[^"]*" href="[^"]*"' <<<"$PAGE" | sed -E 's/&#038;/\&/g; s/&amp;/\&/g' | sed -E 's/.*page=culprit-finder(&tab=)?([a-z]*).*/\2/' | tr '\n' ',')
-assert_eq "$ORDER" ",results,help,spy,pro," "admin_tabs: core tabs first, the free Pro tab last (ADR-0025)"
+ORDER=$(grep -oE 'class="cf-tab[^"]*" href="[^"]*"' <<<"$PAGE" | sed -E 's/&#038;/\&/g; s/&amp;/\&/g' | sed -E 's/.*page=culprit-finder(&tab=)?([a-z-]*).*/\2/' | tr '\n' ',')
+assert_eq "$ORDER" ",results,debug-log,help,spy,pro," "admin_tabs: core tabs first (Debug log since 0.4.0), the free Pro tab last (ADR-0025)"
 assert_contains "$(fetch "$JAR" "$TOOLS&tab=spy")" "CFF-SPY-TAB" "render_tab_{id}: add-on tab renders"
 mode ''
 
