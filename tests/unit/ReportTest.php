@@ -50,6 +50,37 @@ final class ReportTest extends TestCase {
 		$this->assertSame( $expected, $text );
 	}
 
+	public function test_environment_facts_from_0_4_0(): void {
+		$record        = $this->record( array( 'type' => Result::SINGLE, 'culprits' => array( 'example-forms/forms.php' ), 'kept_on' => array() ) );
+		$record['env'] += array(
+			'parent_theme'    => 'Twenty Twenty-Four 1.3',
+			'memory_limit'    => '256M',
+			'wp_memory_limit' => '40M',
+			'server'          => 'Apache/2.4.62 (Debian)',
+			'object_cache'    => false,
+			'debug'           => true,
+		);
+		$this->assertStringContainsString(
+			"- Multisite: no\n"
+			. "- Parent theme: Twenty Twenty-Four 1.3\n"
+			. "- PHP memory limit: 256M (WordPress: 40M)\n"
+			. "- Server: Apache/2.4.62 (Debian)\n"
+			. "- Persistent object cache: no\n"
+			. "- WP_DEBUG: on\n\n",
+			Builder::build( $record )
+		);
+	}
+
+	public function test_unknown_environment_facts_are_left_out(): void {
+		$record        = $this->record( array( 'type' => Result::SINGLE, 'culprits' => array( 'example-forms/forms.php' ), 'kept_on' => array() ) );
+		$record['env'] += array( 'memory_limit' => '128M', 'object_cache' => true );
+		$text           = Builder::build( $record );
+		$this->assertStringContainsString( "- PHP memory limit: 128M\n- Persistent object cache: yes\n\n", $text );
+		foreach ( array( 'Parent theme', 'Server', 'WP_DEBUG', 'unknown' ) as $needle ) {
+			$this->assertStringNotContainsString( $needle, $text );
+		}
+	}
+
 	public function test_verdict_lines_per_type(): void {
 		$cases = array(
 			Result::SINGLE       => 'Caused by one plugin',

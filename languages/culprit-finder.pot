@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Culprit Finder 0.3.2\n"
+"Project-Id-Version: Culprit Finder 0.4.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/culprit-finder\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-20T11:53:37+00:00\n"
+"POT-Creation-Date: 2026-10-21T10:08:28+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: culprit-finder\n"
@@ -18,9 +18,9 @@ msgstr ""
 #: culprit-finder.php
 #: src/Admin/DashboardWidget.php:66
 #: src/Admin/Handlers.php:325
-#: src/Admin/Page.php:72
 #: src/Admin/Page.php:73
-#: src/Admin/Page.php:223
+#: src/Admin/Page.php:74
+#: src/Admin/Page.php:227
 #: src/Plugin.php:244
 msgid "Culprit Finder"
 msgstr ""
@@ -66,7 +66,7 @@ msgid "No, it’s gone"
 msgstr ""
 
 #: src/Admin/AdminBar.php:99
-#: src/Admin/ResultsView.php:273
+#: src/Admin/ResultsView.php:288
 #: src/Admin/TroubleshootView.php:376
 #: src/Admin/TroubleshootView.php:435
 msgid "Undo last answer"
@@ -171,6 +171,149 @@ msgstr ""
 
 #: src/Admin/DashboardWidget.php:165
 msgid "Exit"
+msgstr ""
+
+#: src/Admin/DebugLogView.php:54
+msgid "The log goes to the system log"
+msgstr ""
+
+#: src/Admin/DebugLogView.php:54
+msgid "PHP on this server writes errors to the system log (syslog), which WordPress can’t read. Ask your host where to find it."
+msgstr ""
+
+#: src/Admin/DebugLogView.php:57
+#: src/Admin/DebugLogView.php:122
+msgid "The log can’t be read here"
+msgstr ""
+
+#: src/Admin/DebugLogView.php:57
+#: src/Admin/DebugLogView.php:122
+msgid "The log file exists, but PHP isn’t allowed to read it from WordPress. Your host’s control panel or file manager can show it."
+msgstr ""
+
+#: src/Admin/DebugLogView.php:60
+#: src/Admin/DebugLogView.php:160
+msgid "No errors logged yet"
+msgstr ""
+
+#: src/Admin/DebugLogView.php:60
+msgid "Logging is on, and nothing has been written to the log so far."
+msgstr ""
+
+#: src/Admin/DebugLogView.php:74
+#: src/Admin/ResultsView.php:185
+msgid "On"
+msgstr ""
+
+#: src/Admin/DebugLogView.php:75
+#: src/Admin/ResultsView.php:185
+msgid "Off"
+msgstr ""
+
+#: src/Admin/DebugLogView.php:82
+msgid "Log file"
+msgstr ""
+
+#: src/Admin/DebugLogView.php:86
+msgid "Errors are shown on your pages, so visitors can see them too. On a live site, set WP_DEBUG_DISPLAY to false and read them here instead."
+msgstr ""
+
+#: src/Admin/DebugLogView.php:88
+msgid "Read-only. Culprit Finder never changes these settings or the log file."
+msgstr ""
+
+#: src/Admin/DebugLogView.php:97
+msgid "Debug logging is off"
+msgstr ""
+
+#: src/Admin/DebugLogView.php:98
+msgid "To see PHP errors here, add these lines to wp-config.php, above the line “That’s all, stop editing!”. Errors are then written to a log instead of your pages, so visitors don’t see them."
+msgstr ""
+
+#: src/Admin/DebugLogView.php:100
+msgid "Set WP_DEBUG back to false when you’re done."
+msgstr ""
+
+#. translators: %s: date and time the file was last written
+#: src/Admin/DebugLogView.php:138
+#, php-format
+msgid "Logging is off. This is an older log, last written %s."
+msgstr ""
+
+#: src/Admin/DebugLogView.php:150
+msgid "The log holds errors from every request to your site, from visitors as well as from you. Newest first."
+msgstr ""
+
+#. translators: %s: file size, e.g. "12 MB"
+#: src/Admin/DebugLogView.php:153
+#, php-format
+msgid "Only the end of the %s file is shown."
+msgstr ""
+
+#: src/Admin/DebugLogView.php:160
+msgid "Nothing logged since troubleshooting started"
+msgstr ""
+
+#: src/Admin/DebugLogView.php:161
+msgid "If the problem shows a blank page or “critical error”, reload it once, then come back here."
+msgstr ""
+
+#: src/Admin/DebugLogView.php:183
+msgid "Since troubleshooting started"
+msgstr ""
+
+#: src/Admin/DebugLogView.php:184
+msgid "All recent entries"
+msgstr ""
+
+#: src/Admin/DebugLogView.php:243
+msgid "Fatal error"
+msgstr ""
+
+#: src/Admin/DebugLogView.php:245
+msgid "Warning"
+msgstr ""
+
+#: src/Admin/DebugLogView.php:247
+msgid "Notice"
+msgstr ""
+
+#: src/Admin/DebugLogView.php:249
+msgid "Database"
+msgstr ""
+
+#: src/Admin/DebugLogView.php:251
+msgid "Other"
+msgstr ""
+
+#. translators: %s: number of fatal errors
+#: src/Admin/DebugLogView.php:266
+#, php-format
+msgid "%s fatal error"
+msgid_plural "%s fatal errors"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %s: number of warnings
+#: src/Admin/DebugLogView.php:268
+#, php-format
+msgid "%s warning"
+msgid_plural "%s warnings"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %s: number of notices
+#: src/Admin/DebugLogView.php:270
+#, php-format
+msgid "%s notice"
+msgid_plural "%s notices"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: entries shown, 2: entries in total
+#: src/Admin/DebugLogView.php:276
+#, php-format
+msgid "Showing the %1$s newest of %2$s entries."
 msgstr ""
 
 #: src/Admin/Handlers.php:108
@@ -280,149 +423,153 @@ msgstr ""
 msgid "Your theme, must-use plugins, drop-ins such as object-cache.php, and server settings. If the problem stays with every plugin off, the result says so."
 msgstr ""
 
-#: src/Admin/Page.php:153
+#: src/Admin/Page.php:154
 msgid "Troubleshoot"
 msgstr ""
 
-#: src/Admin/Page.php:154
+#: src/Admin/Page.php:155
 msgid "Results"
 msgstr ""
 
-#: src/Admin/Page.php:155
+#: src/Admin/Page.php:156
+msgid "Debug log"
+msgstr ""
+
+#: src/Admin/Page.php:157
 msgid "Help"
 msgstr ""
 
-#: src/Admin/Page.php:169
+#: src/Admin/Page.php:171
 msgid "Pro"
 msgstr ""
 
-#: src/Admin/Page.php:224
+#: src/Admin/Page.php:228
 msgid "Find the plugin that broke your site. Visitors never notice."
 msgstr ""
 
-#: src/Admin/Page.php:237
+#: src/Admin/Page.php:241
 msgid "Culprit Finder sections"
 msgstr ""
 
-#: src/Admin/Page.php:247
+#: src/Admin/Page.php:251
 msgid "Troubleshooting is running"
 msgstr ""
 
 #. translators: %s: URL that exits WordPress recovery mode
-#: src/Admin/Page.php:270
+#: src/Admin/Page.php:274
 #, php-format
 msgid "<strong>You are still in WordPress recovery mode.</strong> WordPress keeps the plugin that crashed paused for you, so your answers would be wrong. <a href=\"%s\">Exit recovery mode</a> before you answer; Culprit Finder keeps your site usable, and your bookmarked control panel always works."
 msgstr ""
 
 #. translators: %s: URL that exits WordPress recovery mode
-#: src/Admin/Page.php:273
+#: src/Admin/Page.php:277
 #, php-format
 msgid "<strong>You are in WordPress recovery mode.</strong> Bookmark the two links below and press Start, then <a href=\"%s\">exit recovery mode</a> before you answer any question."
 msgstr ""
 
-#: src/Admin/Page.php:284
+#: src/Admin/Page.php:288
 msgid "Troubleshooting started. Plugins are switched off for you only; visitors see the normal site."
 msgstr ""
 
-#: src/Admin/Page.php:285
+#: src/Admin/Page.php:289
 msgid "Troubleshooting ended. The site is back to normal for you."
 msgstr ""
 
-#: src/Admin/Page.php:286
+#: src/Admin/Page.php:290
 msgid "Please save both safety links and tick “I’ve saved both safety links” before you start."
 msgstr ""
 
-#: src/Admin/Page.php:287
+#: src/Admin/Page.php:291
 msgid "Result deleted."
 msgstr ""
 
-#: src/Admin/Page.php:288
+#: src/Admin/Page.php:292
 msgid "All results deleted."
 msgstr ""
 
-#: src/Admin/Page.php:303
+#: src/Admin/Page.php:307
 msgid "Your troubleshooting session reached its maximum length and was ended. The site is back to normal for you."
 msgstr ""
 
-#: src/Admin/Page.php:304
+#: src/Admin/Page.php:308
 msgid "Your troubleshooting session expired after an hour without answers and was ended. The site is back to normal for you."
 msgstr ""
 
 #. translators: 1: time the session started, 2: time it was replaced
-#: src/Admin/Page.php:313
+#: src/Admin/Page.php:317
 #, php-format
 msgid "Your troubleshooting session from %1$s was replaced by a new session at %2$s. It ended cleanly: the site is back to normal for you, and the new session only affects the browser that started it."
 msgstr ""
 
-#: src/Admin/Page.php:360
+#: src/Admin/Page.php:364
 msgid "One plugin causes the problem"
 msgstr ""
 
-#: src/Admin/Page.php:362
+#: src/Admin/Page.php:366
 msgid "Two plugins conflict with each other"
 msgstr ""
 
-#: src/Admin/Page.php:364
+#: src/Admin/Page.php:368
 msgid "Three or more plugins are involved"
 msgstr ""
 
-#: src/Admin/Page.php:366
+#: src/Admin/Page.php:370
 msgid "It’s not one of the plugins tested"
 msgstr ""
 
-#: src/Admin/Page.php:368
+#: src/Admin/Page.php:372
 msgid "There was nothing to test"
 msgstr ""
 
-#: src/Admin/Page.php:370
+#: src/Admin/Page.php:374
 msgid "The answers didn’t add up"
 msgstr ""
 
-#: src/Admin/Page.php:383
+#: src/Admin/Page.php:387
 msgid "One plugin"
 msgstr ""
 
-#: src/Admin/Page.php:385
+#: src/Admin/Page.php:389
 msgid "Two plugins conflict"
 msgstr ""
 
-#: src/Admin/Page.php:387
+#: src/Admin/Page.php:391
 msgid "Three or more plugins"
 msgstr ""
 
-#: src/Admin/Page.php:389
+#: src/Admin/Page.php:393
 msgid "Not a plugin"
 msgstr ""
 
-#: src/Admin/Page.php:391
+#: src/Admin/Page.php:395
 msgid "Nothing to test"
 msgstr ""
 
-#: src/Admin/Page.php:393
+#: src/Admin/Page.php:397
 msgid "Inconsistent answers"
 msgstr ""
 
-#: src/Admin/Page.php:406
+#: src/Admin/Page.php:410
 msgid "The problem appears whenever this plugin is on."
 msgstr ""
 
-#: src/Admin/Page.php:408
+#: src/Admin/Page.php:412
 msgid "The problem appears only when both of these are on."
 msgstr ""
 
-#: src/Admin/Page.php:410
+#: src/Admin/Page.php:414
 msgid "These two are part of it; test further with both of them on."
 msgstr ""
 
-#: src/Admin/Page.php:412
+#: src/Admin/Page.php:416
 msgid "The problem stayed with all of them off. Check the theme, must-use plugins, or the server."
 msgstr ""
 
-#: src/Admin/Page.php:414
+#: src/Admin/Page.php:418
 msgid "Every active plugin was kept on."
 msgstr ""
 
-#: src/Admin/Page.php:416
+#: src/Admin/Page.php:420
 msgid "The problem may come and go. Try again and check each step carefully."
 msgstr ""
 
@@ -612,7 +759,7 @@ msgid "Download"
 msgstr ""
 
 #: src/Admin/ResultsView.php:105
-#: src/Admin/ResultsView.php:199
+#: src/Admin/ResultsView.php:214
 msgid "Delete"
 msgstr ""
 
@@ -677,137 +824,155 @@ msgid "Multisite"
 msgstr ""
 
 #: src/Admin/ResultsView.php:171
+#: src/Admin/ResultsView.php:182
 msgid "Yes"
 msgstr ""
 
 #: src/Admin/ResultsView.php:171
+#: src/Admin/ResultsView.php:182
 msgid "No"
 msgstr ""
 
+#: src/Admin/ResultsView.php:173
+msgid "Parent theme"
+msgstr ""
+
+#: src/Admin/ResultsView.php:176
+msgid "PHP memory limit"
+msgstr ""
+
 #: src/Admin/ResultsView.php:179
+msgid "Server"
+msgstr ""
+
+#: src/Admin/ResultsView.php:182
+msgid "Persistent object cache"
+msgstr ""
+
+#: src/Admin/ResultsView.php:194
 msgid "Copied!"
 msgstr ""
 
-#: src/Admin/ResultsView.php:179
+#: src/Admin/ResultsView.php:194
 msgid "Copy for forum"
 msgstr ""
 
-#: src/Admin/ResultsView.php:188
+#: src/Admin/ResultsView.php:203
 msgid "Download .md"
 msgstr ""
 
-#: src/Admin/ResultsView.php:197
+#: src/Admin/ResultsView.php:212
 msgid "Download .txt"
 msgstr ""
 
-#: src/Admin/ResultsView.php:201
+#: src/Admin/ResultsView.php:216
 msgid "Safe to share publicly: no site address, user names or emails."
 msgstr ""
 
-#: src/Admin/ResultsView.php:202
+#: src/Admin/ResultsView.php:217
 msgid "Show plain text"
 msgstr ""
 
 #. translators: %d: number of steps
-#: src/Admin/ResultsView.php:221
+#: src/Admin/ResultsView.php:236
 #, php-format
 msgid "Steps tested (%d)"
 msgstr ""
 
-#: src/Admin/ResultsView.php:225
+#: src/Admin/ResultsView.php:240
 msgid "Each step in order: which plugins were off for you, and your answer. Anyone can repeat these steps to check the result."
 msgstr ""
 
 #. translators: %s: list of plugin names
-#: src/Admin/ResultsView.php:235
+#: src/Admin/ResultsView.php:250
 #, php-format
 msgid "Off: %s"
 msgstr ""
 
-#: src/Admin/ResultsView.php:236
+#: src/Admin/ResultsView.php:251
 msgid "Off: none, all plugins on"
 msgstr ""
 
-#: src/Admin/ResultsView.php:238
+#: src/Admin/ResultsView.php:253
 msgid "Problem still there"
 msgstr ""
 
-#: src/Admin/ResultsView.php:238
+#: src/Admin/ResultsView.php:253
 msgid "Problem gone"
 msgstr ""
 
-#: src/Admin/ResultsView.php:252
+#: src/Admin/ResultsView.php:267
 msgid "Baseline"
 msgstr ""
 
-#: src/Admin/ResultsView.php:254
+#: src/Admin/ResultsView.php:269
 msgid "Find first"
 msgstr ""
 
-#: src/Admin/ResultsView.php:256
+#: src/Admin/ResultsView.php:271
 msgid "Pair search"
 msgstr ""
 
-#: src/Admin/ResultsView.php:258
+#: src/Admin/ResultsView.php:273
 msgid "Confirm"
 msgstr ""
 
-#: src/Admin/ResultsView.php:270
+#: src/Admin/ResultsView.php:285
 msgid "This is the result of your current session."
 msgstr ""
 
-#: src/Admin/ResultsView.php:270
+#: src/Admin/ResultsView.php:285
 msgid "Your site is back to normal for you while you read it."
 msgstr ""
 
-#: src/Admin/ResultsView.php:272
+#: src/Admin/ResultsView.php:287
 #: src/Admin/TroubleshootView.php:436
 msgid "Done, exit"
 msgstr ""
 
-#: src/Admin/ResultsView.php:285
+#: src/Admin/ResultsView.php:300
 msgid "Run again"
 msgstr ""
 
-#: src/Admin/ResultsView.php:287
+#: src/Admin/ResultsView.php:302
 msgid "Run again starts a new session with a new emergency exit link. Bookmark it first:"
 msgstr ""
 
 #. translators: %s: plugin author
-#: src/Admin/ResultsView.php:326
+#: src/Admin/ResultsView.php:341
 #, php-format
 msgid "By %s"
 msgstr ""
 
-#: src/Admin/ResultsView.php:329
+#: src/Admin/ResultsView.php:344
 msgid "Plugin website"
 msgstr ""
 
 #. translators: %s: list of plugin names
-#: src/Admin/ResultsView.php:340
+#: src/Admin/ResultsView.php:355
 #, php-format
 msgid "Tested together with its required plugins: %s"
 msgstr ""
 
-#: src/Admin/ResultsView.php:344
+#: src/Admin/ResultsView.php:359
 msgid "What you can do next"
 msgstr ""
 
 #. translators: %s: Plugins screen URL
-#: src/Admin/ResultsView.php:346
+#: src/Admin/ResultsView.php:361
 #, php-format
 msgid "Check for an update on the <a href=\"%s\">Plugins screen</a> (after you exit)."
 msgstr ""
 
-#: src/Admin/ResultsView.php:347
+#: src/Admin/ResultsView.php:362
 msgid "Send this report to the plugin’s support forum."
 msgstr ""
 
-#: src/Admin/ResultsView.php:348
+#: src/Admin/ResultsView.php:363
 msgid "If you can live without it, deactivate it for everyone from the Plugins screen."
 msgstr ""
 
-#: src/Admin/ResultsView.php:375
+#: src/Admin/ResultsView.php:390
 msgid "None of the plugins tested"
 msgstr ""
 

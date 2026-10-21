@@ -4,7 +4,7 @@ Tags: troubleshooting, plugin conflict, debug, critical error, white screen
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.3.2
+Stable tag: 0.4.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,6 +26,7 @@ Guides and answers to common questions are in the documentation: https://getculp
 * **Always a way out:** an Exit button, a logged-out emergency exit link, and an automatic end after an hour without answers, or after three hours at most.
 * **A support report** for forums and plugin authors, with no site address, user names or emails. Copy it, or download it as .md or .txt.
 * **Results history:** your last 10 results stay on the Results tab, on your own site.
+* **Debug log viewer:** the newest PHP errors from your debug log, grouped with their stack traces, and during troubleshooting only the ones logged since you started. Read-only: it never edits wp-config.php or the log.
 
 = What it can't test =
 
@@ -97,6 +98,10 @@ Not yet. It refuses to start on multisite networks.
 
 To switch plugins off for your browser only, Culprit Finder must run before WordPress loads the other plugins, and only must-use plugins load that early. So when you press Start it adds one small helper file there, the same approach as WordPress's own Health Check & Troubleshooting plugin. Without your troubleshooting cookie the file does nothing. It is removed when troubleshooting ends (Exit, the emergency exit link, the 60-minute timeout or the three-hour limit, or deactivating the plugin), and Culprit Finder never overwrites or deletes a file it didn't create.
 
+= Where do I see PHP errors? =
+
+On the **Debug log** tab. It shows the end of your PHP error log, newest first, with fatal errors and warnings marked. If logging is off, the tab shows the three lines to add to wp-config.php; Culprit Finder never changes that file for you. The log includes errors from every visitor's requests, not only yours.
+
 = Can I manage plugins during troubleshooting? =
 
 No. The Plugins screen is paused for you while a session runs, so the shortened list you see can never be saved by accident. Exit first.
@@ -122,6 +127,10 @@ Culprit Finder stays free and fully functional without it, and your settings and
 
 == Changelog ==
 
+= 0.4.0 =
+* New: a Debug log tab with the newest PHP errors, grouped with their stack traces. During troubleshooting it shows what was logged since you started. Read-only, for administrators only.
+* New: reports now include the PHP memory limit, the server, the parent theme, whether a persistent object cache is used, and whether WP_DEBUG is on.
+
 = 0.3.2 =
 * Starting a new session while another one runs is now all-or-nothing: if saving the new session fails, the running session keeps going and add-ons are not told it ended.
 * The helper file in wp-content/mu-plugins is now written in one step, so an interrupted Start can never leave a half-written file.
@@ -146,6 +155,9 @@ Culprit Finder stays free and fully functional without it, and your settings and
 * First release: switch plugins off for your browser only, find the plugin (or the two plugins) behind a problem, keep plugins on, respect plugin dependencies, answer from the page, the toolbar or the dashboard widget, results history with .md and .txt downloads, and a WP-CLI command.
 
 == Upgrade Notice ==
+
+= 0.4.0 =
+Adds a read-only Debug log tab and more environment details in reports. Troubleshooting works exactly as before.
 
 = 0.3.2 =
 Safer session takeover and helper file install. Troubleshooting works exactly as before.

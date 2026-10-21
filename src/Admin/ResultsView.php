@@ -169,6 +169,21 @@ final class ResultsView {
 		}
 		$rows[ __( 'Not tested', 'culprit-finder' ) ] = __( 'Must-use plugins, drop-ins, theme', 'culprit-finder' );
 		$rows[ __( 'Multisite', 'culprit-finder' ) ]  = ! empty( $env['multisite'] ) ? __( 'Yes', 'culprit-finder' ) : __( 'No', 'culprit-finder' );
+		if ( ! empty( $env['parent_theme'] ) ) {
+			$rows[ __( 'Parent theme', 'culprit-finder' ) ] = $env['parent_theme'];
+		}
+		if ( ! empty( $env['memory_limit'] ) ) {
+			$rows[ __( 'PHP memory limit', 'culprit-finder' ) ] = $env['memory_limit'] . ( ! empty( $env['wp_memory_limit'] ) ? ' (WordPress: ' . $env['wp_memory_limit'] . ')' : '' );
+		}
+		if ( ! empty( $env['server'] ) ) {
+			$rows[ __( 'Server', 'culprit-finder' ) ] = $env['server'];
+		}
+		if ( isset( $env['object_cache'] ) ) {
+			$rows[ __( 'Persistent object cache', 'culprit-finder' ) ] = $env['object_cache'] ? __( 'Yes', 'culprit-finder' ) : __( 'No', 'culprit-finder' );
+		}
+		if ( isset( $env['debug'] ) ) {
+			$rows['WP_DEBUG'] = $env['debug'] ? __( 'On', 'culprit-finder' ) : __( 'Off', 'culprit-finder' );
+		}
 		foreach ( $rows as $label => $value ) {
 			echo '<dt>' . esc_html( $label ) . '</dt><dd>' . esc_html( $value ) . '</dd>';
 		}

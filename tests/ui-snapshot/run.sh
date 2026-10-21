@@ -24,6 +24,8 @@ s = re.sub(r"ver=[^\"&]+", "ver=V", s)
 s = re.sub(r"Culprit Finder \d+\.\d+\.\d+", "Culprit Finder VERSION", s)
 s = re.sub(r"(<dt>(?:WordPress|PHP)</dt>\s*<dd>)[0-9][^<]*(</dd>)", r"\1X\2", s)
 s = re.sub(r"WordPress [0-9][0-9.]*(?:-[A-Za-z0-9.-]+)?, PHP [0-9][0-9.]*", "WordPress X, PHP X", s)
+s = re.sub(r"(<dt>(?:PHP memory limit|Server)</dt>\s*<dd>)[^<]*(</dd>)", r"\1X\2", s)
+s = re.sub(r"- (PHP memory limit|Server): [^\n<]*", r"- \1: X", s)
 s = re.sub(r">\s*<", ">\n<", s)
 print(s)
 '

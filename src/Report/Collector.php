@@ -54,7 +54,7 @@ final class Collector {
 				'theme'         => $theme->exists() ? $theme->get( 'Name' ) : '',
 				'theme_version' => $theme->exists() ? $theme->get( 'Version' ) : '',
 				'multisite'     => is_multisite(),
-			),
+			) + self::more_env( $theme ),
 		);
 		$always = AddOns::of( $session );
 		if ( $always ) {
@@ -94,6 +94,34 @@ final class Collector {
 			'answers'  => array_map( 'boolval', array_slice( $session['answers'], 0, $step->answers_used() ) ),
 			'names'    => $names,
 		);
+	}
+
+	/**
+	 * Environment facts added in 0.4.0 (ADR-0031). A fact that isn't known is left out, never
+	 * guessed; no file paths.
+	 *
+	 * @param \WP_Theme $theme Active theme.
+	 * @return array
+	 */
+	private static function more_env( $theme ) {
+		$env    = array();
+		$parent = $theme->exists() ? $theme->parent() : false;
+		if ( $parent ) {
+			$env['parent_theme'] = trim( $parent->get( 'Name' ) . ' ' . $parent->get( 'Version' ) );
+		}
+		$memory = (string) ini_get( 'memory_limit' );
+		if ( '' !== $memory ) {
+			$env['memory_limit'] = $memory;
+		}
+		if ( defined( 'WP_MEMORY_LIMIT' ) ) {
+			$env['wp_memory_limit'] = (string) WP_MEMORY_LIMIT;
+		}
+		if ( ! empty( $_SERVER['SERVER_SOFTWARE'] ) ) {
+			$env['server'] = sanitize_text_field( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ) );
+		}
+		$env['object_cache'] = (bool) wp_using_ext_object_cache();
+		$env['debug']        = defined( 'WP_DEBUG' ) && WP_DEBUG;
+		return $env;
 	}
 
 	/**

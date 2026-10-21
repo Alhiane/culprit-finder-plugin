@@ -24,6 +24,7 @@ final class Page {
 
 	const TAB_TROUBLESHOOT = 'troubleshoot';
 	const TAB_RESULTS      = 'results';
+	const TAB_DEBUG_LOG    = 'debug-log';
 	const TAB_HELP         = 'help';
 
 	/**
@@ -142,7 +143,7 @@ final class Page {
 	}
 
 	/**
-	 * Tabs: the three core tabs first, then add-on tabs from `culprit_finder_admin_tabs` (ADR-0021),
+	 * Tabs: the four core tabs first, then add-on tabs from `culprit_finder_admin_tabs` (ADR-0021),
 	 * then the free Pro tab when no tab uses the id `pro` and the Pro tips show (ADR-0025).
 	 * Culprit Finder Pro registers its own `pro` tab, so the two never clash.
 	 *
@@ -152,6 +153,7 @@ final class Page {
 		$core  = array(
 			self::TAB_TROUBLESHOOT => __( 'Troubleshoot', 'culprit-finder' ),
 			self::TAB_RESULTS      => __( 'Results', 'culprit-finder' ),
+			self::TAB_DEBUG_LOG    => __( 'Debug log', 'culprit-finder' ),
 			self::TAB_HELP         => __( 'Help', 'culprit-finder' ),
 		);
 		$extra = Hooks::filter( 'culprit_finder_admin_tabs', $core );
@@ -202,6 +204,8 @@ final class Page {
 		echo '<div class="cf-panel">';
 		if ( self::TAB_RESULTS === $tab ) {
 			( new ResultsView( $this->plugin ) )->render( $session, $owned );
+		} elseif ( self::TAB_DEBUG_LOG === $tab ) {
+			( new DebugLogView( $this->plugin ) )->render();
 		} elseif ( self::TAB_HELP === $tab ) {
 			( new HelpView( $this->plugin->pro_discovery() ) )->render();
 		} elseif ( ProDiscovery::TAB === $tab && $this->free_pro_tab ) {

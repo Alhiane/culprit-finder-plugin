@@ -14,5 +14,9 @@ REPORT=$(wpcli culprit-finder result --format=report)
 assert_contains "$REPORT" "Caused by one plugin" "report verdict"
 assert_contains "$REPORT" "CFF Solo 1.0.0" "report culprit"
 assert_not_contains "$REPORT" "localhost" "AC-11 no site URL in report"
+assert_contains "$REPORT" "- PHP memory limit: " "report environment: memory limit (0.4.0)"
+assert_contains "$REPORT" "- Persistent object cache: no" "report environment: object cache (0.4.0)"
+assert_contains "$REPORT" "- WP_DEBUG: on" "report environment: WP_DEBUG (0.4.0)"
+assert_not_contains "$REPORT" "wp-content" "report environment: no file paths"
 wpcli culprit-finder exit >/dev/null
 echo "solo: SINGLE in $ANSWERS answers"
