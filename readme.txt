@@ -1,6 +1,6 @@
 === Culprit Finder ===
 Contributors: alhiane
-Tags: troubleshooting, plugin conflict, debug, critical error, white screen
+Tags: troubleshooting, plugin conflict, debug log, critical error, white screen
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
