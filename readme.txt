@@ -1,4 +1,4 @@
-=== Culprit Finder ===
+=== Culprit Finder – Plugin Conflict Troubleshooter ===
 Contributors: alhiane
 Tags: troubleshooting, plugin conflict, debug log, critical error, white screen
 Requires at least: 6.5

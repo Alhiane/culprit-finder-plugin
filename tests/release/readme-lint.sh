@@ -6,7 +6,7 @@ R="$ROOT/readme.txt"
 fail() { echo "readme-lint: $*" >&2; exit 1; }
 field() { grep -m1 -E "^$1:" "$R" | sed -E "s/^$1:[[:space:]]*//"; }
 
-[ "$(head -1 "$R")" = "=== Culprit Finder ===" ] || fail "first line must be === Culprit Finder ==="
+[ "$(head -1 "$R")" = "=== Culprit Finder – Plugin Conflict Troubleshooter ===" ] || fail "first line must be === Culprit Finder – Plugin Conflict Troubleshooter ==="
 for f in Contributors Tags "Requires at least" "Tested up to" "Requires PHP" "Stable tag" License "License URI"; do
   [ -n "$(field "$f")" ] || fail "missing header field: $f"
 done
